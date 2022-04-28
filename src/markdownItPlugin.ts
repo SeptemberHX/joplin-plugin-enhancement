@@ -12,21 +12,31 @@ export default function (context) {
                 console.log(tokens, idx);
                 const token = tokens[idx];
                 let result = defaultRender(tokens, idx, options, env, self);
+
+                let styleStr = "";
                 for (let attr of token.attrs) {
                     console.log(attr);
-                    if (attr[0] !== 'title') continue;
-                    result = `
+                    if (attr[0] == 'title') {
+                        result = `
                         ${result}
                         <figcaption>${attr[1]}</figcaption>
                     `
-                    break;
+                    } else if (attr[0] == 'width') {
+                        styleStr += ` width="${attr[1]}" `;
+                    } else if (attr[0] == 'height') {
+                        styleStr += ` height="${attr[1]}" `;
+                    }
                 }
 
+                let imgTagRex = /<img/;
+                const index = result.search(imgTagRex);
+                result = result.substr(0, index + 4) + ` ${styleStr}` + result.substr(index + 4);
                 result = `
                 <figure>
                     ${result}
                 </figure>
                 `;
+                console.log(result);
                 return result
             }
         },

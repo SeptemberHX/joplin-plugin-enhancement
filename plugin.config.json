@@ -1,5 +1,7 @@
 {
 	"extraScripts": [
-		"markdownItPlugin.ts"
+		"markdownItPlugin.ts",
+		"image.ts",
+		"utils.ts"
 	]
 }

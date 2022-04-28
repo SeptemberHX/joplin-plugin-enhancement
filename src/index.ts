@@ -7,8 +7,14 @@ joplin.plugins.register({
 
 		await joplin.contentScripts.register(
 			ContentScriptType.MarkdownItPlugin,
-			'betterImage',
+			'betterImage_figure',
 			'./markdownItPlugin.js'
+		);
+
+		await joplin.contentScripts.register(
+			ContentScriptType.MarkdownItPlugin,
+			'betterImage_size',
+			'./image.js'
 		);
 	},
 });

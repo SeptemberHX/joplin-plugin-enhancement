@@ -2,8 +2,12 @@ body {
     counter-set: figNo;
 }
 
+figure {
+    text-align: center;
+}
+
 img {
-    vertical-align: center;
+    text-align: center;
     counter-increment: figNo;
 }
 
