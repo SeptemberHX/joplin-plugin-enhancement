@@ -1,0 +1,13 @@
+{
+	"manifest_version": 1,
+	"id": "com.septemberhx.Joplin.BetterImage",
+	"app_min_version": "2.8",
+	"version": "1.0.0",
+	"name": "better-image",
+	"description": "Better image display in joplin",
+	"author": "SeptemberHX",
+	"homepage_url": "https://github.com/SeptemberHX/joplin-plugin-better-image.git",
+	"repository_url": "https://github.com/SeptemberHX/joplin-plugin-better-image.git",
+	"keywords": [],
+	"categories": []
+}

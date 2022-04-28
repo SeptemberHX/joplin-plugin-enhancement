@@ -1,0 +1,16 @@
+body {
+    counter-set: figNo;
+}
+
+img {
+    vertical-align: center;
+    counter-increment: figNo;
+}
+
+figcaption {
+    text-align: center;
+}
+
+figcaption::before {
+    content: 'Fig.' counter(figNo) ': ';
+}
