@@ -1,3 +1,4 @@
+// code mainly comes from https://github.com/markdown-it/markdown-it/blob/master/lib/rules_inline/image.js
 // Process ![image](<src> "title")
 
 'use strict';
@@ -151,7 +152,7 @@ export default function (context) {
 
                 if (pos < max && state.src.charCodeAt(pos) === 0x7B/* { */) {
                     // [link](  <href>  "title"  ){  width=[width]  ,  height=[height]  }
-                    //                             ^^ skipping these spaces
+                    //                                                                  ^ trying to get its pos
                     let sizeStrPos = ++pos;
                     for (; pos < max; pos++) {
                         code = state.src.charCodeAt(pos);
@@ -221,6 +222,7 @@ export default function (context) {
                     if (height) {
                         attrs.push(['height', height]);
                     }
+                    token.attrs[token.attrIndex('alt')][1] = md.renderer.renderInline(token.children, options, state.env);
                     // ++++++++++++++++++++++ width and height parsing ends ++++++++++++++++++++++++++
                 }
 
@@ -229,7 +231,7 @@ export default function (context) {
                 return true;
             }
 
-            // ---- add our new rule just before raw 'image' rule ----
+            // ---- add our new rule just before raw 'image' ruler instead of replacing it ----
             md.inline.ruler.before('image', 'image_size', image);
             // ++++++
         }

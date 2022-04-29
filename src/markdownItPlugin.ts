@@ -4,19 +4,17 @@ export default function (context) {
             const pluginId = context.pluginId;
 
             const defaultRender = markdownIt.renderer.rules.image || function (tokens, idx, options, env, self) {
-                console.log(tokens, idx);
                 return self.renderToken(tokens, idx, options, env, self);
             };
 
             markdownIt.renderer.rules.image = function (tokens, idx, options, env, self) {
-                console.log(tokens, idx);
+                // console.log(tokens, idx);
                 const token = tokens[idx];
                 let result = defaultRender(tokens, idx, options, env, self);
 
                 let styleStr = "";
                 for (let attr of token.attrs) {
-                    console.log(attr);
-                    if (attr[0] == 'title') {
+                    if (attr[0] == 'alt' && attr[1].length > 0) {
                         result = `
                         ${result}
                         <figcaption>${attr[1]}</figcaption>
@@ -36,7 +34,6 @@ export default function (context) {
                     ${result}
                 </figure>
                 `;
-                console.log(result);
                 return result
             }
         },

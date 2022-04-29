@@ -1,11 +1,21 @@
-# Joplin Plugin
+# Joplin Plugin Better Image
 
-This is a template to create a new Joplin plugin.
+> Generate from the Joplin plugin template: https://joplinapp.org/api/get_started/plugins/
 
-The main two files you will want to look at are:
+Allow following md works:
 
-- `/src/index.ts`, which contains the entry point for the plugin source code.
-- `/src/manifest.json`, which is the plugin manifest. It contains information such as the plugin a name, version, etc.
+```markdown
+![Your Figure Caption Here](/path/to/your/img){width=80%}
+```
+
+This plugin can:
+* Specific the width/height of the image with `{width=80px}`, `{height=30}`, `{width=50%}`
+* Render the image `![]()` in a `<figure>` block with `figcaption`
+* Use the `alt` attribute as the figure caption, and display the caption under the image if not empty
+* Center alignment for image and caption
+* Automatic image numbering
+
+![Cat and Dog](./screenshot/example.png)
 
 ## Building the plugin
 

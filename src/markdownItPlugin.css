@@ -4,11 +4,11 @@ body {
 
 figure {
     text-align: center;
+    counter-increment: figNo;
 }
 
 img {
     text-align: center;
-    counter-increment: figNo;
 }
 
 figcaption {
@@ -16,5 +16,5 @@ figcaption {
 }
 
 figcaption::before {
-    content: 'Fig.' counter(figNo) ': ';
+    content: 'Fig. ' counter(figNo) ': ';
 }
