@@ -18,3 +18,7 @@ figcaption {
 figcaption::before {
     content: 'Fig. ' counter(figNo) ': ';
 }
+
+.mermaid {
+    text-align: center;
+}
