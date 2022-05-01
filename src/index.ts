@@ -14,5 +14,11 @@ joplin.plugins.register({
 			'betterImage_size',
 			'./image.js'
 		);
+
+		await joplin.contentScripts.register(
+			ContentScriptType.MarkdownItPlugin,
+			'link',
+			'./link.js'
+		);
 	},
 });

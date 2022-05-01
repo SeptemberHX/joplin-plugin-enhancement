@@ -2,6 +2,7 @@
 	"extraScripts": [
 		"markdownItPlugin.ts",
 		"image.ts",
-		"utils.ts"
+		"utils.ts",
+		"link.ts"
 	]
 }
