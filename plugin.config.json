@@ -2,11 +2,6 @@
 	"extraScripts": [
 		"markdownItPlugin.ts",
 		"image.ts",
-		"utils.ts",
-		"table.ts",
-		"markdowntable.ts",
-		"markdownTableData.ts",
-		"markdownTableUtility.ts",
-		"tableCommands.ts"
+		"utils.ts"
 	]
 }
