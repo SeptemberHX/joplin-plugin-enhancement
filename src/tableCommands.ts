@@ -1,5 +1,57 @@
-// code from https://github.com/takumisoft68/vscode-markdown-table/blob/master/src/commands.ts
+// some code from https://github.com/takumisoft68/vscode-markdown-table/blob/master/src/commands.ts
 import * as mdt from './markdowntable';
+
+export function insertColumn(cm, isLeft: boolean) {
+    if (!isCurrSelectionInTable(cm)) {
+        return;
+    }
+
+    // ドキュメント取得
+    const doc = cm.getDoc();
+    // 選択範囲取得
+    const cur_selection = doc.listSelections()[0];
+    // if (!doc.getSelection().isEmpty) {
+    //     return;
+    // }
+
+    // 表を探す
+    const parseResult = parseSelection(doc, cur_selection);
+    const startLine = parseResult[0],
+          endLine = parseResult[1],
+          table_selection = parseResult[2],
+          table_text = parseResult[3];
+
+    // 元のカーソル位置を取得
+    const [prevline, prevcharacter] = [cur_selection.head.line - startLine, cur_selection.head.ch];
+
+    // テーブルをフォーマット
+    const tableData = mdt.stringToTableData(table_text);
+
+    // 元のカーソル位置のセルを取得
+    const [prevRow, prevColumn] = mdt.getCellAtPosition(tableData, prevline, prevcharacter);
+
+    // 挿入位置
+    const insertPosition = isLeft ? prevColumn : prevColumn + 1;
+
+    const newTableData = mdt.insertColumn(tableData, insertPosition);
+    const tableStrFormatted = mdt.toFormatTableStr(newTableData);
+    const tableDataFormatted = mdt.stringToTableData(tableStrFormatted);
+
+    //エディタ選択範囲にテキストを反映
+    doc.replaceRange(tableStrFormatted, table_selection.anchor, table_selection.head);
+
+    // 新しいカーソル位置を計算
+    // character の +1 は表セル内の|とデータの間の半角スペース分
+    const newColumn = insertPosition;
+    const [newline, newcharacter] = mdt.getPositionOfCell(tableDataFormatted, prevRow, newColumn);
+    const newPosition = {
+        'line': table_selection.anchor.line + newline,
+        'ch': table_selection.anchor.ch + newcharacter + 1
+    };
+
+    // カーソル位置を移動
+    doc.setSelection(newPosition);
+};
 
 /**
  * merge navigateNextCell() and navigatePrevCell() into one function
@@ -12,30 +64,11 @@ export function navigateCell(cm, withFormat: boolean, prev=false) {
     const cur_selection = doc.listSelections()[0];
 
     // 表を探す
-    let startLine = cur_selection.anchor.line;
-    let endLine = cur_selection.anchor.line;
-
-    while (startLine - 1 >= 0) {
-        const line_text = doc.getLine(startLine);
-        if (!isInTable(line_text)) {
-            startLine++;
-            break;
-        }
-        startLine--;
-    }
-    while (endLine + 1 < doc.lineCount()) {
-        const line_text = doc.getLine(endLine + 1);
-        if (!isInTable(line_text)) {
-            break;
-        }
-        endLine++;
-    }
-    const table_selection = {
-        'anchor': {'line': startLine, 'ch': 0},
-        'head': {'line': endLine, 'ch': 10000}
-    };
-    doc.setSelection(table_selection.anchor, table_selection.head);
-    const table_text = doc.getSelection();
+    const parseResult = parseSelection(doc, cur_selection);
+    const startLine = parseResult[0],
+        endLine = parseResult[1],
+        table_selection = parseResult[2],
+        table_text = parseResult[3];
 
     // 元のカーソル位置を取得
     const [prevline, prevcharacter] = [cur_selection.head.line - startLine, cur_selection.head.ch];
@@ -103,4 +136,44 @@ export function navigateCell(cm, withFormat: boolean, prev=false) {
 
 function isInTable(text: string) :boolean {
     return text.trim().startsWith('|');
+}
+
+
+export function isCurrSelectionInTable(cm) :boolean {
+    const doc = cm.getDoc();
+    const cur_selection = doc.listSelections()[0];
+
+    let startLine = cur_selection.anchor.line;
+    const line_text = doc.getLine(startLine);
+    return isInTable(line_text);
+}
+
+function parseSelection(doc, cur_selection) {
+    // 表を探す
+    let startLine = cur_selection.anchor.line;
+    let endLine = cur_selection.anchor.line;
+
+    while (startLine - 1 >= 0) {
+        const line_text = doc.getLine(startLine);
+        if (!isInTable(line_text)) {
+            startLine++;
+            break;
+        }
+        startLine--;
+    }
+    while (endLine + 1 < doc.lineCount()) {
+        const line_text = doc.getLine(endLine + 1);
+        if (!isInTable(line_text)) {
+            break;
+        }
+        endLine++;
+    }
+    const table_selection = {
+        'anchor': {'line': startLine, 'ch': 0},
+        'head': {'line': endLine, 'ch': 10000}
+    };
+    doc.setSelection(table_selection.anchor, table_selection.head);
+    const table_text = doc.getSelection();
+
+    return [startLine, endLine, table_selection, table_text];
 }
