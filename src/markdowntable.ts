@@ -130,9 +130,8 @@ export function insertRow(tableData: MarkdownTableData, insertAt: number): Markd
     cells.splice(insertAt, 0, Array.from({ length: column_num }, () => '  '));
     leftovers.splice(insertAt, 0, '');
 
-    const text = tableData.originalText + '\n' + tableData.indent + '|' + '  |'.repeat(tableData.columns.length);
-
-    return new MarkdownTableData(text, aligns, columns, cells, leftovers, indent);
+    const table = new MarkdownTableData("", aligns, columns, cells, leftovers, indent);
+    return new MarkdownTableData(toFormatTableStr(table), aligns, columns, cells, leftovers, indent);
 }
 
 export function insertColumn(tableData: MarkdownTableData, insertAt: number): MarkdownTableData {

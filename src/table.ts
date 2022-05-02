@@ -1,4 +1,4 @@
-import {navigateCell, isCurrSelectionInTable, insertColumn} from "./tableCommands";
+import {navigateCell, insertColumn, insertRow} from "./tableCommands";
 
 
 module.exports = {
@@ -18,7 +18,6 @@ module.exports = {
                     } else if (event.code === 'Tab' && event.shiftKey) {
                         navigateCell(cm, true, true);
                     } else if (event.shiftKey && event.ctrlKey) {
-                        console.log(event.code);
                         switch (event.code) {
                             case 'ArrowLeft':
                                 insertColumn(cm, true);
@@ -27,8 +26,10 @@ module.exports = {
                                 insertColumn(cm, false);
                                 break;
                             case 'ArrowUp':
+                                insertRow(cm, true);
                                 break;
                             case 'ArrowDown':
+                                insertRow(cm, false);
                                 break;
                             default:break;
                         }
