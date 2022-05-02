@@ -1,6 +1,6 @@
 // some code from https://github.com/takumisoft68/vscode-markdown-table/blob/master/src/commands.ts
 import * as mdt from './markdowntable';
-import {deleteColumn} from "./markdowntable";
+
 
 export function deleteColume(cm) {
     if (!isCurrSelectionInTable(cm)) {
