@@ -1,6 +1,8 @@
-# Joplin Plugin Better Image
+# Joplin Plugin Enhancement
 
 > Generate from the Joplin plugin template: https://joplinapp.org/api/get_started/plugins/
+
+## Image
 
 Allow following md works:
 
@@ -16,6 +18,26 @@ This plugin can:
 * Automatic image numbering
 
 ![Cat and Dog](./screenshot/example.png)
+
+## Table
+
+Auto add row/column, delete column, and format table.
+
+> This part mainly comes from [takumisoft68: vscode-markdown-table](https://github.com/takumisoft68/vscode-markdown-table). Please refer to it for the function description.
+> I just convert the code from vscode's editor to joplin's codemirror. :)
+
+Because I have no idea how to create a context menu, currently all the operations are triggered by shortcut:
+
+|          Function          |          Shutcut          |
+| :------------------------: | :-----------------------: |
+|  Insert a row above/below  |  ctrl + shift + up/down   |
+| Insert a column left/right | ctrl + shift + left/right |
+|   Delete current column    | ctrl + shift + backspace  |
+| Navigate to previous cell  |            tab            |
+|   Navigate to next cell    |        shift + tab        |
+
+1. It will auto format your table code for alignment when navigation between cells with `tab`
+2. A new line is appended when trying to navigate to next cell from the last cell
 
 ## Building the plugin
 
