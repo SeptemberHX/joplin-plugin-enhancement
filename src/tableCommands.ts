@@ -1,5 +1,63 @@
 // some code from https://github.com/takumisoft68/vscode-markdown-table/blob/master/src/commands.ts
 import * as mdt from './markdowntable';
+import {deleteColumn} from "./markdowntable";
+
+export function deleteColume(cm) {
+    if (!isCurrSelectionInTable(cm)) {
+        return;
+    }
+
+    // ドキュメント取得
+    const doc = cm.getDoc();
+    // 選択範囲取得
+    const cur_selection = doc.listSelections()[0];
+    // if (!doc.getSelection().isEmpty) {
+    //     return;
+    // }
+
+    // 表を探す
+    const parseResult = parseSelection(doc, cur_selection);
+    const startLine = parseResult[0],
+        endLine = parseResult[1],
+        table_selection = parseResult[2],
+        table_text = parseResult[3];
+
+    // 元のカーソル位置を取得
+    const [prevline, prevcharacter] = [cur_selection.head.line - startLine, cur_selection.head.ch];
+
+    // テーブルをフォーマット
+    const tableData = mdt.stringToTableData(table_text);
+
+    if (tableData.columns.length == 1) {
+        return;
+    }
+
+    // 元のカーソル位置のセルを取得
+    const [prevRow, prevColumn] = mdt.getCellAtPosition(tableData, prevline, prevcharacter);
+
+    // 删除位置
+    const newTableData = mdt.deleteColumn(tableData, prevColumn);
+    const tableStrFormatted = mdt.toFormatTableStr(newTableData);
+    const tableDataFormatted = mdt.stringToTableData(tableStrFormatted);
+
+    //エディタ選択範囲にテキストを反映
+    doc.replaceRange(tableStrFormatted, table_selection.anchor, table_selection.head);
+
+    // 新しいカーソル位置を計算
+    // character の +1 は表セル内の|とデータの間の半角スペース分
+    let newColumn = prevColumn;
+    if (newColumn >= tableDataFormatted.columns.length) {
+        newColumn = tableDataFormatted.columns.length - 1;
+    }
+    const [newline, newcharacter] = mdt.getPositionOfCell(tableDataFormatted, prevRow, newColumn);
+    const newPosition = {
+        'line': table_selection.anchor.line + newline,
+        'ch': table_selection.anchor.ch + newcharacter + 1
+    };
+
+    // カーソル位置を移動
+    doc.setSelection(newPosition);
+}
 
 export function insertRow(cm, isAbove: boolean) {
     if (!isCurrSelectionInTable(cm)) {

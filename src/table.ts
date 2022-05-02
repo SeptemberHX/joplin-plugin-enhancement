@@ -1,4 +1,4 @@
-import {navigateCell, insertColumn, insertRow} from "./tableCommands";
+import {navigateCell, insertColumn, insertRow, deleteColume} from "./tableCommands";
 
 
 module.exports = {
@@ -17,7 +17,7 @@ module.exports = {
                         navigateCell(cm, true, false);
                     } else if (event.code === 'Tab' && event.shiftKey) {
                         navigateCell(cm, true, true);
-                    } else if (event.shiftKey && event.ctrlKey) {
+                    } else if (event.shiftKey && event.ctrlKey && !event.metaKey) {
                         switch (event.code) {
                             case 'ArrowLeft':
                                 insertColumn(cm, true);
@@ -30,6 +30,9 @@ module.exports = {
                                 break;
                             case 'ArrowDown':
                                 insertRow(cm, false);
+                                break;
+                            case 'Backspace':
+                                deleteColume(cm);
                                 break;
                             default:break;
                         }

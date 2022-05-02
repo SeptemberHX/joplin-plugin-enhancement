@@ -1,4 +1,4 @@
-// implemented by takumisoft68 at https://github.com/takumisoft68/vscode-markdown-table/blob/master/src/markdowntable.tssss
+// code implemented by takumisoft68 at https://github.com/takumisoft68/vscode-markdown-table/blob/master/src/markdowntable.tssss
 
 import MarkdownTableData from './markdownTableData';
 import * as Utility from './markdownTableUtility';
@@ -129,6 +129,24 @@ export function insertRow(tableData: MarkdownTableData, insertAt: number): Markd
 
     cells.splice(insertAt, 0, Array.from({ length: column_num }, () => '  '));
     leftovers.splice(insertAt, 0, '');
+
+    const table = new MarkdownTableData("", aligns, columns, cells, leftovers, indent);
+    return new MarkdownTableData(toFormatTableStr(table), aligns, columns, cells, leftovers, indent);
+}
+
+export function deleteColumn(tableData: MarkdownTableData, deleteAt: number): MarkdownTableData {
+    let columns = tableData.columns;
+    let aligns = tableData.aligns;
+    let cells = tableData.cells;
+    let leftovers = tableData.leftovers;
+    let column_num = tableData.columns.length;
+    let indent = tableData.indent;
+
+    columns.splice(deleteAt, 1);
+    aligns.splice(deleteAt, 1);
+    for (let i = 0; i < cells.length; i++) {
+        cells[i].splice(deleteAt, 1);
+    }
 
     const table = new MarkdownTableData("", aligns, columns, cells, leftovers, indent);
     return new MarkdownTableData(toFormatTableStr(table), aligns, columns, cells, leftovers, indent);
