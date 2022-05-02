@@ -2,12 +2,16 @@
 
 > Generate from the Joplin plugin template: https://joplinapp.org/api/get_started/plugins/
 
-## Image
+It contains several enhancement for both codemirror and markdown renderer.
+
+## Features
+
+### Image
 
 Allow following md works:
 
 ```markdown
-![Your Figure Caption Here](/path/to/your/img){width=80%}
+![Your Figure Caption Here](/path/to/your/img){width=60%}
 ```
 
 This plugin can:
@@ -19,11 +23,11 @@ This plugin can:
 
 ![Cat and Dog](./screenshot/example.png)
 
-## Table
+### Table
 
 Auto add row/column, delete column, and format table.
 
-> This part mainly comes from [takumisoft68: vscode-markdown-table](https://github.com/takumisoft68/vscode-markdown-table). Please refer to it for the function description.
+> This part mainly comes from [takumisoft68: vscode-markdown-table](https://github.com/takumisoft68/vscode-markdown-table). Please refer to it for the feature description.
 > I just convert the code from vscode's editor to joplin's codemirror. :)
 
 Because I have no idea how to create a context menu, currently all the operations are triggered by shortcut:
@@ -36,10 +40,12 @@ Because I have no idea how to create a context menu, currently all the operation
 | Navigate to previous cell  |            tab            |
 |   Navigate to next cell    |        shift + tab        |
 
-1. It will auto format your table code for alignment when navigation between cells with `tab`
+1. It will automatically format your table code for alignment when navigation between cells with `tab`
 2. A new line is appended when trying to navigate to next cell from the last cell
 
-## Building the plugin
+## Build
+
+### Building the plugin
 
 The plugin is built using Webpack, which creates the compiled code in `/dist`. A JPL archive will also be created at the root, which can use to distribute the plugin.
 
@@ -47,7 +53,7 @@ To build the plugin, simply run `npm run dist`.
 
 The project is setup to use TypeScript, although you can change the configuration to use plain JavaScript.
 
-## Updating the plugin framework
+### Updating the plugin framework
 
 To update the plugin framework, run `npm run update`.
 
