@@ -28,5 +28,6 @@
     "yargs": "^16.2.0"
   },
   "dependencies": {
+    "mime-types": "^2.1.35"
   }
 }
