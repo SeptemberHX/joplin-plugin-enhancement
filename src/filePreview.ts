@@ -12,7 +12,6 @@ export default function (context) {
             };
 
             markdownIt.renderer.rules.link_close = function (tokens, idx, options, env, self) {
-                console.log(tokens, idx);
                 const token = tokens[idx - 2];
                 let result = defaultRender(tokens, idx, options, env, self);
                 let link_path;
@@ -22,7 +21,6 @@ export default function (context) {
                     }
                 }
 
-                console.log(link_path);
                 if (link_path.startsWith('file://')) {
                     let file_extension = path.extname(link_path).toUpperCase();
                     switch (file_extension) {

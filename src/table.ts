@@ -1,4 +1,5 @@
 import {navigateCell, insertColumn, insertRow, deleteColume} from "./tableCommands";
+import TableFormatterBridge from "./tableFormatterBridge";
 
 
 module.exports = {
@@ -10,6 +11,13 @@ module.exports = {
                         cm.off('keyup', tabPressed);
                     }
                     cm.on('keyup', tabPressed);
+
+                    const commandBridge = new TableFormatterBridge(cm);
+                    CodeMirror.defineExtension('insertColumnLeft', commandBridge.insertColumnLeft.bind(commandBridge));
+                    CodeMirror.defineExtension('insertColumnRight', commandBridge.insertColumnRight.bind(commandBridge));
+                    CodeMirror.defineExtension('insertRowAbove', commandBridge.insertRowAbove.bind(commandBridge));
+                    CodeMirror.defineExtension('insertRowBelow', commandBridge.insertRowBelow.bind(commandBridge));
+                    CodeMirror.defineExtension('deleteColumn', commandBridge.deleteColumn.bind(commandBridge));
                 });
 
                 function tabPressed(cm, event) {
