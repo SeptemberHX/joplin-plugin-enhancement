@@ -36,7 +36,7 @@ export default class MermaidFolder {
                         continue;
                     }
                 } else {
-                    if (!meetMermaid) {
+                    if (!meetMermaid && token.string.includes('mermaid')) {
                         meetMermaid = true;
                         from = {line: lineNo, ch: token.start};
                     } else if (token.string.endsWith('```')) {
