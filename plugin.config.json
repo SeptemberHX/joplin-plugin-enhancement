@@ -1,13 +1,17 @@
 {
 	"extraScripts": [
-		"markdownItPlugin.ts",
-		"image.ts",
-		"utils.ts",
-		"table.ts",
-		"markdowntable.ts",
-		"markdownTableData.ts",
-		"markdownTableUtility.ts",
-		"tableCommands.ts",
-		"filePreview.ts"
+		"driver/codemirror/index.ts",
+		"driver/codemirror/table.ts",
+		"driver/codemirror/markdowntable.ts",
+		"driver/codemirror/markdownTableData.ts",
+		"driver/codemirror/markdownTableUtility.ts",
+		"driver/codemirror/tableCommands.ts",
+
+		"driver/markdownItRenderer/index.ts",
+		"driver/markdownItRenderer/filePreviewRenderer.ts",
+		"driver/markdownItRenderer/imageRenderer.ts",
+
+		"driver/markdownItRuler/index.ts",
+		"driver/markdownItRuler/utils.ts"
 	]
 }

@@ -508,7 +508,7 @@ export enum ContentScriptType {
 	 * module.exports = {
 	 *     default: function(context) {
 	 *         return {
-	 *             plugin: function(markdownIt, options) {
+	 *             plugin: function(markdownItRuler, options) {
 	 *                 // ...
 	 *             },
 	 *             assets: {

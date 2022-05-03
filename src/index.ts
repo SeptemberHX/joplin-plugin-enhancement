@@ -7,25 +7,19 @@ joplin.plugins.register({
 		await joplin.contentScripts.register(
 			ContentScriptType.MarkdownItPlugin,
 			'enhancement_figure_name',
-			'./markdownItPlugin.js'
+			'./driver/markdownItRuler/index.js'
 		);
 
 		await joplin.contentScripts.register(
 			ContentScriptType.MarkdownItPlugin,
-			'enhancement_image_size',
-			'./image.js'
-		);
-
-		await joplin.contentScripts.register(
-			ContentScriptType.MarkdownItPlugin,
-			'enhancement_file_preview',
-			'./filePreview.js'
+			'enhancement_renderer',
+			'./driver/markdownItRenderer/index.js'
 		);
 
 		await joplin.contentScripts.register(
 			ContentScriptType.CodeMirrorPlugin,
 			'enhancement_table_formatter',
-			'./table.js'
+			'./driver/codemirror/index.js'
 		);
 
 		// I don't like too many items on the toolbar. :)
