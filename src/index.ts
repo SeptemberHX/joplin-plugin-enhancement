@@ -22,6 +22,78 @@ joplin.plugins.register({
 			'./driver/codemirror/index.js'
 		);
 
+		await joplin.commands.register({
+			name: 'alignColumnLeft',
+			label: 'Align current column to left',
+			iconName: 'fas fa-align-left',
+			execute: async () => {
+				await joplin.commands.execute('editor.execCommand', {
+					name: 'alignColumns',
+					args: [[':', '-']]
+				});
+			},
+		});
+
+		await joplin.commands.register({
+			name: 'alignColumnRight',
+			label: 'Align current column to right',
+			iconName: 'fas fa-align-right',
+			execute: async () => {
+				await joplin.commands.execute('editor.execCommand', {
+					name: 'alignColumns',
+					args: [['-', ':']]
+				});
+			},
+		});
+
+		await joplin.commands.register({
+			name: 'alignColumnCenter',
+			label: 'Align current column to center',
+			iconName: 'fas fa-align-center',
+			execute: async () => {
+				await joplin.commands.execute('editor.execCommand', {
+					name: 'alignColumns',
+					args: [[':', ':']]
+				});
+			},
+		});
+
+		await joplin.commands.register({
+			name: 'alignColumnSlash',
+			label: 'Remove the alignment of current column',
+			iconName: 'fas fa-align-justify',
+			execute: async () => {
+				await joplin.commands.execute('editor.execCommand', {
+					name: 'alignColumns',
+					args: [['-', '-']]
+				});
+			},
+		});
+
+		await joplin.views.toolbarButtons.create(
+			'align-column-left',
+			'alignColumnLeft',
+			ToolbarButtonLocation.EditorToolbar,
+		);
+
+		await joplin.views.toolbarButtons.create(
+			'align-column-center',
+			'alignColumnCenter',
+			ToolbarButtonLocation.EditorToolbar,
+		);
+
+		await joplin.views.toolbarButtons.create(
+			'align-column-right',
+			'alignColumnRight',
+			ToolbarButtonLocation.EditorToolbar,
+		);
+
+		await joplin.views.toolbarButtons.create(
+			'align-column-slash',
+			'alignColumnSlash',
+			ToolbarButtonLocation.EditorToolbar,
+		);
+
 		// I don't like too many items on the toolbar. :)
 
 		// await joplin.commands.register({

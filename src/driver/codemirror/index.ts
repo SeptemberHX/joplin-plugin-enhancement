@@ -18,6 +18,7 @@ module.exports = {
                     CodeMirror.defineExtension('insertRowAbove', commandBridge.insertRowAbove.bind(commandBridge));
                     CodeMirror.defineExtension('insertRowBelow', commandBridge.insertRowBelow.bind(commandBridge));
                     CodeMirror.defineExtension('deleteColumn', commandBridge.deleteColumn.bind(commandBridge));
+                    CodeMirror.defineExtension('alignColumns', commandBridge.alignColumnsCommand.bind(commandBridge));
                 });
 
                 function tabPressed(cm, event) {

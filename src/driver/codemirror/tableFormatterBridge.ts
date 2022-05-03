@@ -1,4 +1,4 @@
-import {deleteColume, insertColumn, insertRow} from "./tableCommands";
+import {alignColumns, deleteColume, insertColumn, insertRow} from "./tableCommands";
 
 export default class TableFormatterBridge {
     constructor(private readonly editor) {}
@@ -21,5 +21,9 @@ export default class TableFormatterBridge {
 
     deleteColumn() {
         deleteColume(this.editor);
+    }
+
+    alignColumnsCommand(options) {
+        alignColumns(this.editor, options);
     }
 }

@@ -1,11 +1,11 @@
 {
 	"extraScripts": [
 		"driver/codemirror/index.ts",
-		"driver/codemirror/table.ts",
 		"driver/codemirror/markdowntable.ts",
 		"driver/codemirror/markdownTableData.ts",
 		"driver/codemirror/markdownTableUtility.ts",
 		"driver/codemirror/tableCommands.ts",
+		"driver/codemirror/tableFormatterBridge.ts",
 
 		"driver/markdownItRenderer/index.ts",
 		"driver/markdownItRenderer/filePreviewRenderer.ts",
