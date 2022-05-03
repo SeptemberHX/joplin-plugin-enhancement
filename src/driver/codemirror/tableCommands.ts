@@ -244,6 +244,10 @@ export function insertColumn(cm, isLeft: boolean) {
  * migrate from vscode editor to codemirror
  */
 export function navigateCell(cm, withFormat: boolean, prev=false) {
+    if (!isCurrSelectionInTable(cm)) {
+        return;
+    }
+
     // ドキュメント取得
     const doc = cm.getDoc();
     // 選択範囲取得
