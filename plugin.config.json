@@ -10,6 +10,9 @@
 		"driver/codemirror/mermaidFolder/index.ts",
 		"driver/codemirror/mermaidFolder/mermaidFolder.ts",
 
+		"driver/codemirror/quickCommands/index.ts",
+		"driver/codemirror/quickCommands/quickCommands.ts",
+
 		"driver/markdownItRenderer/index.ts",
 		"driver/markdownItRenderer/filePreviewRenderer.ts",
 		"driver/markdownItRenderer/imageRenderer.ts",

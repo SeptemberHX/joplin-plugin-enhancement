@@ -1,0 +1,44 @@
+/* from https://github.com/ylc395/joplin-plugin-note-link-system/blob/main/src/driver/codeMirror/style.css */
+
+.CodeMirror-hints {
+    position: absolute;
+    z-index: 10;
+    overflow: hidden;
+    list-style: none;
+
+    margin: 0;
+    padding: 2px;
+
+    -webkit-box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+    border: 1px solid silver;
+
+    background: var(--joplin-background-color);
+    font-size: 90%;
+    font-family: monospace;
+
+    max-height: 20em;
+    overflow-y: auto;
+}
+
+.quick-commands-hint.CodeMirror-hint {
+    margin: 0;
+    padding: 0 4px;
+    border-radius: 2px;
+    white-space: pre;
+    color: var(--joplin-color);
+    cursor: pointer;
+}
+
+.quick-commands-hint.CodeMirror-hint-active {
+    background: var(--joplin-raised-background-color);
+    color: var(--joplin-raised-color);
+}
+
+.quick-commands-hint-path {
+    margin-left: 1em;
+    font-size: 0.8em;
+    color: var(--joplin-color-faded);
+}

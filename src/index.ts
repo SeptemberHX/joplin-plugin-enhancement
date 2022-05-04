@@ -42,6 +42,12 @@ joplin.plugins.register({
 
 		}
 
+		await joplin.contentScripts.register(
+			ContentScriptType.CodeMirrorPlugin,
+			'enhancement_quick_commands',
+			'./driver/codemirror/quickCommands/index.js'
+		);
+
 		if (enableTableFormatter) {
 			await joplin.contentScripts.register(
 				ContentScriptType.CodeMirrorPlugin,
