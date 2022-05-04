@@ -4,7 +4,7 @@ import {settings} from "./settings";
 import {
 	ENABLE_IMAGE_ENHANCEMENT,
 	ENABLE_LOCAL_PDF_PREVIEW,
-	ENABLE_MERMAID_FOLDER,
+	ENABLE_MERMAID_FOLDER, ENABLE_QUICK_COMMANDS,
 	ENABLE_TABLE_FORMATTER
 } from "./common";
 
@@ -16,6 +16,7 @@ joplin.plugins.register({
 		const enableMermaidFolder = await joplin.settings.value(ENABLE_MERMAID_FOLDER);
 		const enableLocalPDFPreview = await joplin.settings.value(ENABLE_LOCAL_PDF_PREVIEW);
 		const enableImageEnhancement = await joplin.settings.value(ENABLE_IMAGE_ENHANCEMENT);
+		const enableQuickCommands = await joplin.settings.value(ENABLE_QUICK_COMMANDS);
 
 		if (enableImageEnhancement) {
 			await joplin.contentScripts.register(
@@ -42,11 +43,13 @@ joplin.plugins.register({
 
 		}
 
-		await joplin.contentScripts.register(
-			ContentScriptType.CodeMirrorPlugin,
-			'enhancement_quick_commands',
-			'./driver/codemirror/quickCommands/index.js'
-		);
+		if (enableQuickCommands) {
+			await joplin.contentScripts.register(
+				ContentScriptType.CodeMirrorPlugin,
+				'enhancement_quick_commands',
+				'./driver/codemirror/quickCommands/index.js'
+			);
+		}
 
 		if (enableTableFormatter) {
 			await joplin.contentScripts.register(

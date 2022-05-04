@@ -3,7 +3,7 @@ import { SettingItemType } from "api/types";
 import {
     ENABLE_IMAGE_ENHANCEMENT,
     ENABLE_LOCAL_PDF_PREVIEW,
-    ENABLE_MERMAID_FOLDER,
+    ENABLE_MERMAID_FOLDER, ENABLE_QUICK_COMMANDS,
     ENABLE_TABLE_FORMATTER
 } from "./common";
 
@@ -52,6 +52,15 @@ export namespace settings {
             type: SettingItemType.Bool,
             label: 'Allow to set image size and caption',
             description: "![Image Caption](path){width=80%}. (requires restart)",
+        }
+
+        PLUGIN_SETTINGS[ENABLE_QUICK_COMMANDS] = {
+            value: true,
+            public: true,
+            section: SECTION,
+            type: SettingItemType.Bool,
+            label: 'Enable quick commands for quick input',
+            description: "Insert mermaid graph, tables, etc. with /commands. (requires restart)",
         }
 
         await joplin.settings.registerSettings(PLUGIN_SETTINGS);

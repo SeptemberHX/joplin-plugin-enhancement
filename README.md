@@ -43,6 +43,27 @@ Because I have no idea how to create a context menu, currently all the operation
 1. It will automatically format your table code for alignment when navigation between cells with `tab`
 2. A new line is appended when trying to navigate to next cell from the last cell
 
+### Local file preview
+
+Currently only local pdf file can be previewed.
+
+### Quick Commands
+
+Type `/command` in the editor for quick input of table, mermaid, etc.
+
+* `/table`
+* `/graph`
+* `/flowchart`
+* `/sequenceDiagram`
+* `/gantt`
+* `/classDiagram`
+* `/erDiagram`
+* `/journey`
+
+### Auto folder in the editor
+
+Currently only the mermaid block can be folded automatically.
+
 ## Build
 
 ### Building the plugin
