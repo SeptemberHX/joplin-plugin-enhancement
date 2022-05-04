@@ -1,6 +1,6 @@
 import {navigateCell, insertColumn, insertRow, deleteColume} from "./tableCommands";
 import TableFormatterBridge from "./tableFormatterBridge";
-import MermaidFolder from "./mermaidFolder";
+import MermaidFolder from "../mermaidFolder/mermaidFolder";
 
 
 module.exports = {

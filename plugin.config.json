@@ -1,11 +1,14 @@
 {
 	"extraScripts": [
-		"driver/codemirror/index.ts",
-		"driver/codemirror/markdowntable.ts",
-		"driver/codemirror/markdownTableData.ts",
-		"driver/codemirror/markdownTableUtility.ts",
-		"driver/codemirror/tableCommands.ts",
-		"driver/codemirror/tableFormatterBridge.ts",
+		"driver/codemirror/tableFormatter/index.ts",
+		"driver/codemirror/tableFormatter/markdowntable.ts",
+		"driver/codemirror/tableFormatter/markdownTableData.ts",
+		"driver/codemirror/tableFormatter/markdownTableUtility.ts",
+		"driver/codemirror/tableFormatter/tableCommands.ts",
+		"driver/codemirror/tableFormatter/tableFormatterBridge.ts",
+
+		"driver/codemirror/mermaidFolder/index.ts",
+		"driver/codemirror/mermaidFolder/mermaidFolder.ts",
 
 		"driver/markdownItRenderer/index.ts",
 		"driver/markdownItRenderer/filePreviewRenderer.ts",
