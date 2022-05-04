@@ -84,7 +84,7 @@ export default class MermaidFolder {
         const markEl = document.createElement('i');
         markEl.classList.add(MARKER_CLASS_NAME);
         markEl.textContent = '==> folded mermaid graph block <==';
-
+        markEl.style.cssText = 'color: darkgray;';
         return markEl;
     }
 }
