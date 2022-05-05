@@ -139,14 +139,17 @@ export default class QuickCommands {
         const completion: Completion = {
             from: completionFrom,
             to: completionTo,
-            list: this.getCommandHints(keyword, this.doc.getRange({line: cursorLine, ch: 0}, {line: cursorLine, ch: cursorCh})),
+            list: this.getCommandHints(
+                keyword,
+                this.doc.getRange({line: cursorLine, ch: 0}, {line: cursorLine, ch: cursorCh - 1}) // string before '/'
+            ),
         };
         return completion;
     }
 
     private getCommandHints(keyword: string, indent) : Hint[] {
         let hints = [];
-
+        
         // add indent when there exists 'tab' before or add a new line
         let indentText = '';
         if (indent.trim().length != 0) {
