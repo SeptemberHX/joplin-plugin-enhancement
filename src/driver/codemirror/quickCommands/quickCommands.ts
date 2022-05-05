@@ -149,7 +149,7 @@ export default class QuickCommands {
 
     private getCommandHints(keyword: string, indent) : Hint[] {
         let hints = [];
-        
+
         // add indent when there exists 'tab' before or add a new line
         let indentText = '';
         if (indent.trim().length != 0) {
