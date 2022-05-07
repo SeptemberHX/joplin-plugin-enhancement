@@ -30,6 +30,8 @@
   },
   "dependencies": {
     "mime-types": "^2.1.35",
-    "ts-debounce": "^4.0.0"
+    "node-fetch": "^2.6.1",
+    "ts-debounce": "^4.0.0",
+    "ts-node": "^10.7.0"
   }
 }

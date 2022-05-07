@@ -4,9 +4,10 @@ import {settings} from "./settings";
 import {
 	ENABLE_IMAGE_ENHANCEMENT,
 	ENABLE_LOCAL_PDF_PREVIEW,
-	ENABLE_MERMAID_FOLDER, ENABLE_QUICK_COMMANDS,
+	ENABLE_MERMAID_FOLDER, ENABLE_PAPERS, ENABLE_QUICK_COMMANDS,
 	ENABLE_TABLE_FORMATTER
 } from "./common";
+import {syncAllPaperItems} from "./driver/papers/papersUtils";
 
 joplin.plugins.register({
 	onStart: async function() {
@@ -17,6 +18,24 @@ joplin.plugins.register({
 		const enableLocalPDFPreview = await joplin.settings.value(ENABLE_LOCAL_PDF_PREVIEW);
 		const enableImageEnhancement = await joplin.settings.value(ENABLE_IMAGE_ENHANCEMENT);
 		const enableQuickCommands = await joplin.settings.value(ENABLE_QUICK_COMMANDS);
+		const enablePapers = await joplin.settings.value(ENABLE_PAPERS);
+
+		if (enablePapers) {
+			await joplin.commands.register({
+				name: "enhancement_papers_syncAll",
+				label: "Sync All Files from PapersLib",
+				execute: async () => {
+					console.log('==============');
+					await syncAllPaperItems();
+				},
+			});
+
+			await joplin.views.menuItems.create(
+				"syncAllFilesFromPapersLib",
+				"enhancement_papers_syncAll",
+				MenuItemLocation.Tools
+			);
+		}
 
 		if (enableImageEnhancement) {
 			await joplin.contentScripts.register(

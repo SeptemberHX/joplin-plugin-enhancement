@@ -4,7 +4,8 @@ import {
     ENABLE_IMAGE_ENHANCEMENT,
     ENABLE_LOCAL_PDF_PREVIEW,
     ENABLE_MERMAID_FOLDER, ENABLE_QUICK_COMMANDS,
-    ENABLE_TABLE_FORMATTER
+    ENABLE_TABLE_FORMATTER,
+    ENABLE_PAPERS, PAPERS_COOKIE
 } from "./common";
 
 export namespace settings {
@@ -61,6 +62,24 @@ export namespace settings {
             type: SettingItemType.Bool,
             label: 'Enable quick commands for quick input',
             description: "Insert mermaid graph, tables, etc. with /commands. (requires restart)",
+        }
+
+        PLUGIN_SETTINGS[ENABLE_PAPERS] = {
+            value: true,
+            public: true,
+            section: SECTION,
+            type: SettingItemType.Bool,
+            label: 'Enable fetch data from readcube papers',
+            description: "Fetch your files from readcube papers and create notes for each file. (requires restart)",
+        }
+
+        PLUGIN_SETTINGS[PAPERS_COOKIE] = {
+            value: '',
+            public: true,
+            section: SECTION,
+            type: SettingItemType.String,
+            label: 'Cookie for readcube papers',
+            description: "Visit readcube papers web app in your web browser, open development tools and copy your cookies",
         }
 
         await joplin.settings.registerSettings(PLUGIN_SETTINGS);

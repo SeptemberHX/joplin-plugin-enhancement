@@ -5,7 +5,7 @@ module.exports = {
         return {
             plugin: function (CodeMirror) {
                 CodeMirror.defineOption("mermaidFolder", [], async function(cm, val, old) {
-                    new MermaidFolder(_context, cm);
+                    await new MermaidFolder(_context, cm);
                 });
             },
             codeMirrorOptions: { 'mermaidFolder': true },
