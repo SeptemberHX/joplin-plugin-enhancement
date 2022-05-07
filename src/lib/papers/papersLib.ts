@@ -23,6 +23,14 @@ type CollectionItem = {
     id: string;
 }
 
+type AnnotationItem = {
+    id: string;
+    type: string;
+    text: string;
+    note: string;
+    color_id: number;
+}
+
 
 export default class PapersLib {
     constructor(private readonly cookie) {
@@ -54,10 +62,10 @@ export default class PapersLib {
                     // const annoRes = await fetch(`https://sync.readcube.com/collections/${collection_id}/items/${item.id}/annotations`, {headers: {cookie: this.cookie}});
                     results.push({
                         title: item.article.title,
-                        from: 'Not supported now',
-                        authors: item.article.authors,
-                        tags: [],
-                        rating: -1,
+                        from: 'journal' in item.article ? item.article.journal : 'Unknown',
+                        authors: 'authors' in item.article ? item.article.authors : [],
+                        tags: 'tags' in item.user_data ? item.user_data.tags : [],
+                        rating: 'rating' in item.user_data ? item.user_data.rating : -1,
                         abstract: item.article.abstract,
                         collection_id: collection_id,
                         id: item.id,
@@ -74,6 +82,25 @@ export default class PapersLib {
                 }
             } else {
                 break;
+            }
+        }
+        return results;
+    }
+
+    async getAnnotation(collection_id, item_id) {
+        let requestUrl = `https://sync.readcube.com/collections/${collection_id}/items/${item_id}/annotations`;
+        let results: AnnotationItem[] = [];
+        const response = await fetch(requestUrl, { headers: { cookie: this.cookie} });
+        const resJson = await response.json();
+        if (resJson.status === 'ok') {
+            for (let anno of resJson.annotations) {
+                results.push({
+                    id: anno.id,
+                    type: anno.type,
+                    text: anno.text,
+                    note: anno.note,
+                    color_id: anno.color_id
+                });
             }
         }
         return results;
