@@ -6,6 +6,35 @@ It contains several enhancement for both codemirror and markdown renderer.
 
 ## Features
 
+### ReadCube Papers
+
+ReadCube Papers is a reference manager: [Official website](https://www.papersapp.com/).
+
+This plugin supports:
+
+1. Create one note for each paper in your library on Papers including the following content. They are grouped by the published year.
+   1. title
+   2. authors
+   3. journal/conference name
+   4. tags
+   5. rating
+   6. abstract
+   7. user note
+   8. user annotations
+2. Each created note is named with the paper's title. You can update all the papers' information through the menu.
+3. Direct link to the PDF file.
+
+![](./screenshot/readcube.png)
+
+Each paper note has two parts:
+* Joplin note part(the green box area): All the content in it will be saved
+* Papers data part(the purple box area): All the content in it will be overwritten when syncing with Papers.
+
+How to use:
+1. In the Joplin Settings -> Joplin Enhancement -> Set your cookie for Papers
+2. Joplin Menubar -> Tools -> Sync files with Papers: It will create notes for your papers without the annotations
+3. Open one note: the annotation will be automatically updated. Or click the sync icon on the editor toolbar.
+
 ### Image
 
 Allow following md works:
