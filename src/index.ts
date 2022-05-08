@@ -22,19 +22,40 @@ joplin.plugins.register({
 		const enablePapers = await joplin.settings.value(ENABLE_PAPERS);
 
 		if (enablePapers) {
-			let syncAllPaperItemsDebounce = debounce(syncAllPaperItems, 5000);
 			let updateAnnotationsDebounce = debounce(updateAnnotations, 1000);
+			const dialogs = joplin.views.dialogs;
+			const beforeHandle = await dialogs.create('BeforeSyncDialog');
+			await dialogs.setHtml(beforeHandle, '<p>You are trying to sync with your papers library.</p>' +
+				'<p>Click "Ok" button to begin the synchronization</p>' +
+				'<p>After clicking the "Ok" button, this dialog disappears, and the dialog will show again when the synchronization is finished.</p>' +
+				'<p>It can spend several minutes, depending on your library size and network condition.</p>' +
+				'<p><mark>Please DO NOT try to sync again until next dialog appears again!</mark></p>');
+			await dialogs.setButtons(beforeHandle, [{id: 'ok'}, {id: 'cancel'}]);
+
+			const errHandle = await dialogs.create('errSyncDialog');
+			await dialogs.setHtml(errHandle, '<p>Error happens during sync with your Papers library. Please check your papers cookie and network connection.</p>');
+			await dialogs.setButtons(errHandle, [{id: 'ok'}]);
+
+			const finishHandle = await dialogs.create('finishSyncDialog');
+			await dialogs.setHtml(finishHandle, '<p>Syncing with your Papers library finished.</p>')
+			await dialogs.setButtons(finishHandle, [{id: 'ok'}]);
 
 			await joplin.commands.register({
 				name: "enhancement_papers_syncAll",
 				label: "Sync All Files from PapersLib",
 				execute: async () => {
 					try {
-						await syncAllPaperItemsDebounce();
+						const result = await dialogs.open(beforeHandle);
+						if (result.id === 'ok') {
+							await syncAllPaperItems();
+							await dialogs.open(finishHandle);
+						}
 					} catch (err) {
 						if (err.message.code === 'ETIMEDOUT') {
 							console.log("ETIMEDOUT in syncAllPaperItems()");
 						}
+						await dialogs.open(errHandle);
+						return;
 					}
 				},
 			});

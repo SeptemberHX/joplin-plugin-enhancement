@@ -71,8 +71,8 @@ export async function updateAnnotations(noteId, noteBody) {
 
 async function replacePaperNoteBody(item, noteId) {
     const note = await joplin.data.get(['notes', noteId], { fields: ['body']});
-    let fromIndex = note.body.indexOf('## Papers');
-    let toIndex = note.body.indexOf('### Annotations');
+    let fromIndex = note.body.lastIndexOf('## Papers');
+    let toIndex = note.body.lastIndexOf('### Annotations');
 
     // avoid unnecessary note update
     const newMetadata = buildPaperNoteBody(item);
@@ -95,6 +95,7 @@ async function replacePaperNoteBody(item, noteId) {
         return;
     }
 
+    console.log(`Update for ${item.title}`);
     await joplin.data.put(['notes', noteId], null, { body: modifiedNote });
 }
 
