@@ -22,3 +22,58 @@ figcaption::before {
 .mermaid {
     text-align: center;
 }
+
+/* for papers */
+.paper_tg {
+    max-width: 1000px;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.paper_tg td {
+    border-color: black;
+    border-style: solid;
+    border-width: 1px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    overflow: hidden;
+    padding: 10px 5px;
+    word-break: normal;
+}
+
+.paper_tg th {
+    border-color: black;
+    border-style: solid;
+    border-width: 1px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    overflow: hidden;
+    padding: 10px 5px;
+    word-break: normal;
+}
+
+.paper_tg_title, .paper_tg_from, .paper_tg_tags, .paper_tg_stars, .paper_tg_authors {
+    border-color: inherit;
+    font-size: large;
+    text-align: center;
+    vertical-align: middle;
+}
+
+th.paper_tg_title {
+    font-weight: bold; !important;
+}
+
+th.paper_tg_abstract {
+    border-color: inherit;
+    text-align: left;
+    vertical-align: top
+}
+
+th.paper_tg_from {
+    width: 50%;
+}
+
+.paper_tg_tags {
+    width: 25%;
+}

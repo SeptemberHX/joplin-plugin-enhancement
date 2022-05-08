@@ -40,6 +40,7 @@ export async function syncAllPaperItems() {
 }
 
 export async function updateAnnotations(noteId, noteBody) {
+    console.log('Enhancement: In updateAnnotations...');
     const papersCookie = await joplin.settings.value(PAPERS_COOKIE);
     if (papersCookie.length === 0) {
         alert('Empty cookie for Papers. Please set it in the preferences.');
@@ -73,14 +74,27 @@ async function replacePaperNoteBody(item, noteId) {
     let fromIndex = note.body.indexOf('## Papers');
     let toIndex = note.body.indexOf('### Annotations');
 
+    // avoid unnecessary note update
+    const newMetadata = buildPaperNoteBody(item);
+    if (newMetadata === note.body.substr(fromIndex, toIndex)) {
+        console.log(`No update for ${item.title}`);
+        return;
+    }
+
     let modifiedNote = '';
     if (fromIndex > 0 && toIndex > 0) {
-        modifiedNote = note.body.substr(0, fromIndex) + buildPaperNoteBody(item) + note.body.substr(toIndex);
+        modifiedNote = note.body.substr(0, fromIndex) + newMetadata + note.body.substr(toIndex);
     }
 
     if (modifiedNote.length === 0) {
         modifiedNote = note.body;
     }
+
+    // avoid unnecessary note update
+    if (modifiedNote === note.body) {
+        return;
+    }
+
     await joplin.data.put(['notes', noteId], null, { body: modifiedNote });
 }
 
@@ -126,12 +140,15 @@ function buildPaperItemBody(item) {
     return "## Notes\n" +
         "\n" +
         buildPaperNoteBody(item) +
-        "### Annotations\n";
+        "### Annotations\n" +
+        "\n" +
+        "Please click the sync button on the editor toolbar to fetch your annotations from Papers.\n";
 }
 
 function buildPaperNoteBody(item) {
     return "## Papers\n" +
     "\n" +
+    "```papers\n" +
     "* Title: \t" + item.title + "\n" +
     "* Authors: \t" + item.authors.join(', ') + "\n" +
     "* From: \t" + item.from + "\n" +
@@ -140,6 +157,7 @@ function buildPaperNoteBody(item) {
     "* Abstract: \t" + item.abstract + "\n" +
     "* id: \t" + item.id + "\n" +
     "* collection_id: \t" + item.collection_id + "\n" +
+    "```\n" +
     "\n" +
     "### Notes\n" +
     "\n" +
@@ -148,18 +166,17 @@ function buildPaperNoteBody(item) {
 }
 
 function buildAnnotationBody(annotations) {
-    console.log(annotations);
     let annoBody = '### Annotations\n\n';
     for (let anno of annotations) {
         switch (anno.type) {
             case 'highlight':
-                annoBody += `<mark>${anno.text}</mark>\n\n`;
+                annoBody += `<mark>${anno.text.replaceAll('\n', '')}</mark>\n\n`;
                 break;
             case 'underline':
-                annoBody += `<u>${anno.text}</u>\n\n`;
+                annoBody += `<u>${anno.text.replaceAll('\n', '')}</u>\n\n`;
                 break;
             default:
-                annoBody += anno.text + '\n\n';
+                annoBody += anno.text.replaceAll('\n', '') + '\n\n';
                 break;
         }
     }

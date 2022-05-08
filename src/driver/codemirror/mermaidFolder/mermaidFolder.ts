@@ -22,6 +22,7 @@ export default class MermaidFolder {
 
         let meetMermaid = false;
         let from;
+        let blockType = 'mermaid';
         doc.eachLine((line) => {
             const lineNo = doc.getLineNumber(line);
             if (lineNo === null) {
@@ -36,10 +37,12 @@ export default class MermaidFolder {
                         continue;
                     }
                 } else {
-                    if (!meetMermaid && token.string.includes('mermaid')) {
+                    if (!meetMermaid && (token.string.includes('mermaid') || token.string.includes('papers'))) {
                         meetMermaid = true;
                         from = {line: lineNo, ch: token.start};
+                        blockType = token.string.includes('mermaid') ? 'mermaid' : 'papers';
                     } else if (token.string.endsWith('```')) {
+                        if (!meetMermaid) continue;
                         meetMermaid = false;
 
                         // not fold when it is folded ?
@@ -58,7 +61,7 @@ export default class MermaidFolder {
                             { line: from.line, ch: 0 },
                             { line: lineNo, ch: token.end },
                             {
-                                replacedWith: this.createFoldMarker(token.string),
+                                replacedWith: this.createFoldMarker(token.string, blockType),
                                 handleMouseEvents: true,
                                 className: MARKER_CLASS_NAME, // class name is not renderer in DOM
                             },
@@ -80,10 +83,10 @@ export default class MermaidFolder {
         }
     }
 
-    private createFoldMarker(href: string) {
+    private createFoldMarker(href: string, blockType) {
         const markEl = document.createElement('i');
         markEl.classList.add(MARKER_CLASS_NAME);
-        markEl.textContent = '==> folded mermaid graph block <==';
+        markEl.textContent = `==> folded ${blockType} block <==`;
         markEl.style.cssText = 'color: darkgray;';
         return markEl;
     }

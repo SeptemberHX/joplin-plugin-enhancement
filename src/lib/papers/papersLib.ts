@@ -1,4 +1,4 @@
-import fetch, { AbortError } from 'node-fetch';
+import fetch from 'node-fetch';
 
 /**
  * API utils for Readcube PapersLib. All the apis are analyzed from the web application.
@@ -54,7 +54,7 @@ export default class PapersLib {
         let requestUrl = `https://sync.readcube.com/collections/${collection_id}/items?size=50`;
         let results: PaperItem[] = [];
         while (true) {
-            console.log('In while loop...');
+            console.log('In the fetching while-loop...');
             const response = await fetch(requestUrl, {headers: {cookie: this.cookie}});
             const resJson = await response.json();
             if (resJson.status === 'ok') {
@@ -108,7 +108,6 @@ export default class PapersLib {
 
     async getAllItems() {
         const collections = await this.getCollections();
-        const items = await this.getItems(collections[0].id);
-        return items;
+        return await this.getItems(collections[0].id);
     }
 }
