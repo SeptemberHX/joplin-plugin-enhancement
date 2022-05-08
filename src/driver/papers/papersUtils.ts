@@ -54,8 +54,11 @@ export async function updateAnnotations(noteId, noteBody) {
         const paperItemId = paperItemIdMatchR[1];
         const paperCollectionId = paperCollectionIdMatchR[1];
         const annoBody = buildAnnotationBody(await papers.getAnnotation(paperCollectionId, paperItemId));
-
         let fromIndex = noteBody.lastIndexOf('### Annotations');
+        if (annoBody === noteBody.substr(fromIndex)) {
+            return;
+        }
+
         let modifiedNote = '';
         if (fromIndex > 0) {
             modifiedNote = noteBody.substr(0, fromIndex) + annoBody;
@@ -76,7 +79,7 @@ async function replacePaperNoteBody(item, noteId) {
 
     // avoid unnecessary note update
     const newMetadata = buildPaperNoteBody(item);
-    if (newMetadata === note.body.substr(fromIndex, toIndex)) {
+    if (newMetadata === note.body.substr(fromIndex, toIndex - fromIndex)) {
         console.log(`No update for ${item.title}`);
         return;
     }
@@ -149,6 +152,8 @@ function buildPaperItemBody(item) {
 function buildPaperNoteBody(item) {
     return "## Papers\n" +
     "\n" +
+    "> :warning: **Warning:** Contents below is auto generated when syncing with Papers. Any changes will be lost!\n" +
+    "\n" +
     "```papers\n" +
     "* Title: \t" + item.title + "\n" +
     "* Authors: \t" + item.authors.join(', ') + "\n" +
@@ -176,8 +181,11 @@ function buildAnnotationBody(annotations) {
             case 'underline':
                 annoBody += `<u>${anno.text.replaceAll('\n', '')}</u>\n\n`;
                 break;
+            case 'note':
+                annoBody += `<blockquote>${anno.note}</blockquote>`;
+                break;
             default:
-                annoBody += anno.text.replaceAll('\n', '') + '\n\n';
+                // annoBody += anno.text.replaceAll('\n', '') + '\n\n';
                 break;
         }
     }

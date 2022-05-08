@@ -22,7 +22,7 @@ joplin.plugins.register({
 		const enablePapers = await joplin.settings.value(ENABLE_PAPERS);
 
 		if (enablePapers) {
-			let updateAnnotationsDebounce = debounce(updateAnnotations, 1000);
+			let updateAnnotationsDebounce = debounce(updateAnnotations, 500);
 			const dialogs = joplin.views.dialogs;
 			const beforeHandle = await dialogs.create('BeforeSyncDialog');
 			await dialogs.setHtml(beforeHandle, '<p>You are trying to sync with your papers library.</p>' +
@@ -75,6 +75,17 @@ joplin.plugins.register({
 					}
 				}
 			})
+
+			await joplin.workspace.onNoteSelectionChange(async () => {
+				const currNote = await joplin.workspace.selectedNote();
+				try {
+					await updateAnnotations(currNote.id, currNote.body);
+				} catch (err) {
+					if (err.message.code === 'ETIMEDOUT') {
+						console.log("ETIMEDOUT in updateAnnotations()");
+					}
+				}
+			});
 
 			await joplin.views.menuItems.create(
 				"syncAllFilesFromPapersLib",

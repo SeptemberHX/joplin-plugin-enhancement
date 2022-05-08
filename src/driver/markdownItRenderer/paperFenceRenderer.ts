@@ -27,7 +27,7 @@ export function paperFenceRenderer(markdownIt, _options) {
                     case 'RATING:':
                         rating = parts.slice(3).join(' ');
                         break;
-                    case 'TAGS':
+                    case 'TAGS:':
                         tags = parts.slice(3).join(' ');
                         break;
                     case 'ABSTRACT:':
