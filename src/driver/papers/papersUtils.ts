@@ -11,6 +11,22 @@ export async function syncAllPaperItems() {
         return;
     }
 
+    // get all the existing {paper item id : note id} in "ReadCube Papers"
+    const folders = await joplin.data.get(['folders']);
+    let existPapers = {};
+    for (let folder of folders.items) {
+        if (folder.parent_id === paperRootFolderId) {
+            const notes = await joplin.data.get(['folders', folder.id, 'notes'], { fields: ['body', 'id', 'title']});
+            for (let note of notes.items) {
+                const paperItemIdMatchR = note.body.match(/\sid:\s*(\S{8}-\S{4}-\S{4}-\S{4}-\S{12})/);
+                if (paperItemIdMatchR) {
+                    existPapers[paperItemIdMatchR[1]] = note.id;
+                }
+            }
+        }
+    }
+
+    // send request to ReadCube Papers to get the papers' information and split them by published year
     const papers = new PapersLib(papersCookie);
     let year2Items = {}
     for (let item of await papers.getAllItems()) {
@@ -20,20 +36,16 @@ export async function syncAllPaperItems() {
         year2Items[item.year].push(item);
     }
 
+    // create and get sub folders named by published year in "ReadCube Papers"
     const name2FolderIds = await getOrCreatePaperYearFolder(paperRootFolderId, Object.keys(year2Items));
+
+    // create note or update exising notes
     for (let year in year2Items) {
-        const notes = await joplin.data.get(['folders', name2FolderIds[year], 'notes']);
-
-        let existPapers = {};
-        for (let note of notes.items) {
-            existPapers[note.title] = note.id;
-        }
-
         for (let paperItem of year2Items[year]) {
-            if (!(paperItem.title in existPapers)) {
+            if (!(paperItem.id in existPapers)) {  // create new note for new paper item or the paper item id is missing in the note
                 await joplin.data.post(['notes'], null, {title: paperItem.title, parent_id: name2FolderIds[year], body: buildPaperItemBody(paperItem)});
-            } else {
-                await replacePaperNoteBody(paperItem, existPapers[paperItem.title]);
+            } else {  // if exists, update the paper item's information in the note body
+                await replacePaperNoteBody(paperItem, existPapers[paperItem.id], name2FolderIds[year]);
             }
         }
     }
@@ -72,14 +84,14 @@ export async function updateAnnotations(noteId, noteBody) {
     }
 }
 
-async function replacePaperNoteBody(item, noteId) {
-    const note = await joplin.data.get(['notes', noteId], { fields: ['body']});
+async function replacePaperNoteBody(item, noteId, parentId) {
+    const note = await joplin.data.get(['notes', noteId], { fields: ['body', 'parent_id', 'title']});
     let fromIndex = note.body.lastIndexOf('## Papers');
     let toIndex = note.body.lastIndexOf('### Annotations');
 
     // avoid unnecessary note update
     const newMetadata = buildPaperNoteBody(item);
-    if (newMetadata === note.body.substr(fromIndex, toIndex - fromIndex)) {
+    if (newMetadata === note.body.substr(fromIndex, toIndex - fromIndex) && parentId === note.parent_id && note.title === item.title) {
         console.log(`No update for ${item.title}`);
         return;
     }
@@ -94,12 +106,12 @@ async function replacePaperNoteBody(item, noteId) {
     }
 
     // avoid unnecessary note update
-    if (modifiedNote === note.body) {
+    if (modifiedNote === note.body && parentId === note.parent_id && note.title === item.title) {
         return;
     }
 
-    console.log(`Update for ${item.title}`);
-    await joplin.data.put(['notes', noteId], null, { body: modifiedNote });
+    // console.log(`Update for ${item.title}, raw parentId: ${note.parent_id}, now: ${parentId}; raw title: ${note.title}, now: ${item.title}`);
+    await joplin.data.put(['notes', noteId], null, { body: modifiedNote, title: item.title, parent_id: parentId });
 }
 
 async function getOrCreatePaperRootFolder() {
