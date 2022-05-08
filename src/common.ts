@@ -5,5 +5,6 @@ export const ENABLE_IMAGE_ENHANCEMENT = 'enableImageEnhancement';
 export const ENABLE_QUICK_COMMANDS = 'enableQuickCommands';
 export const ENABLE_PAPERS = 'enablePapers';
 export const PAPERS_COOKIE = 'papersCookie';
+export const ENABLE_AUTO_ANNOTATION_FETCH = 'enableAutoAnnotationFetch';
 
 export const PAPERS_FOLDER_NAME = 'ReadCube Papers';

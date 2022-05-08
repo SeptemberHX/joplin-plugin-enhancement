@@ -2,6 +2,7 @@ import joplin from 'api';
 import {ContentScriptType, MenuItemLocation, ToolbarButtonLocation} from "api/types";
 import {settings} from "./settings";
 import {
+	ENABLE_AUTO_ANNOTATION_FETCH,
 	ENABLE_IMAGE_ENHANCEMENT,
 	ENABLE_LOCAL_PDF_PREVIEW,
 	ENABLE_MERMAID_FOLDER, ENABLE_PAPERS, ENABLE_QUICK_COMMANDS,
@@ -20,6 +21,7 @@ joplin.plugins.register({
 		const enableImageEnhancement = await joplin.settings.value(ENABLE_IMAGE_ENHANCEMENT);
 		const enableQuickCommands = await joplin.settings.value(ENABLE_QUICK_COMMANDS);
 		const enablePapers = await joplin.settings.value(ENABLE_PAPERS);
+		const enableAutoAnnotationFetch = await joplin.settings.value(ENABLE_AUTO_ANNOTATION_FETCH);
 
 		if (enablePapers) {
 			let updateAnnotationsDebounce = debounce(updateAnnotations, 500);
@@ -42,7 +44,7 @@ joplin.plugins.register({
 
 			await joplin.commands.register({
 				name: "enhancement_papers_syncAll",
-				label: "Sync All Files from PapersLib",
+				label: "Sync All Files from Papers",
 				execute: async () => {
 					try {
 						const result = await dialogs.open(beforeHandle);
@@ -76,16 +78,18 @@ joplin.plugins.register({
 				}
 			})
 
-			await joplin.workspace.onNoteSelectionChange(async () => {
-				const currNote = await joplin.workspace.selectedNote();
-				try {
-					await updateAnnotations(currNote.id, currNote.body);
-				} catch (err) {
-					if (err.message.code === 'ETIMEDOUT') {
-						console.log("ETIMEDOUT in updateAnnotations()");
+			if (enableAutoAnnotationFetch) {
+				await joplin.workspace.onNoteSelectionChange(async () => {
+					const currNote = await joplin.workspace.selectedNote();
+					try {
+						await updateAnnotations(currNote.id, currNote.body);
+					} catch (err) {
+						if (err.message.code === 'ETIMEDOUT') {
+							console.log("ETIMEDOUT in updateAnnotations()");
+						}
 					}
-				}
-			});
+				});
+			}
 
 			await joplin.views.menuItems.create(
 				"syncAllFilesFromPapersLib",

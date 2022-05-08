@@ -5,7 +5,7 @@ import {
     ENABLE_LOCAL_PDF_PREVIEW,
     ENABLE_MERMAID_FOLDER, ENABLE_QUICK_COMMANDS,
     ENABLE_TABLE_FORMATTER,
-    ENABLE_PAPERS, PAPERS_COOKIE
+    ENABLE_PAPERS, PAPERS_COOKIE, ENABLE_AUTO_ANNOTATION_FETCH
 } from "./common";
 
 export namespace settings {
@@ -69,8 +69,17 @@ export namespace settings {
             public: true,
             section: SECTION,
             type: SettingItemType.Bool,
-            label: 'Enable fetch data from readcube papers',
-            description: "Fetch your files from readcube papers and create notes for each file. (requires restart)",
+            label: 'Enable fetch data from ReadCube Papers',
+            description: "Fetch your files from ReadCube Papers and create notes for each file. (requires restart)",
+        }
+
+        PLUGIN_SETTINGS[ENABLE_AUTO_ANNOTATION_FETCH] = {
+            value: true,
+            public: true,
+            section: SECTION,
+            type: SettingItemType.Bool,
+            label: 'Enable auto fetch annotations',
+            description: " Auto fetch annotations from ReadCube Papers when opening a note. (requires restart)",
         }
 
         PLUGIN_SETTINGS[PAPERS_COOKIE] = {
@@ -78,8 +87,8 @@ export namespace settings {
             public: true,
             section: SECTION,
             type: SettingItemType.String,
-            label: 'Cookie for readcube papers',
-            description: "Visit readcube papers web app in your web browser, open development tools and copy your cookies",
+            label: 'Cookie for ReadCube Papers',
+            description: "Visit ReadCube Papers web app in your web browser, open development tools and copy your cookies",
         }
 
         await joplin.settings.registerSettings(PLUGIN_SETTINGS);
