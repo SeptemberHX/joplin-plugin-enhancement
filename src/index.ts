@@ -8,7 +8,7 @@ import {
 	ENABLE_MERMAID_FOLDER, ENABLE_PAPERS, ENABLE_QUICK_COMMANDS,
 	ENABLE_TABLE_FORMATTER
 } from "./common";
-import {syncAllPaperItems, updateAnnotations} from "./driver/papers/papersUtils";
+import {syncAllPaperItems, updateAllInfoForOneNote, updateAnnotations} from "./driver/papers/papersUtils";
 import {debounce} from "ts-debounce";
 
 joplin.plugins.register({
@@ -24,7 +24,7 @@ joplin.plugins.register({
 		const enableAutoAnnotationFetch = await joplin.settings.value(ENABLE_AUTO_ANNOTATION_FETCH);
 
 		if (enablePapers) {
-			let updateAnnotationsDebounce = debounce(updateAnnotations, 500);
+			let updateAllInfoForOneNoteDebounce = debounce(updateAllInfoForOneNote, 200);
 			const dialogs = joplin.views.dialogs;
 			const beforeHandle = await dialogs.create('BeforeSyncDialog');
 			await dialogs.setHtml(beforeHandle, '<p>You are trying to sync with your papers library.</p>' +
@@ -63,16 +63,16 @@ joplin.plugins.register({
 			});
 
 			await joplin.commands.register({
-				name: "enhancement_papers_getAnnotations",
-				label: "Get Annotations for current paper",
+				name: "enhancement_papers_updateAllInfo",
+				label: "Update all info for current paper",
 				iconName: "fas fa-sync",
 				execute: async () => {
 					const currNote = await joplin.workspace.selectedNote();
 					try {
-						await updateAnnotationsDebounce(currNote.id, currNote.body);
+						await updateAllInfoForOneNoteDebounce(currNote.id, currNote.body);
 					} catch (err) {
 						if (err.message.code === 'ETIMEDOUT') {
-							console.log("ETIMEDOUT in updateAnnotations()");
+							console.log("ETIMEDOUT in updateAllInfoForOneNote()");
 						}
 					}
 				}
@@ -82,7 +82,7 @@ joplin.plugins.register({
 				await joplin.workspace.onNoteSelectionChange(async () => {
 					const currNote = await joplin.workspace.selectedNote();
 					try {
-						await updateAnnotations(currNote.id, currNote.body);
+						await updateAllInfoForOneNote(currNote.id, currNote.body);
 					} catch (err) {
 						if (err.message.code === 'ETIMEDOUT') {
 							console.log("ETIMEDOUT in updateAnnotations()");
@@ -98,8 +98,8 @@ joplin.plugins.register({
 			);
 
 			await joplin.views.toolbarButtons.create(
-				'getAnnotationsForCurrentPaper',
-				'enhancement_papers_getAnnotations',
+				'updateAllInfoForCurrentPaper',
+				'enhancement_papers_updateAllInfo',
 				ToolbarButtonLocation.EditorToolbar,
 			);
 		}

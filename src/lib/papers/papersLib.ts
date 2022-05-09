@@ -17,6 +17,11 @@ type PaperItem = {
     id: string;
     notes: string;
     annotations: [];
+    issn: string;
+    volume: string;
+    url: string;
+    pagination: string;
+    journal_abbrev: string;
 }
 
 type CollectionItem = {
@@ -36,6 +41,9 @@ export default class PapersLib {
     constructor(private readonly cookie) {
     }
 
+    /**
+     * Get all the collections
+     */
     async getCollections() {
         const response = await fetch(`https://sync.readcube.com/collections/`,
             { headers: {cookie: this.cookie }}
@@ -50,6 +58,10 @@ export default class PapersLib {
         return results;
     }
 
+    /**
+     * Get all the items in the given collection
+     * @param collection_id
+     */
     async getItems(collection_id: string) {
         let requestUrl = `https://sync.readcube.com/collections/${collection_id}/items?size=50`;
         let results: PaperItem[] = [];
@@ -59,20 +71,7 @@ export default class PapersLib {
             const resJson = await response.json();
             if (resJson.status === 'ok') {
                 for (let item of resJson.items) {
-                    // const annoRes = await fetch(`https://sync.readcube.com/collections/${collection_id}/items/${item.id}/annotations`, {headers: {cookie: this.cookie}});
-                    results.push({
-                        title: item.article.title,
-                        from: 'journal' in item.article ? item.article.journal : 'Unknown',
-                        authors: 'authors' in item.article ? item.article.authors : [],
-                        tags: 'tags' in item.user_data ? item.user_data.tags : [],
-                        rating: 'rating' in item.user_data ? item.user_data.rating : -1,
-                        abstract: item.article.abstract,
-                        collection_id: collection_id,
-                        id: item.id,
-                        notes: 'notes' in item.user_data ? item.user_data.notes : '',
-                        annotations: [],
-                        year: 'year' in item.article ? item.article.year : 'Unknown'
-                    });
+                    results.push(this.parseItemJson(item, collection_id));
                 }
                 console.log(results.length, '/', resJson.total);
                 if (resJson.items.length != 0) {
@@ -87,6 +86,27 @@ export default class PapersLib {
         return results;
     }
 
+    /**
+     * Get the description for one item
+     * @param collection_id
+     * @param item_id
+     */
+    async getItem(collection_id: string, item_id: string) {
+        let requestUrl = `https://sync.readcube.com/collections/${collection_id}/items/${item_id}`;
+        const response = await fetch(requestUrl, {headers: {cookie: this.cookie}});
+        const resJson = await response.json();
+        if (resJson.status === 'ok') {
+            return this.parseItemJson(resJson.item, collection_id);
+        } {
+            return null;
+        }
+    }
+
+    /**
+     * Get the user annotations of specific paper item created through ReadCube Papers
+     * @param collection_id
+     * @param item_id
+     */
     async getAnnotation(collection_id, item_id) {
         let requestUrl = `https://sync.readcube.com/collections/${collection_id}/items/${item_id}/annotations`;
         let results: AnnotationItem[] = [];
@@ -106,8 +126,33 @@ export default class PapersLib {
         return results;
     }
 
+    /**
+     * Get all the paper items in the first collections
+     */
     async getAllItems() {
         const collections = await this.getCollections();
         return await this.getItems(collections[0].id);
+    }
+
+    parseItemJson(itemData, collection_id) {
+        const item: PaperItem = {
+            title: itemData.article.title,
+            from: 'journal' in itemData.article ? itemData.article.journal : 'Unknown',
+            authors: 'authors' in itemData.article ? itemData.article.authors : [],
+            tags: 'tags' in itemData.user_data ? itemData.user_data.tags : [],
+            rating: 'rating' in itemData.user_data ? itemData.user_data.rating : -1,
+            abstract: itemData.article.abstract,
+            collection_id: collection_id,
+            id: itemData.id,
+            notes: 'notes' in itemData.user_data ? itemData.user_data.notes : '',
+            annotations: [],
+            year: 'year' in itemData.article ? itemData.article.year : 'Unknown',
+            issn: 'issn' in itemData.article ? itemData.article.year : '',
+            volume: 'volume' in itemData.article ? itemData.article.volume : '',
+            url: 'url' in itemData.article ? itemData.article.url : '',
+            pagination: 'pagination' in itemData.article ? itemData.article.pagination : '',
+            journal_abbrev: 'journal_abbrev' in itemData.article ? itemData.article.journal_abbrev : ''
+        }
+        return item;
     }
 }

@@ -45,7 +45,7 @@ export async function syncAllPaperItems() {
             if (!(paperItem.id in existPapers)) {  // create new note for new paper item or the paper item id is missing in the note
                 await joplin.data.post(['notes'], null, {title: paperItem.title, parent_id: name2FolderIds[year], body: buildPaperItemBody(paperItem)});
             } else {  // if exists, update the paper item's information in the note body
-                await replacePaperNoteBody(paperItem, existPapers[paperItem.id], name2FolderIds[year]);
+                await replacePaperInfoBody(paperItem, existPapers[paperItem.id], name2FolderIds[year]);
             }
         }
     }
@@ -84,13 +84,51 @@ export async function updateAnnotations(noteId, noteBody) {
     }
 }
 
-async function replacePaperNoteBody(item, noteId, parentId) {
+export async function updateAllInfoForOneNote(noteId, noteBody) {
+    console.log('Enhancement: In updateAllInfoForOneNote...');
+    const papersCookie = await joplin.settings.value(PAPERS_COOKIE);
+    if (papersCookie.length === 0) {
+        alert('Empty cookie for Papers. Please set it in the preferences.');
+        return;
+    }
+
+    const papers = new PapersLib(papersCookie);
+    const paperItemIdMatchR = noteBody.match(/\sid:\s*(\S{8}-\S{4}-\S{4}-\S{4}-\S{12})/);
+    const paperCollectionIdMatchR = noteBody.match(/collection_id:\s*(\S{8}-\S{4}-\S{4}-\S{4}-\S{12})/);
+    if (paperItemIdMatchR && paperCollectionIdMatchR) {
+        const paperItemId = paperItemIdMatchR[1];
+        const paperCollectionId = paperCollectionIdMatchR[1];
+
+        const paperInfoBody = buildPaperInfoBody(await papers.getItem(paperCollectionId, paperItemId));
+        const annoBody = buildAnnotationBody(await papers.getAnnotation(paperCollectionId, paperItemId));
+
+        let paperInfoFromIndex = noteBody.lastIndexOf('## Papers');
+
+        let modifiedNote = '';
+        if (paperInfoFromIndex > 0) {
+            modifiedNote = noteBody.substr(0, paperInfoFromIndex) + paperInfoBody + annoBody;
+        }
+
+        if (modifiedNote.length === 0) {
+            modifiedNote = noteBody;
+        }
+
+        if (modifiedNote === noteBody) {
+            return;
+        }
+
+        await joplin.data.put(['notes', noteId], null, { body: modifiedNote });
+        await joplin.commands.execute('editor.setText', modifiedNote);
+    }
+}
+
+async function replacePaperInfoBody(item, noteId, parentId) {
     const note = await joplin.data.get(['notes', noteId], { fields: ['body', 'parent_id', 'title']});
     let fromIndex = note.body.lastIndexOf('## Papers');
     let toIndex = note.body.lastIndexOf('### Annotations');
 
     // avoid unnecessary note update
-    const newMetadata = buildPaperNoteBody(item);
+    const newMetadata = buildPaperInfoBody(item);
     if (newMetadata === note.body.substr(fromIndex, toIndex - fromIndex) && parentId === note.parent_id && note.title === item.title) {
         console.log(`No update for ${item.title}`);
         return;
@@ -155,32 +193,38 @@ async function getOrCreatePaperYearFolder(rootFolderId, subFolderNames) {
 function buildPaperItemBody(item) {
     return "## Notes\n" +
         "\n" +
-        buildPaperNoteBody(item) +
+        buildPaperInfoBody(item) +
         "### Annotations\n" +
         "\n" +
         "Please click the sync button on the editor toolbar to fetch your annotations from Papers.\n";
 }
 
-function buildPaperNoteBody(item) {
-    return "## Papers\n" +
-    "\n" +
-    "> :warning: **Warning:** Contents below is auto generated when syncing with Papers. Any changes will be lost!\n" +
-    "\n" +
-    "```papers\n" +
-    "* Title: \t" + item.title + "\n" +
-    "* Authors: \t" + item.authors.join(', ') + "\n" +
-    "* From: \t" + item.from + "\n" +
-    "* Rating: \t" + item.rating + "\n" +
-    "* Tags: \t" + item.tags.join(', ') + "\n" +
-    "* Abstract: \t" + item.abstract + "\n" +
-    "* id: \t" + item.id + "\n" +
-    "* collection_id: \t" + item.collection_id + "\n" +
-    "```\n" +
-    "\n" +
-    "### Notes\n" +
-    "\n" +
-    item.notes + "\n" +
-    "\n";
+function buildPaperInfoBody(item) {
+    return `## Papers
+
+> :warning: **Warning:** Contents below is auto generated when syncing with Papers. Any changes will be lost!
+
+\`\`\`papers
+* Title: \t${item.title}
+* Authors: \t${item.authors.join(', ')}
+* From: \t${item.from}
+* Rating: \t${item.rating}
+* Tags: \t${item.tags.join(', ')}
+* Abstract: \t${item.abstract}
+* Issn: \t${item.issn}
+* Volume: \t${item.volume}
+* Url: \t${item.url}
+* Pagination: \t${item.pagination}
+* Journal_abbrev: \t${item.journal_abbrev}
+* id: \t${item.id}
+* collection_id: \t${item.collection_id}
+\`\`\`
+
+### Notes
+
+${item.notes}
+
+`;
 }
 
 function buildAnnotationBody(annotations) {
