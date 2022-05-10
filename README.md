@@ -35,6 +35,12 @@ How to use:
 2. Joplin Menubar -> Tools -> Sync files with Papers: It will create notes for your papers without the annotations
 3. Open one note: the annotation will be automatically updated. Or click the sync icon on the editor toolbar.
 
+### Pseudocode
+
+Pseudocode block:
+
+![](./screenshot/pseudocode.png)
+
 ### Image
 
 Allow following md works:
