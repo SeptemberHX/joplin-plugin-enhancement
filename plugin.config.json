@@ -20,6 +20,9 @@
 		"driver/markdownItRuler/index.ts",
 		"driver/markdownItRuler/utils.ts",
 
+		"driver/markdownItRenderer/pseudocode/index.ts",
+		"driver/markdownItRenderer/pseudocode/pseudocode.ts",
+
 		"driver/papers/papersUtils.ts"
 	]
 }

@@ -5,7 +5,7 @@ import {
     ENABLE_LOCAL_PDF_PREVIEW,
     ENABLE_MERMAID_FOLDER, ENABLE_QUICK_COMMANDS,
     ENABLE_TABLE_FORMATTER,
-    ENABLE_PAPERS, PAPERS_COOKIE, ENABLE_AUTO_ANNOTATION_FETCH
+    ENABLE_PAPERS, PAPERS_COOKIE, ENABLE_AUTO_ANNOTATION_FETCH, ENABLE_PSEUDOCODE
 } from "./common";
 
 export namespace settings {
@@ -26,6 +26,15 @@ export namespace settings {
             type: SettingItemType.Bool,
             label: 'Enable table formatter in editor',
             description: "Allow you to navigate between table cells, format table code, add row/column, align, and delete column with shortcut and tool buttons. (requires restart)",
+        }
+
+        PLUGIN_SETTINGS[ENABLE_PSEUDOCODE] = {
+            value: true,
+            public: true,
+            section: SECTION,
+            type: SettingItemType.Bool,
+            label: 'Enable pseudocode in fenced code block',
+            description: "Render pseudocode in fenced code block by pseudocode.js + Katex. (requires restart)",
         }
 
         PLUGIN_SETTINGS[ENABLE_MERMAID_FOLDER] = {

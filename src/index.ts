@@ -6,7 +6,7 @@ import {
 	ENABLE_IMAGE_ENHANCEMENT,
 	ENABLE_LOCAL_PDF_PREVIEW,
 	ENABLE_MERMAID_FOLDER, ENABLE_PAPERS, ENABLE_QUICK_COMMANDS,
-	ENABLE_TABLE_FORMATTER
+	ENABLE_TABLE_FORMATTER, ENABLE_PSEUDOCODE
 } from "./common";
 import {syncAllPaperItems, updateAllInfoForOneNote, updateAnnotations} from "./driver/papers/papersUtils";
 import {debounce} from "ts-debounce";
@@ -22,6 +22,7 @@ joplin.plugins.register({
 		const enableQuickCommands = await joplin.settings.value(ENABLE_QUICK_COMMANDS);
 		const enablePapers = await joplin.settings.value(ENABLE_PAPERS);
 		const enableAutoAnnotationFetch = await joplin.settings.value(ENABLE_AUTO_ANNOTATION_FETCH);
+		const enablePseudocode = await joplin.settings.value(ENABLE_PSEUDOCODE);
 
 		if (enablePapers) {
 			let updateAllInfoForOneNoteDebounce = debounce(updateAllInfoForOneNote, 200);
@@ -134,6 +135,14 @@ joplin.plugins.register({
 				ContentScriptType.CodeMirrorPlugin,
 				'enhancement_quick_commands',
 				'./driver/codemirror/quickCommands/index.js'
+			);
+		}
+
+		if (enablePseudocode) {
+			await joplin.contentScripts.register(
+				ContentScriptType.MarkdownItPlugin,
+				'enhancement_pseudocode_renderer',
+				'./driver/markdownItRenderer/pseudocode/index.js'
 			);
 		}
 

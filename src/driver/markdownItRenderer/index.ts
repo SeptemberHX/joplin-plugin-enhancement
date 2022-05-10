@@ -1,4 +1,3 @@
-import path = require("path");
 import {filePreviewRenderer} from "./filePreviewRenderer";
 import {imageRenderer} from "./imageRenderer";
 import {paperFenceRenderer} from "./paperFenceRenderer";
