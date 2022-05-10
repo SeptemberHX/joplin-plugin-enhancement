@@ -13,6 +13,7 @@ img {
 
 figcaption {
     text-align: center;
+    font-weight: bold;
 }
 
 figcaption::before {
@@ -67,7 +68,7 @@ th.paper_tg_title {
 th.paper_tg_abstract {
     border-color: inherit;
     text-align: left;
-    vertical-align: top
+    vertical-align: top;
 }
 
 th.paper_tg_from {
