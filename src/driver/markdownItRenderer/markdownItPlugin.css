@@ -62,7 +62,7 @@ figcaption::before {
 }
 
 th.paper_tg_title {
-    font-weight: bold; !important;
+    font-weight: bold !important;
 }
 
 th.paper_tg_abstract {
