@@ -5,10 +5,13 @@ import {
 	ENABLE_AUTO_ANNOTATION_FETCH,
 	ENABLE_IMAGE_ENHANCEMENT,
 	ENABLE_LOCAL_PDF_PREVIEW,
-	ENABLE_MERMAID_FOLDER, ENABLE_PAPERS, ENABLE_QUICK_COMMANDS,
-	ENABLE_TABLE_FORMATTER, ENABLE_PSEUDOCODE
+	ENABLE_MERMAID_FOLDER,
+	ENABLE_PAPERS,
+	ENABLE_PSEUDOCODE,
+	ENABLE_QUICK_COMMANDS,
+	ENABLE_TABLE_FORMATTER
 } from "./common";
-import {syncAllPaperItems, updateAllInfoForOneNote, updateAnnotations} from "./driver/papers/papersUtils";
+import {copyCitationOfCurrentPaper, syncAllPaperItems, updateAllInfoForOneNote} from "./driver/papers/papersUtils";
 import {debounce} from "ts-debounce";
 
 joplin.plugins.register({
@@ -43,6 +46,10 @@ joplin.plugins.register({
 			await dialogs.setHtml(finishHandle, '<p>Syncing with your Papers library finished.</p>')
 			await dialogs.setButtons(finishHandle, [{id: 'ok'}]);
 
+			const copyErrHandle = await dialogs.create('copyErrDialog');
+			await dialogs.setHtml(copyErrHandle, '<p>Ops. It seems you tried to operate on a non-paper note!</p>');
+			await dialogs.setButtons(copyErrHandle, [{id: 'ok'}]);
+
 			await joplin.commands.register({
 				name: "enhancement_papers_syncAll",
 				label: "Sync All Files from Papers",
@@ -70,11 +77,27 @@ joplin.plugins.register({
 				execute: async () => {
 					const currNote = await joplin.workspace.selectedNote();
 					try {
-						await updateAllInfoForOneNoteDebounce(currNote.id, currNote.body);
+						let result = await updateAllInfoForOneNoteDebounce(currNote.id, currNote.body);
+						if (!result) {
+							await dialogs.open(copyErrHandle);
+						}
 					} catch (err) {
 						if (err.message.code === 'ETIMEDOUT') {
 							console.log("ETIMEDOUT in updateAllInfoForOneNote()");
 						}
+					}
+				}
+			});
+
+			await joplin.commands.register({
+				name: "enhancement_papers_copyPaperCitation",
+				label: "Copy current opened paper citation in markdown style",
+				iconName: "fas fa-copyright",
+				execute: async () => {
+					const currNote = await joplin.workspace.selectedNote();
+					const result = await copyCitationOfCurrentPaper(currNote.id, currNote.body);
+					if (!result) {
+						await dialogs.open(copyErrHandle);
 					}
 				}
 			})
@@ -103,6 +126,12 @@ joplin.plugins.register({
 				'enhancement_papers_updateAllInfo',
 				ToolbarButtonLocation.EditorToolbar,
 			);
+
+			await joplin.views.toolbarButtons.create(
+				'copyCurrentPaperCitation',
+				'enhancement_papers_copyPaperCitation',
+				ToolbarButtonLocation.EditorToolbar,
+			)
 		}
 
 		if (enableImageEnhancement) {

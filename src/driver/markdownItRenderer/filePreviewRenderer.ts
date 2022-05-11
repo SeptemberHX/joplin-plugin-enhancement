@@ -11,6 +11,10 @@ export function filePreviewRenderer(markdownIt, _options) {
         const token = tokens[idx - 2];
         let result = defaultRender(tokens, idx, options, env, self);
         let link_path;
+        if (!token.attrs) {
+            return result;
+        }
+
         for (let arr of token.attrs) {
             if (arr[0] === 'href') {
                 link_path = arr[1];

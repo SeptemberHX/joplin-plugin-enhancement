@@ -51,6 +51,43 @@ export async function syncAllPaperItems() {
     }
 }
 
+export async function copyCitationOfCurrentPaper(noteId, noteBody) {
+    const titleMatch = noteBody.match(/\sTitle:\s*(.*)\n/);
+    const authorsMatch = noteBody.match(/\sAuthors:\s*(.*)\n/);
+    const fromMatch = noteBody.match(/\sFrom:\s*(.*)\n/);
+    const yearMatch = noteBody.match(/\sYear:\s*(.*)\n/);
+    const volumeMatch = noteBody.match(/\sVolume:\s*(.*)\n/);
+    const pageMatch = noteBody.match(/\sPagination:\s*(.*)\n/);
+
+    let showText = '';
+    if (titleMatch && authorsMatch) {
+        let authors = authorsMatch[1].split(', ');
+        showText += authors.slice(0, authors.length - 1).join(', ') + `, and ${authors[authors.length - 1]}.`;
+        showText += ` "[${titleMatch[1]}](:/${noteId})."`;
+    } else {
+        return false;
+    }
+
+    if (fromMatch) {
+        showText += ` In *${fromMatch[1]}*.`;
+    }
+
+    if (volumeMatch) {
+        showText += ` vol. ${volumeMatch[1]}.`;
+    }
+
+    if (pageMatch) {
+        showText += ` pp. ${pageMatch[1]}.`;
+    }
+
+    if (yearMatch) {
+        showText += ` ${yearMatch[1]}.`;
+    }
+
+    await joplin.clipboard.writeText(showText);
+    return true;
+}
+
 export async function updateAnnotations(noteId, noteBody) {
     console.log('Enhancement: In updateAnnotations...');
     const papersCookie = await joplin.settings.value(PAPERS_COOKIE);
@@ -119,6 +156,9 @@ export async function updateAllInfoForOneNote(noteId, noteBody) {
 
         await joplin.data.put(['notes', noteId], null, { body: modifiedNote });
         await joplin.commands.execute('editor.setText', modifiedNote);
+        return true;
+    } else {
+        return false;
     }
 }
 
@@ -208,6 +248,7 @@ function buildPaperInfoBody(item) {
 * Title: \t${item.title}
 * Authors: \t${item.authors.join(', ')}
 * From: \t${item.from}
+* Year: \t${item.year}
 * Rating: \t${item.rating}
 * Tags: \t${item.tags.join(', ')}
 * Abstract: \t${item.abstract}

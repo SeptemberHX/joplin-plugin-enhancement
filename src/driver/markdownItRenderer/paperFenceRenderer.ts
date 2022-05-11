@@ -10,7 +10,7 @@ export function paperFenceRenderer(markdownIt, _options) {
             return defaultRender(tokens, idx, options, env, self);
         }
 
-        let title = '', authors = '', from = '', tags = '', rating = '-1', abstract = '', collection_id = '', item_id = '';
+        let title = '', authors = '', from = '', tags = '', rating = '-1', abstract = '', collection_id = '', item_id = '', year = '', page = '', volume = '';
         for (let line of token.content.split('\n')) {
             const parts = line.split(/\s/);
             if (parts.length > 2 && parts[0] === '*') {
@@ -39,18 +39,29 @@ export function paperFenceRenderer(markdownIt, _options) {
                     case 'COLLECTION_ID:':
                         collection_id = parts.slice(3).join(' ');
                         break;
+                    case 'YEAR:':
+                        year = parts.slice(3).join(' ');
+                        break;
+                    case 'PAGINATION:':
+                        page = parts.slice(3).join(' ');
+                        break;
+                    case 'VOLUME:':
+                        volume = parts.slice(3).join(' ');
+                        break;
                     default:
                         break;
                 }
             }
         }
-        let result = generateBodyForPaperFence(title, authors, from, tags, rating, abstract, collection_id, item_id);
+        let result = generateBodyForPaperFence(title, authors, from, tags, rating, abstract,
+            collection_id, item_id, year, page, volume);
         return result
     }
 }
 
 function generateBodyForPaperFence(title: string, authors: string, from: string, tags: string,
-                                   rating: string, abstract: string, collection_id: string, item_id: string) {
+                                   rating: string, abstract: string, collection_id: string, item_id: string,
+                                   year: string, page: string, volume: string) {
     let stars = '☆☆☆☆☆';
     switch (rating) {
         case "1":
@@ -75,20 +86,21 @@ function generateBodyForPaperFence(title: string, authors: string, from: string,
     return `<table class="paper_tg">
 <thead>
   <tr>
-    <th class="paper_tg_title" colspan="3"><a href="https://www.readcube.com/library/${collection_id}:${item_id}">${title}</a></th>
+    <th class="paper_tg_title" colspan="4"><a href="https://www.readcube.com/library/${collection_id}:${item_id}">${title}</a></th>
   </tr>
 </thead>
 <tbody>
   <tr>
-    <td class="paper_tg_authors" colspan="3">${authors}</td>
+    <td class="paper_tg_authors" colspan="4">${authors}</td>
   </tr>
   <tr>
-    <td class="paper_tg_from">${from}</td>
+    <td class="paper_tg_from"><i>${from}</i></td>
+    <td class="paper_tg_year">${year}</td>
     <td class="paper_tg_tags">${tags.length > 0 ? tags : 'No tags'}</td>
     <td class="paper_tg_stars">${stars}</td>
   </tr>
   <tr>
-    <td class="paper_tg_abstract" colspan="3">${abstract}</td>
+    <td class="paper_tg_abstract" colspan="4">${abstract}</td>
   </tr>
 </tbody>
 </table>`
