@@ -24,3 +24,4 @@ export enum MarkdownViewEvents {
     NoteDidUpdate = 'NoteDidUpdate',
     NewNoteOpen = 'NewNoteOpen',
 }
+
