@@ -122,4 +122,3 @@ The file that may cause problem is "webpack.config.js" because it's going to be 
 * [ylc395/joplin-plugin-note-link-system](https://github.com/ylc395/joplin-plugin-note-link-system)
 * [takumisoft68/vscode-markdown-table](https://github.com/takumisoft68/vscode-markdown-table)
 * [markdown-it](https://github.com/markdown-it/markdown-it/blob/master/lib/rules_inline/image.js)
-* 

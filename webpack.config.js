@@ -203,14 +203,24 @@ function resolveExtraScriptPath(name) {
 	s.pop();
 	const nameNoExt = s.join('.');
 
+	const isWebview = ['markdownView/webview/index'].some((page) =>
+		nameNoExt.endsWith(page),
+	);
+
+	const target = isWebview ? 'web' : 'node';
+
 	return {
+		target,
 		entry: relativePath,
 		output: {
 			filename: `${nameNoExt}.js`,
 			path: distDir,
-			library: 'default',
-			libraryTarget: 'commonjs',
-			libraryExport: 'default',
+			...(!isWebview ? {
+					library: 'default',
+					libraryTarget: 'commonjs',
+					libraryExport: 'default',
+				}
+				: {}),
 		},
 	};
 }

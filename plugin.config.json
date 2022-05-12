@@ -23,6 +23,9 @@
 		"driver/markdownItRenderer/pseudocode/index.ts",
 		"driver/markdownItRenderer/pseudocode/pseudocode.ts",
 
+		"driver/markdownView/index.ts",
+		"driver/markdownView/webview/index.ts",
+
 		"driver/papers/papersUtils.ts"
 	]
 }

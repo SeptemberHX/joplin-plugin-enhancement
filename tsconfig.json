@@ -5,6 +5,11 @@
 		"target": "es2015",
 		"jsx": "react",
 		"allowJs": true,
-		"baseUrl": "."
+		"baseUrl": ".",
+		"lib": ["ESNext", "DOM", "DOM.Iterable"],
+		"paths": {
+			"driver/*": ["src/driver/*"]
+		},
+		"sourceMap": true
 	}
 }
