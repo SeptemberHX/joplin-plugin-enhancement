@@ -9,3 +9,5 @@ export const ENABLE_AUTO_ANNOTATION_FETCH = 'enableAutoAnnotationFetch';
 export const ENABLE_PSEUDOCODE = 'enablePseudocode';
 
 export const PAPERS_FOLDER_NAME = 'ReadCube Papers';
+
+export const CITATION_POPUP_ID = 'enhancement_citation_popup_id';

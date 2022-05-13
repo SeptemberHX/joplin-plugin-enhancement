@@ -7,6 +7,8 @@
 		"driver/codemirror/tableFormatter/tableCommands.ts",
 		"driver/codemirror/tableFormatter/tableFormatterBridge.ts",
 
+		"driver/codemirror/autoCitation/index.ts",
+
 		"driver/codemirror/mermaidFolder/index.ts",
 		"driver/codemirror/mermaidFolder/mermaidFolder.ts",
 

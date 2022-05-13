@@ -5,7 +5,7 @@ import fetch from 'node-fetch';
  */
 
 
-type PaperItem = {
+export type PaperItem = {
     title: string;
     from: string;
     authors: string[];
@@ -24,11 +24,11 @@ type PaperItem = {
     journal_abbrev: string;
 }
 
-type CollectionItem = {
+export type CollectionItem = {
     id: string;
 }
 
-type AnnotationItem = {
+export type AnnotationItem = {
     id: string;
     type: string;
     text: string;

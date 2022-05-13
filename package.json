@@ -29,6 +29,7 @@
     "yargs": "^16.2.0"
   },
   "dependencies": {
+    "html-entities": "^2.3.3",
     "katex": "^0.15.3",
     "mime-types": "^2.1.35",
     "node-fetch": "^2.6.1",

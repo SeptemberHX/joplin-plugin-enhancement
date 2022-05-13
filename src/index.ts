@@ -11,8 +11,17 @@ import {
 	ENABLE_QUICK_COMMANDS,
 	ENABLE_TABLE_FORMATTER
 } from "./common";
-import {copyCitationOfCurrentPaper, syncAllPaperItems, updateAllInfoForOneNote} from "./driver/papers/papersUtils";
+import {
+	buildCitationForItem,
+	buildPaperItemFromNotes,
+	buildRefName,
+	copyCitationOfCurrentPaper,
+	syncAllPaperItems,
+	updateAllInfoForOneNote
+} from "./driver/papers/papersUtils";
 import {debounce} from "ts-debounce";
+import {showCitationPopup} from "./ui/citation-popup";
+import {PaperItem} from "./lib/papers/papersLib";
 
 joplin.plugins.register({
 	onStart: async function() {
@@ -49,6 +58,12 @@ joplin.plugins.register({
 			const copyErrHandle = await dialogs.create('copyErrDialog');
 			await dialogs.setHtml(copyErrHandle, '<p>Ops. It seems you tried to operate on a non-paper note!</p>');
 			await dialogs.setButtons(copyErrHandle, [{id: 'ok'}]);
+
+			await joplin.contentScripts.register(
+				ContentScriptType.CodeMirrorPlugin,
+				'enhancement_autoCitation',
+				'./driver/codemirror/autoCitation/index.js'
+			);
 
 			await joplin.commands.register({
 				name: "enhancement_papers_syncAll",
@@ -100,6 +115,35 @@ joplin.plugins.register({
 						await dialogs.open(copyErrHandle);
 					}
 				}
+			});
+
+			await joplin.commands.register({
+				name: 'enhancement_cite_papers',
+				label: 'Cite your papers',
+				iconName: 'fa fa-graduation-cap',
+				execute: async () => {
+					const notePaperItems = await buildPaperItemFromNotes();
+					const items: PaperItem[] = notePaperItems.items;
+					const nodeIds: string[] = notePaperItems.ids;
+					let paperId2Item = {};
+					let paperId2NoteId = {};
+					for (let index in items) {
+						paperId2Item[items[index].id] = items[index];
+						paperId2NoteId[items[index].id] = nodeIds[index];
+					}
+
+					const selectedRefsIDs: string[] = await showCitationPopup(items);
+					const refNames = [];
+					const citations = [];
+					for (const id of selectedRefsIDs) {
+						refNames.push(await buildRefName(paperId2Item[id]));
+						citations.push(await buildCitationForItem(paperId2Item[id], paperId2NoteId[id]));
+					}
+					await joplin.commands.execute('editor.execCommand', {
+						name: 'enhancement_insertCitation',
+						args: [[citations, refNames]]
+					});
+				}
 			})
 
 			if (enableAutoAnnotationFetch) {
@@ -131,7 +175,13 @@ joplin.plugins.register({
 				'copyCurrentPaperCitation',
 				'enhancement_papers_copyPaperCitation',
 				ToolbarButtonLocation.EditorToolbar,
-			)
+			);
+
+			await joplin.views.toolbarButtons.create(
+				'enhancementCitePapers',
+				'enhancement_cite_papers',
+				ToolbarButtonLocation.EditorToolbar
+			);
 		}
 
 		if (enableImageEnhancement) {

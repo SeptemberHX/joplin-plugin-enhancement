@@ -1,6 +1,7 @@
-import PapersLib from "../../lib/papers/papersLib";
+import PapersLib, {PaperItem} from "../../lib/papers/papersLib";
 import joplin from "../../../api";
 import {PAPERS_COOKIE, PAPERS_FOLDER_NAME} from "../../common";
+import exp = require("constants");
 
 export async function syncAllPaperItems() {
     console.log('Enhancement: In syncAllPaperItems...');
@@ -51,6 +52,51 @@ export async function syncAllPaperItems() {
     }
 }
 
+export async function buildPaperItemFromNotes() {
+    const paperRootFolderId = await getOrCreatePaperRootFolder();
+    // get all the existing {paper item id : note id} in "ReadCube Papers"
+    const folders = await joplin.data.get(['folders']);
+
+    let results: PaperItem[] = [];
+    let noteIds: string[] = [];
+    for (let folder of folders.items) {
+        if (folder.parent_id === paperRootFolderId) {
+            const notes = await joplin.data.get(['folders', folder.id, 'notes'], { fields: ['body', 'id', 'title']});
+            for (let note of notes.items) {
+                const paperItemIdMatchR = note.body.match(/\sid:\s*(\S{8}-\S{4}-\S{4}-\S{4}-\S{12})/);
+                if (paperItemIdMatchR) {
+                    const titleMatch = note.body.match(/\sTitle:\s*(.*)\n/);
+                    const authorsMatch = note.body.match(/\sAuthors:\s*(.*)\n/);
+                    const yearMatch = note.body.match(/\sYear:\s*(.*)\n/);
+                    const fromMatch = note.body.match(/\sFrom:\s*(.*)\n/);
+                    const volumeMatch = note.body.match(/\sVolume:\s*(.*)\n/);
+                    const pageMatch = note.body.match(/\sPagination:\s*(.*)\n/);
+                    results.push({
+                        id: paperItemIdMatchR[1],
+                        collection_id: '',
+                        title: titleMatch ? titleMatch[1] : '',
+                        authors: authorsMatch ? authorsMatch[1].split(', ') : '',
+                        year: yearMatch ? yearMatch[1] : '',
+                        from: fromMatch ? fromMatch[1] : '',
+                        volume: volumeMatch ? volumeMatch[1] : '',
+                        pagination: pageMatch ? pageMatch[1] : '',
+                        notes: '',
+                        annotations: [],
+                        issn: '',
+                        url: '',
+                        abstract: '',
+                        journal_abbrev: '',
+                        rating: -1,
+                        tags: []
+                    });
+                    noteIds.push(note.id);
+                }
+            }
+        }
+    }
+    return {items: results, ids: noteIds};
+}
+
 export async function copyCitationOfCurrentPaper(noteId, noteBody) {
     const titleMatch = noteBody.match(/\sTitle:\s*(.*)\n/);
     const authorsMatch = noteBody.match(/\sAuthors:\s*(.*)\n/);
@@ -59,33 +105,69 @@ export async function copyCitationOfCurrentPaper(noteId, noteBody) {
     const volumeMatch = noteBody.match(/\sVolume:\s*(.*)\n/);
     const pageMatch = noteBody.match(/\sPagination:\s*(.*)\n/);
 
-    let showText = '';
     if (titleMatch && authorsMatch) {
-        let authors = authorsMatch[1].split(', ');
-        showText += authors.slice(0, authors.length - 1).join(', ') + `, and ${authors[authors.length - 1]}.`;
-        showText += ` "[${titleMatch[1]}](:/${noteId})."`;
+       const showText = await buildCitation(
+           titleMatch[1],
+           authorsMatch[1].split(', '),
+           fromMatch ? fromMatch[1] : '',
+           volumeMatch ? volumeMatch[1] : '',
+           pageMatch ? pageMatch[1] : '',
+           yearMatch ? yearMatch[1] : '',
+           noteId
+       );
+       await joplin.clipboard.writeText(showText);
     } else {
         return false;
     }
 
-    if (fromMatch) {
-        showText += ` In *${fromMatch[1]}*.`;
-    }
-
-    if (volumeMatch) {
-        showText += ` vol. ${volumeMatch[1]}.`;
-    }
-
-    if (pageMatch) {
-        showText += ` pp. ${pageMatch[1]}.`;
-    }
-
-    if (yearMatch) {
-        showText += ` ${yearMatch[1]}.`;
-    }
-
-    await joplin.clipboard.writeText(showText);
     return true;
+}
+
+export async function buildCitationForItem(item: PaperItem, noteId) {
+    return buildCitation(
+        item.title,
+        item.authors,
+        item.from,
+        item.volume,
+        item.pagination,
+        item.year,
+        noteId
+    );
+}
+
+export async function buildRefName(item: PaperItem) {
+    let name = item.authors[0].split(/\s/)[0];
+    name += item.year;
+    for (const t of item.from.split(/\s/)) {
+        if (t[0] >= 'A' && t[0] <= 'Z') {
+            name += t[0];
+        }
+    }
+    return name;
+}
+
+async function buildCitation(title, authors, from, volume, page, year, noteId) {
+    let showText = "";
+    showText += authors.slice(0, authors.length - 1).join(', ') + `, and ${authors[authors.length - 1]}.`;
+    showText += ` "[${title}](:/${noteId})."`;
+
+    if (from.length > 0) {
+        showText += ` In *${from}*.`;
+    }
+
+    if (volume.length > 0) {
+        showText += ` vol. ${volume}.`;
+    }
+
+    if (page.length > 0) {
+        showText += ` pp. ${page}.`;
+    }
+
+    if (year.length > 0) {
+        showText += ` ${year}.`;
+    }
+
+    return showText;
 }
 
 export async function updateAnnotations(noteId, noteBody) {
