@@ -23,8 +23,11 @@ This plugin supports:
    8. user annotations
 2. Each created note is named with the paper's title. You can update all the papers' information through the menu.
 3. Direct link to the PDF file.
+4. Auto insert formatted references through tool button.
 
 ![](./screenshot/readcube.png)
+
+![img](https://i.imgur.com/Acri6uW.gif)
 
 Each paper note has two parts:
 * Joplin note part(the green box area): All the content in it will be saved
@@ -77,6 +80,10 @@ Because I have no idea how to create a context menu, currently all the operation
 
 1. It will automatically format your table code for alignment when navigation between cells with `tab`
 2. A new line is appended when trying to navigate to next cell from the last cell
+
+> Table column colorize from the plugin: [hieuthi/joplin-plugin-markdown-table-colorize](https://github.com/hieuthi/joplin-plugin-markdown-table-colorize)
+
+![tableFormatter](https://i.imgur.com/mqHdvTm.gif)
 
 ### Local file preview
 
