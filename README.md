@@ -25,6 +25,8 @@ This plugin supports:
 3. Direct link to the PDF file.
 4. Auto insert formatted references through tool button.
 
+> Dialog UI code from [joplin/plugin-bibtex.git](https://github.com/joplin/plugin-bibtex.git)
+
 ![](./screenshot/readcube.png)
 
 ![img](https://i.imgur.com/Acri6uW.gif)
