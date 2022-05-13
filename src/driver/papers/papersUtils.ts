@@ -204,7 +204,6 @@ export async function updateAnnotations(noteId, noteBody) {
 }
 
 export async function updateAllInfoForOneNote(noteId, noteBody) {
-    console.log('Enhancement: In updateAllInfoForOneNote...');
     const papersCookie = await joplin.settings.value(PAPERS_COOKIE);
     if (papersCookie.length === 0) {
         alert('Empty cookie for Papers. Please set it in the preferences.');
