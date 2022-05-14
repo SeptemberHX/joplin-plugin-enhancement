@@ -1,29 +1,20 @@
 {
 	"extraScripts": [
 		"driver/codemirror/tableFormatter/index.ts",
-		"driver/codemirror/tableFormatter/markdowntable.ts",
-		"driver/codemirror/tableFormatter/markdownTableData.ts",
-		"driver/codemirror/tableFormatter/markdownTableUtility.ts",
-		"driver/codemirror/tableFormatter/tableCommands.ts",
-		"driver/codemirror/tableFormatter/tableFormatterBridge.ts",
-
 		"driver/codemirror/autoCitation/index.ts",
 
 		"driver/codemirror/mermaidFolder/index.ts",
-		"driver/codemirror/mermaidFolder/mermaidFolder.ts",
 
 		"driver/codemirror/quickCommands/index.ts",
-		"driver/codemirror/quickCommands/quickCommands.ts",
 
-		"driver/markdownItRenderer/index.ts",
-		"driver/markdownItRenderer/filePreviewRenderer.ts",
-		"driver/markdownItRenderer/imageRenderer.ts",
+		"driver/markdownItRenderer/filePreview/index.ts",
+		"driver/markdownItRenderer/image/index.ts",
+		"driver/markdownItRenderer/paperFence/index.ts",
+		"driver/markdownItRenderer/pseudocode/index.ts",
 
 		"driver/markdownItRuler/index.ts",
 		"driver/markdownItRuler/utils.ts",
 
-		"driver/markdownItRenderer/pseudocode/index.ts",
-		"driver/markdownItRenderer/pseudocode/pseudocode.ts",
 
 		"driver/papers/papersUtils.ts"
 	]

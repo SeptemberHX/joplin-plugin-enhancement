@@ -31,6 +31,6 @@ export default class InsertCitation {
 
         this.doc.setValue(text);
         this.doc.replaceRange(insertRefNames.join(''), currSelection.to());
-        this.doc.setSelection(currSelection);
+        // this.doc.setSelection(currSelection);
     }
 }

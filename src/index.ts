@@ -43,16 +43,22 @@ joplin.plugins.register({
 		if (enableImageEnhancement) {
 			await joplin.contentScripts.register(
 				ContentScriptType.MarkdownItPlugin,
-				'enhancement_figure_name',
+				'enhancement_figure_width',
 				'./driver/markdownItRuler/index.js'
+			);
+
+			await joplin.contentScripts.register(
+				ContentScriptType.MarkdownItPlugin,
+				'enhancement_figure_width_caption',
+				'./driver/markdownItRenderer/image/index.js'
 			);
 		}
 
 		if (enableLocalPDFPreview) {
 			await joplin.contentScripts.register(
 				ContentScriptType.MarkdownItPlugin,
-				'enhancement_renderer',
-				'./driver/markdownItRenderer/index.js'
+				'enhancement_preview_renderer',
+				'./driver/markdownItRenderer/filePreview/index.js'
 			);
 		}
 
@@ -114,6 +120,12 @@ async function initPapers(enableAutoAnnotationFetch) {
 		ContentScriptType.CodeMirrorPlugin,
 		'enhancement_autoCitation',
 		'./driver/codemirror/autoCitation/index.js'
+	);
+
+	await joplin.contentScripts.register(
+		ContentScriptType.MarkdownItPlugin,
+		'enhancement_paper_fence_renderer',
+		'./driver/markdownItRenderer/paperFence/index.js'
 	);
 
 	await joplin.commands.register({

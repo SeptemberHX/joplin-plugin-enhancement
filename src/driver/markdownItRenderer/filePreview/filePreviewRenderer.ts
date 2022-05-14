@@ -8,8 +8,16 @@ export function filePreviewRenderer(markdownIt, _options) {
     };
 
     markdownIt.renderer.rules.link_close = function (tokens, idx, options, env, self) {
-        const token = tokens[idx - 2];
         let result = defaultRender(tokens, idx, options, env, self);
+        if (tokens.length < 2) {
+            return result;
+        }
+
+        const token = tokens[0];
+        if (token.type !== 'link_open') {
+            return result;
+        }
+
         let link_path;
         if (!token.attrs) {
             return result;
@@ -21,7 +29,7 @@ export function filePreviewRenderer(markdownIt, _options) {
             }
         }
 
-        if (link_path.startsWith('file://')) {
+        if (link_path.startsWith('file:///')) {
             let file_extension = path.extname(link_path).toUpperCase();
             switch (file_extension) {
                 case '.PDF':

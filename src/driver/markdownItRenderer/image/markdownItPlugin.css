@@ -1,0 +1,26 @@
+body {
+    counter-set: figNo;
+}
+
+figure {
+    text-align: center;
+    counter-increment: figNo;
+}
+
+img {
+    text-align: center;
+}
+
+figcaption {
+    text-align: center;
+    font-weight: bold;
+}
+
+figcaption::before {
+    content: 'Fig. ' counter(figNo) ': ';
+}
+
+.mermaid {
+    text-align: center;
+}
+
