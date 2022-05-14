@@ -1,6 +1,5 @@
 import {navigateCell, insertColumn, insertRow, deleteColume} from "./tableCommands";
 import TableFormatterBridge from "./tableFormatterBridge";
-import MermaidFolder from "../mermaidFolder/mermaidFolder";
 
 
 module.exports = {
@@ -20,8 +19,6 @@ module.exports = {
                     CodeMirror.defineExtension('insertRowBelow', commandBridge.insertRowBelow.bind(commandBridge));
                     CodeMirror.defineExtension('deleteColumn', commandBridge.deleteColumn.bind(commandBridge));
                     CodeMirror.defineExtension('alignColumns', commandBridge.alignColumnsCommand.bind(commandBridge));
-
-                    new MermaidFolder(_context, cm);
                 });
 
                 function tabPressed(cm, event) {
