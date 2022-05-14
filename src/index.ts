@@ -90,6 +90,12 @@ joplin.plugins.register({
 		if (enableTableFormatter) {
 			await initTableFormatter();
 		}
+
+		await joplin.contentScripts.register(
+			ContentScriptType.MarkdownItPlugin,
+			'enhancement_mindmap_renderer',
+			'./driver/markdownItRenderer/mindmap/index.js'
+		);
 	},
 });
 
