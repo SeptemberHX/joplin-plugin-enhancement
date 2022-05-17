@@ -5,7 +5,7 @@ import {
     ENABLE_LOCAL_PDF_PREVIEW,
     ENABLE_MERMAID_FOLDER, ENABLE_QUICK_COMMANDS,
     ENABLE_TABLE_FORMATTER,
-    ENABLE_PAPERS, PAPERS_COOKIE, ENABLE_AUTO_ANNOTATION_FETCH, ENABLE_PSEUDOCODE
+    ENABLE_PAPERS, PAPERS_COOKIE, ENABLE_AUTO_ANNOTATION_FETCH, ENABLE_PSEUDOCODE, ENABLE_CUSTOM_STYLE
 } from "./common";
 
 export namespace settings {
@@ -98,6 +98,15 @@ export namespace settings {
             type: SettingItemType.String,
             label: 'Cookie for ReadCube Papers',
             description: "Visit ReadCube Papers web app in your web browser, open development tools and copy your cookies",
+        }
+
+        PLUGIN_SETTINGS[ENABLE_CUSTOM_STYLE] = {
+            value: false,
+            public: true,
+            section: SECTION,
+            type: SettingItemType.Bool,
+            label: 'Enable Custom CSS style',
+            description: "Header auto numbering, Times New Roman font family, and more",
         }
 
         await joplin.settings.registerSettings(PLUGIN_SETTINGS);

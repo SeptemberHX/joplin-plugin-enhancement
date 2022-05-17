@@ -2,7 +2,7 @@ import joplin from 'api';
 import {ContentScriptType, MenuItemLocation, ToolbarButtonLocation} from "api/types";
 import {settings} from "./settings";
 import {
-	ENABLE_AUTO_ANNOTATION_FETCH,
+	ENABLE_AUTO_ANNOTATION_FETCH, ENABLE_CUSTOM_STYLE,
 	ENABLE_IMAGE_ENHANCEMENT,
 	ENABLE_LOCAL_PDF_PREVIEW,
 	ENABLE_MERMAID_FOLDER,
@@ -35,6 +35,7 @@ joplin.plugins.register({
 		const enablePapers = await joplin.settings.value(ENABLE_PAPERS);
 		const enableAutoAnnotationFetch = await joplin.settings.value(ENABLE_AUTO_ANNOTATION_FETCH);
 		const enablePseudocode = await joplin.settings.value(ENABLE_PSEUDOCODE);
+		const enableCustomStyle = await joplin.settings.value(ENABLE_CUSTOM_STYLE);
 
 		if (enablePapers) {
 			await initPapers(enableAutoAnnotationFetch);
@@ -84,6 +85,14 @@ joplin.plugins.register({
 				ContentScriptType.MarkdownItPlugin,
 				'enhancement_pseudocode_renderer',
 				'./driver/markdownItRenderer/pseudocode/index.js'
+			);
+		}
+
+		if (enableCustomStyle) {
+			await joplin.contentScripts.register(
+				ContentScriptType.MarkdownItPlugin,
+				'enhancement_paper_style',
+				'./driver/style/index.js'
 			);
 		}
 

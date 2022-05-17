@@ -28,7 +28,7 @@
     word-break: normal;
 }
 
-.paper_tg_title, .paper_tg_from, .paper_tg_tags, .paper_tg_stars, .paper_tg_authors {
+.paper_tg_title, .paper_tg_from, .paper_tg_tags, .paper_tg_stars, .paper_tg_authors, .paper_tg_from {
     border-color: inherit;
     font-size: large;
     text-align: center;

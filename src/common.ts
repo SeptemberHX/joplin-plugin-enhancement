@@ -7,6 +7,7 @@ export const ENABLE_PAPERS = 'enablePapers';
 export const PAPERS_COOKIE = 'papersCookie';
 export const ENABLE_AUTO_ANNOTATION_FETCH = 'enableAutoAnnotationFetch';
 export const ENABLE_PSEUDOCODE = 'enablePseudocode';
+export const ENABLE_CUSTOM_STYLE = 'enableCustomStyle';
 
 export const PAPERS_FOLDER_NAME = 'ReadCube Papers';
 

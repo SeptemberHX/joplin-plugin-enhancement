@@ -15,6 +15,7 @@
 		"driver/markdownItRuler/index.ts",
 		"driver/markdownItRuler/utils.ts",
 
+		"driver/style/index.ts",
 
 		"driver/papers/papersUtils.ts"
 	]
