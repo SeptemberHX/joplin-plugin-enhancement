@@ -141,10 +141,10 @@ ol ol li {
 
 ol ol li::before {
     /* 有序列表第二级：括号加小写字母 */
-    content: "(" counter(liist, lower-alpha) ")　　";
-    position: absolute;
-    margin-right: 2rem;
-    left: -2rem;
+    content: "(" counter(liist, lower-alpha) ").";
+    left: -1.2em;
+    margin-right: -0.6em;
+    position: relative;
 }
 
 ol ol ol {
@@ -168,6 +168,10 @@ ol ol ol li::before {
     text-align: right;
 }
 
+#rendered-md ul, #rendered-md ol {
+    margin-bottom: revert !important;
+}
+
 li {
     position: relative;
 }
@@ -187,4 +191,9 @@ span.katex-display span.katex span.katex-html::after {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
+}
+
+sup.footnote-ref {
+    vertical-align: middle;
+    font-size: inherit;
 }
