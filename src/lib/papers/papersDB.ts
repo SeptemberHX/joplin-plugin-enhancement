@@ -2,7 +2,9 @@
 
 import joplin from "api";
 import {PaperItem} from "./papersLib";
-import exp = require("constants");
+import {getOrCreatePaperRootFolder} from "../../driver/papers/papersUtils";
+import {PAPERS_NOTEID_TO_PAPERID_TITLE} from "../../common";
+
 const fs = joplin.require('fs-extra')
 const sqlite3 = joplin.require('sqlite3')
 
@@ -38,35 +40,7 @@ async function createTable() {
         )
     `;
 
-    const createMapQuery = `
-        CREATE TABLE IF NOT EXISTS note2paper (
-            id TEXT PRIMARY KEY,
-            paperId TEXT,
-            FOREIGN KEY(paperId) REFERENCES papers(id) ON DELETE CASCADE
-        )
-    `;
     await runQuery('run', createQuery, {});
-    await runQuery('run', createMapQuery, {});
-}
-
-export async function getNoteId2PaperId() {
-    const records = await runQuery('all', `SELECT * FROM papers`, {});
-    let nodeId2PaperId = {};
-    for (let record of records) {
-        nodeId2PaperId[record.id] = record.paperId;
-    }
-    return nodeId2PaperId;
-}
-
-export async function createNoteId2PaperId(noteId, paperId) {
-    await runQuery('run', `INSERT INTO note2paper (id, paperId) VALUES ($id, $paperId)`, {$id: noteId, $paperId: paperId});
-}
-
-export async function getPaperItemByNoteId(noteId: string) {
-    const record = await runQuery('get', `SELECT * FROM note2paper WHERE id = $id`, {$id: noteId});
-    if (record) {
-        return getRecord(record.paperId);
-    }
 }
 
 export async function getAllRecords() {
@@ -160,4 +134,41 @@ async function runQuery(func, SQLQuery, parameters): Promise<any>{
             database[func](SQLQuery, parameters, (err, row) => { err ? reject(err) : resolve(row) })
         }
     )
+}
+
+// ---------------------------- NoteId2PaperId: because we want it synced between clients, we save it in a note
+
+async function getOrCreatePaperDBNote() {
+    const rootFolderId = await getOrCreatePaperRootFolder();
+    const notes = await joplin.data.get(['folders', rootFolderId, 'notes'], { fields: ['id', 'title']});
+    for (let note of notes.items) {
+        if (note.title === PAPERS_NOTEID_TO_PAPERID_TITLE) {
+            return note.id;
+        }
+    }
+
+    return await joplin.data.post(['notes'], null, {
+        title: PAPERS_NOTEID_TO_PAPERID_TITLE,
+        parent_id: rootFolderId,
+        body: '{}'
+    });
+}
+
+export async function getNoteId2PaperId() {
+    const dbNoteId = await getOrCreatePaperDBNote();
+    const note = await joplin.data.get(['notes', dbNoteId], { fields: ['body', 'id', 'title']});
+
+    try {
+        const t = (JSON).parse(note.body);
+        console.log(t);
+        return JSON.parse(note.body);
+    } catch (err) {
+
+    }
+
+    return {};
+}
+
+export async function getPaperItemByNoteId(noteId: string) {
+    return await getRecord((await getNoteId2PaperId())[noteId]);
 }

@@ -297,7 +297,7 @@ async function replacePaperInfoBody(item, noteId, parentId) {
     await joplin.data.put(['notes', noteId], null, { body: modifiedNote, title: item.title, parent_id: parentId });
 }
 
-async function getOrCreatePaperRootFolder() {
+export async function getOrCreatePaperRootFolder() {
     const folders = await joplin.data.get(['folders']);
     let folder_id;
     for (let folder of folders.items) {
