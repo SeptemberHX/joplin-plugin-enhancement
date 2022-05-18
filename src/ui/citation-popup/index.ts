@@ -69,7 +69,7 @@ function fromRefsToHTML(refs: PaperItem[]): string {
                 title: ref.title,
                 author: ref.authors,
                 year: ref.year,
-                from: ref.from,
+                from: ref.journal,
             };
         })
     );

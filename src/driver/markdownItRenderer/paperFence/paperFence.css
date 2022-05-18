@@ -1,6 +1,8 @@
 /* for papers */
 .paper_tg {
     max-width: 1000px;
+    width: 90%;
+    margin: auto;
     border-collapse: collapse;
     border-spacing: 0;
 }
@@ -28,7 +30,7 @@
     word-break: normal;
 }
 
-.paper_tg_title, .paper_tg_from, .paper_tg_tags, .paper_tg_stars, .paper_tg_authors, .paper_tg_from {
+.paper_tg_title, .paper_tg_from, .paper_tg_tags, .paper_tg_stars, .paper_tg_authors, .paper_tg_from, .paper_tg_year {
     border-color: inherit;
     font-size: large;
     text-align: center;

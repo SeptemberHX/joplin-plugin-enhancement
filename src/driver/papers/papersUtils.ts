@@ -2,6 +2,14 @@ import PapersLib, {PaperItem} from "../../lib/papers/papersLib";
 import joplin from "../../../api";
 import {PAPERS_COOKIE, PAPERS_FOLDER_NAME} from "../../common";
 import exp = require("constants");
+import {createRecord, getAllRecords, getNoteId2PaperId, updateRecord} from "../../lib/papers/papersDB";
+
+export async function createNewNotesForPapers(paperItems: PaperItem[]) {
+    let noteId2PaperId =  await getNoteId2PaperId();
+    for (let item of paperItems) {
+
+    }
+}
 
 export async function syncAllPaperItems() {
     console.log('Enhancement: In syncAllPaperItems...');
@@ -11,6 +19,24 @@ export async function syncAllPaperItems() {
         alert('Empty cookie for Papers. Please set it in the preferences.');
         return;
     }
+
+    const papers = new PapersLib(papersCookie);
+    const allRemotePapers = await papers.getAllItems();
+    let exitedPaperItemIds = new Set();
+    const existedPapers = await getAllRecords();
+    for (let paperItem of existedPapers) {
+        exitedPaperItemIds.add(paperItem.id);
+    }
+
+    for (let remotePaper of allRemotePapers) {
+        if (exitedPaperItemIds.has(remotePaper.id)) {
+            await updateRecord(remotePaper.id, remotePaper);
+        } else {
+            await createRecord(remotePaper.id, remotePaper);
+        }
+    }
+
+    return;
 
     // get all the existing {paper item id : note id} in "ReadCube Papers"
     const folders = await joplin.data.get(['folders']);
@@ -28,9 +54,8 @@ export async function syncAllPaperItems() {
     }
 
     // send request to ReadCube Papers to get the papers' information and split them by published year
-    const papers = new PapersLib(papersCookie);
     let year2Items = {}
-    for (let item of await papers.getAllItems()) {
+    for (let item of allRemotePapers) {
         if (!(item.year in year2Items)) {
             year2Items[item.year] = [];
         }
@@ -77,7 +102,7 @@ export async function buildPaperItemFromNotes() {
                         title: titleMatch ? titleMatch[1] : '',
                         authors: authorsMatch ? authorsMatch[1].split(', ') : '',
                         year: yearMatch ? yearMatch[1] : '',
-                        from: fromMatch ? fromMatch[1] : '',
+                        journal: fromMatch ? fromMatch[1] : '',
                         volume: volumeMatch ? volumeMatch[1] : '',
                         pagination: pageMatch ? pageMatch[1] : '',
                         notes: '',
@@ -127,7 +152,7 @@ export async function buildCitationForItem(item: PaperItem, noteId) {
     return buildCitation(
         item.title,
         item.authors,
-        item.from,
+        item.journal,
         item.volume,
         item.pagination,
         item.year,
@@ -138,7 +163,7 @@ export async function buildCitationForItem(item: PaperItem, noteId) {
 export async function buildRefName(item: PaperItem) {
     let name = item.authors[0].split(/\s/)[0];
     name += item.year;
-    for (const t of item.from.split(/\s/)) {
+    for (const t of item.journal.split(/\s/)) {
         if (t[0] >= 'A' && t[0] <= 'Z') {
             name += t[0];
         }

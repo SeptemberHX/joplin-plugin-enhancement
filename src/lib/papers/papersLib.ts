@@ -5,9 +5,9 @@ import fetch from 'node-fetch';
  */
 
 
-export type PaperItem = {
+export class PaperItem {
     title: string;
-    from: string;
+    journal: string;
     authors: string[];
     tags: string[];
     rating: number;
@@ -137,7 +137,7 @@ export default class PapersLib {
     parseItemJson(itemData, collection_id) {
         const item: PaperItem = {
             title: itemData.article.title,
-            from: 'journal' in itemData.article ? itemData.article.journal : 'Unknown',
+            journal: 'journal' in itemData.article ? itemData.article.journal : 'Unknown',
             authors: 'authors' in itemData.article ? itemData.article.authors : [],
             tags: 'tags' in itemData.user_data ? itemData.user_data.tags : [],
             rating: 'rating' in itemData.user_data ? itemData.user_data.rating : -1,

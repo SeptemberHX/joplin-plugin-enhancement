@@ -22,6 +22,7 @@ import {
 import {debounce} from "ts-debounce";
 import {showCitationPopup} from "./ui/citation-popup";
 import {PaperItem} from "./lib/papers/papersLib";
+import {getPaperItemByNoteId, setupDatabase} from "./lib/papers/papersDB";
 
 joplin.plugins.register({
 	onStart: async function() {
@@ -103,6 +104,20 @@ joplin.plugins.register({
 });
 
 async function initPapers(enableAutoAnnotationFetch) {
+	// init the database
+	await setupDatabase();
+
+	await joplin.contentScripts.onMessage(
+		'enhancement_paper_fence_renderer',
+		async () => {
+			const currNote = await joplin.workspace.selectedNote();
+			if (currNote) {
+				return await getPaperItemByNoteId(currNote.id);
+			}
+			return undefined;
+		}
+	);
+
 	let updateAllInfoForOneNoteDebounce = debounce(updateAllInfoForOneNote, 200);
 	const dialogs = joplin.views.dialogs;
 	const beforeHandle = await dialogs.create('BeforeSyncDialog');
@@ -151,6 +166,7 @@ async function initPapers(enableAutoAnnotationFetch) {
 				if (err.message.code === 'ETIMEDOUT') {
 					console.log("ETIMEDOUT in syncAllPaperItems()");
 				}
+				console.log(err);
 				await dialogs.open(errHandle);
 				return;
 			}
