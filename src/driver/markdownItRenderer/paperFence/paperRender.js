@@ -1,5 +1,5 @@
 function generateBodyForPaperFence(title, authors, from, tags, rating, abstract, collection_id, item_id,
-                                   year, page, volume) {
+                                   year, page, volume, notes) {
     let stars = '☆☆☆☆☆';
     switch (rating) {
         case "1":
@@ -40,6 +40,9 @@ function generateBodyForPaperFence(title, authors, from, tags, rating, abstract,
   <tr>
     <td class="paper_tg_abstract" colspan="4">${abstract}</td>
   </tr>
+  <tr>
+    <td class="paper_tg_notes" colspan="4"><b>User Notes:</b><br/>${notes}</td>
+  </tr>
 </tbody>
 </table>`
 }
@@ -48,12 +51,16 @@ document.addEventListener('joplin-noteDidUpdate', () => {
     loadPaperDetail();
 });
 
+const initIID_paper = setInterval(() => {
+    clearInterval(initIID_paper);
+    loadPaperDetail();
+}, 100);
 
 function loadPaperDetail() {
     webviewApi.postMessage("enhancement_paper_fence_renderer").then(item => {
         if (item) {
             const html = generateBodyForPaperFence(item.title, item.authors, item.journal, item.tags, item.rating,
-                item.abstract, item.collection_id, item.id, item.year, item.page, item.volume);
+                item.abstract, item.collection_id, item.id, item.year, item.page, item.volume, item.notes);
             let paperDetailDiv = document.getElementById('div_paper_detail');
             if (!paperDetailDiv) {
                 paperDetailDiv = document.createElement("div");

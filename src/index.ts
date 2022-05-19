@@ -2,7 +2,8 @@ import joplin from 'api';
 import {ContentScriptType, MenuItemLocation, ToolbarButtonLocation} from "api/types";
 import {settings} from "./settings";
 import {
-	ENABLE_AUTO_ANNOTATION_FETCH, ENABLE_CUSTOM_STYLE,
+	ENABLE_AUTO_ANNOTATION_FETCH,
+	ENABLE_CUSTOM_STYLE,
 	ENABLE_IMAGE_ENHANCEMENT,
 	ENABLE_LOCAL_PDF_PREVIEW,
 	ENABLE_MERMAID_FOLDER,
@@ -13,11 +14,9 @@ import {
 } from "./common";
 import {
 	buildCitationForItem,
-	buildPaperItemFromNotes,
 	buildRefName,
-	copyCitationOfCurrentPaper, createNewNotesForPapers,
-	syncAllPaperItems,
-	updateAllInfoForOneNote
+	createNewNotesForPapers,
+	syncAllPaperItems
 } from "./driver/papers/papersUtils";
 import {debounce} from "ts-debounce";
 import {selectPapersPopup} from "./ui/citation-popup";
@@ -118,7 +117,6 @@ async function initPapers(enableAutoAnnotationFetch) {
 		}
 	);
 
-	let updateAllInfoForOneNoteDebounce = debounce(updateAllInfoForOneNote, 200);
 	const dialogs = joplin.views.dialogs;
 	const beforeHandle = await dialogs.create('BeforeSyncDialog');
 	await dialogs.setHtml(beforeHandle, '<p>You are trying to sync with your papers library.</p>' +
@@ -174,28 +172,9 @@ async function initPapers(enableAutoAnnotationFetch) {
 	});
 
 	await joplin.commands.register({
-		name: "enhancement_papers_updateAllInfo",
-		label: "Update all info for current paper",
-		iconName: "fas fa-sync",
-		execute: async () => {
-			const currNote = await joplin.workspace.selectedNote();
-			try {
-				let result = await updateAllInfoForOneNoteDebounce(currNote.id, currNote.body);
-				if (!result) {
-					await dialogs.open(copyErrHandle);
-				}
-			} catch (err) {
-				if (err.message.code === 'ETIMEDOUT') {
-					console.log("ETIMEDOUT in updateAllInfoForOneNote()");
-				}
-			}
-		}
-	});
-
-	await joplin.commands.register({
-		name: "enhancement_papers_copyPaperCitation",
-		label: "Copy current opened paper citation in markdown style",
-		iconName: "fas fa-copyright",
+		name: "enhancement_papers_createNoteForPaper",
+		label: "Create notes for papers",
+		iconName: "fas fa-notes",
 		execute: async () => {
 			const items: PaperItem[] = await getAllRecords();
 			let paperId2Item = {};
@@ -237,35 +216,16 @@ async function initPapers(enableAutoAnnotationFetch) {
 		}
 	});
 
-	// if (enableAutoAnnotationFetch) {
-	// 	await joplin.workspace.onNoteSelectionChange(async () => {
-	// 		const currNote = await joplin.workspace.selectedNote();
-	// 		try {
-	// 			await updateAllInfoForOneNote(currNote.id, currNote.body);
-	// 		} catch (err) {
-	// 			if (err.message.code === 'ETIMEDOUT') {
-	// 				console.log("ETIMEDOUT in updateAnnotations()");
-	// 			}
-	// 		}
-	// 	});
-	// }
-
 	await joplin.views.menuItems.create(
 		"syncAllFilesFromPapersLib",
 		"enhancement_papers_syncAll",
 		MenuItemLocation.Tools
 	);
 
-	await joplin.views.toolbarButtons.create(
-		'updateAllInfoForCurrentPaper',
-		'enhancement_papers_updateAllInfo',
-		ToolbarButtonLocation.EditorToolbar,
-	);
-
-	await joplin.views.toolbarButtons.create(
-		'copyCurrentPaperCitation',
-		'enhancement_papers_copyPaperCitation',
-		ToolbarButtonLocation.EditorToolbar,
+	await joplin.views.menuItems.create(
+		'createNoteForPaper',
+		'enhancement_papers_createNoteForPaper',
+		MenuItemLocation.Tools,
 	);
 
 	await joplin.views.toolbarButtons.create(

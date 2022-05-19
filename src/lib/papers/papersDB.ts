@@ -163,10 +163,31 @@ export async function getNoteId2PaperId() {
     const dbNoteId = await getOrCreatePaperDBNote();
     const note = await joplin.data.get(['notes', dbNoteId], { fields: ['body', 'id', 'title']});
 
+    // we need to clean deleted note id here because we have no idea how to be notified when a note is deleted.
+    let existNoteIds = new Set();
+    let page = 1;
+    let notes = await joplin.data.get(['notes'], {fields: ['id']});
+    while (true) {
+        for (let noteItem of notes.items) {
+            existNoteIds.add(noteItem.id);
+        }
+
+        if (notes.has_more) {
+            page += 1;
+            notes = await joplin.data.get(['notes'], {fields: ['id'], page: page});
+        } else {
+            break;
+        }
+    }
+
     try {
-        const t = (JSON).parse(note.body);
-        console.log(t);
-        return JSON.parse(note.body);
+        const noteId2PaperId = (JSON).parse(note.body);
+        for (let noteId in noteId2PaperId) {
+            if (!existNoteIds.has(noteId)) {
+                delete noteId2PaperId[noteId];
+            }
+        }
+        return noteId2PaperId;
     } catch (err) {
 
     }
