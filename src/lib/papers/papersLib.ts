@@ -136,18 +136,18 @@ export default class PapersLib {
 
     parseItemJson(itemData, collection_id) {
         const item: PaperItem = {
-            title: itemData.article.title,
+            title: 'title' in itemData.article ? itemData.article.title : '',
             journal: 'journal' in itemData.article ? itemData.article.journal : 'Unknown',
             authors: 'authors' in itemData.article ? itemData.article.authors : [],
             tags: 'tags' in itemData.user_data ? itemData.user_data.tags : [],
-            rating: 'rating' in itemData.user_data ? itemData.user_data.rating : -1,
-            abstract: itemData.article.abstract,
+            rating: 'rating' in itemData.user_data ? itemData.user_data.rating ? itemData.user_data.rating : -1 : -1,
+            abstract: 'abstract' in itemData.article ? itemData.article.abstract : '',
             collection_id: collection_id,
             id: itemData.id,
             notes: 'notes' in itemData.user_data ? itemData.user_data.notes : '',
             annotations: [],
-            year: 'year' in itemData.article ? itemData.article.year : 'Unknown',
-            issn: 'issn' in itemData.article ? itemData.article.year : '',
+            year: 'year' in itemData.article ? itemData.article.year : 1000,
+            issn: 'issn' in itemData.article ? itemData.article.issn : '',
             volume: 'volume' in itemData.article ? itemData.article.volume : '',
             url: 'url' in itemData.article ? itemData.article.url : '',
             pagination: 'pagination' in itemData.article ? itemData.article.pagination : '',

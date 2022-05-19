@@ -11,7 +11,7 @@ let popupHandle: string = "";
  * to be inserted in the note content
  * @returns ID of the selected reference
  */
-export async function showCitationPopup(refs: PaperItem[]): Promise<string[]> {
+export async function selectPapersPopup(refs: PaperItem[]): Promise<string[]> {
     // If the dialog was not initialized, create it and get its handle
     if (popupHandle === "") {
         popupHandle = await joplin.views.dialogs.create(CITATION_POPUP_ID);

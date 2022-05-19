@@ -2,13 +2,43 @@ import PapersLib, {PaperItem} from "../../lib/papers/papersLib";
 import joplin from "../../../api";
 import {PAPERS_COOKIE, PAPERS_FOLDER_NAME} from "../../common";
 import exp = require("constants");
-import {createRecord, getAllRecords, getNoteId2PaperId, updateRecord} from "../../lib/papers/papersDB";
+import {
+    createRecord,
+    getAllRecords,
+    getNoteId2PaperId,
+    updateNoteId2PaperId,
+    updateRecord
+} from "../../lib/papers/papersDB";
 
-export async function createNewNotesForPapers(paperItems: PaperItem[]) {
-    let noteId2PaperId =  await getNoteId2PaperId();
-    for (let item of paperItems) {
-
+export async function createNewNotesForPapers(selectedItemIds: string[], paperItems: PaperItem[]) {
+    let noteId2PaperId = await getNoteId2PaperId();
+    let paperId2NoteId = {};
+    for (let noteId in noteId2PaperId) {
+        paperId2NoteId[noteId2PaperId[noteId]] = noteId;
     }
+
+    let paperId2Items = {};
+    for (let item of paperItems) {
+        paperId2Items[item.id] = item;
+    }
+
+    const rootPathId = await getOrCreatePaperRootFolder();
+    let newNoteId2PaperIdMap = {};
+    let noteIds = [];
+    for (let itemId of selectedItemIds) {
+        if (itemId in paperId2NoteId) {
+            newNoteId2PaperIdMap[paperId2NoteId[itemId]] = itemId;
+            noteIds.push(paperId2NoteId[itemId]);
+        } else {
+            const yearDirs = await getOrCreatePaperYearFolder(rootPathId, [paperId2Items[itemId].year.toString()])
+            const targetYearDir = yearDirs[paperId2Items[itemId].year.toString()];
+            const note = await joplin.data.post(['notes'], null, {title: paperId2Items[itemId].title, parent_id: targetYearDir, body: ''});
+            newNoteId2PaperIdMap[note.id] = itemId;
+            noteIds.push(note.id);
+        }
+    }
+    await updateNoteId2PaperId(newNoteId2PaperIdMap);
+    return noteIds;
 }
 
 export async function syncAllPaperItems() {

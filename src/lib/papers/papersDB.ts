@@ -45,7 +45,12 @@ async function createTable() {
 
 export async function getAllRecords() {
     const records = await runQuery('all', `SELECT * FROM papers`, {})
-    return records.map((record) => ({id: record.id, recurrence: getRecordAsPaperItem(record)}))
+    let results = [];
+    for (let record of records) {
+        results.push(getRecordAsPaperItem(record));
+    }
+    return results;
+    return records.map((record) => getRecordAsPaperItem(record));
 }
 
 export async function createRecord(id: string, paperItem: PaperItem){
@@ -171,4 +176,14 @@ export async function getNoteId2PaperId() {
 
 export async function getPaperItemByNoteId(noteId: string) {
     return await getRecord((await getNoteId2PaperId())[noteId]);
+}
+
+export async function updateNoteId2PaperId(items) {
+    let existMap = await getNoteId2PaperId();
+    for (let noteId in items) {
+        existMap[noteId] = items[noteId];
+    }
+
+    const dbNoteId = await getOrCreatePaperDBNote();
+    await joplin.data.put(['notes', dbNoteId], null, { body: JSON.stringify(existMap) });
 }

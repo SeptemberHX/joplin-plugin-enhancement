@@ -15,14 +15,14 @@ import {
 	buildCitationForItem,
 	buildPaperItemFromNotes,
 	buildRefName,
-	copyCitationOfCurrentPaper,
+	copyCitationOfCurrentPaper, createNewNotesForPapers,
 	syncAllPaperItems,
 	updateAllInfoForOneNote
 } from "./driver/papers/papersUtils";
 import {debounce} from "ts-debounce";
-import {showCitationPopup} from "./ui/citation-popup";
+import {selectPapersPopup} from "./ui/citation-popup";
 import {PaperItem} from "./lib/papers/papersLib";
-import {getPaperItemByNoteId, setupDatabase} from "./lib/papers/papersDB";
+import {getAllRecords, getPaperItemByNoteId, setupDatabase} from "./lib/papers/papersDB";
 
 joplin.plugins.register({
 	onStart: async function() {
@@ -197,10 +197,17 @@ async function initPapers(enableAutoAnnotationFetch) {
 		label: "Copy current opened paper citation in markdown style",
 		iconName: "fas fa-copyright",
 		execute: async () => {
-			const currNote = await joplin.workspace.selectedNote();
-			const result = await copyCitationOfCurrentPaper(currNote.id, currNote.body);
-			if (!result) {
-				await dialogs.open(copyErrHandle);
+			const items: PaperItem[] = await getAllRecords();
+			let paperId2Item = {};
+			for (let index in items) {
+				paperId2Item[items[index].id] = items[index];
+			}
+
+			const selectedRefsIDs: string[] = await selectPapersPopup(items);
+
+			if (selectedRefsIDs.length > 0) {
+				const noteIds = await createNewNotesForPapers(selectedRefsIDs, items);
+				await joplin.commands.execute('openNote', noteIds[0]);
 			}
 		}
 	});
@@ -210,42 +217,38 @@ async function initPapers(enableAutoAnnotationFetch) {
 		label: 'Cite your papers',
 		iconName: 'fa fa-graduation-cap',
 		execute: async () => {
-			const notePaperItems = await buildPaperItemFromNotes();
-			const items: PaperItem[] = notePaperItems.items;
-			const nodeIds: string[] = notePaperItems.ids;
+			const items: PaperItem[] = await getAllRecords();
 			let paperId2Item = {};
-			let paperId2NoteId = {};
 			for (let index in items) {
 				paperId2Item[items[index].id] = items[index];
-				paperId2NoteId[items[index].id] = nodeIds[index];
 			}
 
-			const selectedRefsIDs: string[] = await showCitationPopup(items);
+			const selectedRefsIDs: string[] = await selectPapersPopup(items);
 			const refNames = [];
 			const citations = [];
 			for (const id of selectedRefsIDs) {
 				refNames.push(await buildRefName(paperId2Item[id]));
-				citations.push(await buildCitationForItem(paperId2Item[id], paperId2NoteId[id]));
+				citations.push(await buildCitationForItem(paperId2Item[id], ""));
 			}
 			await joplin.commands.execute('editor.execCommand', {
 				name: 'enhancement_insertCitation',
 				args: [[citations, refNames]]
 			});
 		}
-	})
+	});
 
-	if (enableAutoAnnotationFetch) {
-		await joplin.workspace.onNoteSelectionChange(async () => {
-			const currNote = await joplin.workspace.selectedNote();
-			try {
-				await updateAllInfoForOneNote(currNote.id, currNote.body);
-			} catch (err) {
-				if (err.message.code === 'ETIMEDOUT') {
-					console.log("ETIMEDOUT in updateAnnotations()");
-				}
-			}
-		});
-	}
+	// if (enableAutoAnnotationFetch) {
+	// 	await joplin.workspace.onNoteSelectionChange(async () => {
+	// 		const currNote = await joplin.workspace.selectedNote();
+	// 		try {
+	// 			await updateAllInfoForOneNote(currNote.id, currNote.body);
+	// 		} catch (err) {
+	// 			if (err.message.code === 'ETIMEDOUT') {
+	// 				console.log("ETIMEDOUT in updateAnnotations()");
+	// 			}
+	// 		}
+	// 	});
+	// }
 
 	await joplin.views.menuItems.create(
 		"syncAllFilesFromPapersLib",
