@@ -5,7 +5,7 @@ import {
     ENABLE_LOCAL_PDF_PREVIEW,
     ENABLE_MERMAID_FOLDER, ENABLE_QUICK_COMMANDS,
     ENABLE_TABLE_FORMATTER,
-    ENABLE_PAPERS, PAPERS_COOKIE, ENABLE_AUTO_ANNOTATION_FETCH, ENABLE_PSEUDOCODE, ENABLE_CUSTOM_STYLE
+    ENABLE_PAPERS, PAPERS_COOKIE, ENABLE_PSEUDOCODE, ENABLE_CUSTOM_STYLE
 } from "./common";
 
 export namespace settings {
@@ -80,15 +80,6 @@ export namespace settings {
             type: SettingItemType.Bool,
             label: 'Enable fetch data from ReadCube Papers',
             description: "Fetch your files from ReadCube Papers and create notes for each file. (requires restart)",
-        }
-
-        PLUGIN_SETTINGS[ENABLE_AUTO_ANNOTATION_FETCH] = {
-            value: true,
-            public: true,
-            section: SECTION,
-            type: SettingItemType.Bool,
-            label: 'Enable auto fetch annotations',
-            description: " Auto fetch annotations from ReadCube Papers when opening a note. (requires restart)",
         }
 
         PLUGIN_SETTINGS[PAPERS_COOKIE] = {

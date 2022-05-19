@@ -2,19 +2,19 @@ function generateBodyForPaperFence(title, authors, from, tags, rating, abstract,
                                    year, page, volume, notes) {
     let stars = '☆☆☆☆☆';
     switch (rating) {
-        case "1":
+        case 1:
             stars = '★☆☆☆☆';
             break;
-        case "2":
+        case 2:
             stars = '★★☆☆☆';
             break;
-        case "3":
+        case 3:
             stars = '★★★☆☆';
             break;
-        case "4":
+        case 4:
             stars = '★★★★☆';
             break;
-        case "5":
+        case 5:
             stars = '★★★★★';
             break;
         default:
