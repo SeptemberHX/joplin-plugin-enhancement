@@ -2,7 +2,6 @@ import joplin from 'api';
 import {ContentScriptType, MenuItemLocation, ToolbarButtonLocation} from "api/types";
 import {settings} from "./settings";
 import {
-	ENABLE_AUTO_ANNOTATION_FETCH,
 	ENABLE_CUSTOM_STYLE,
 	ENABLE_IMAGE_ENHANCEMENT,
 	ENABLE_LOCAL_PDF_PREVIEW,
@@ -18,7 +17,6 @@ import {
 	createNewNotesForPapers,
 	syncAllPaperItems
 } from "./driver/papers/papersUtils";
-import {debounce} from "ts-debounce";
 import {selectPapersPopup} from "./ui/citation-popup";
 import {PaperItem} from "./lib/papers/papersLib";
 import {getAllRecords, getPaperItemByNoteId, setupDatabase} from "./lib/papers/papersDB";
@@ -33,12 +31,11 @@ joplin.plugins.register({
 		const enableImageEnhancement = await joplin.settings.value(ENABLE_IMAGE_ENHANCEMENT);
 		const enableQuickCommands = await joplin.settings.value(ENABLE_QUICK_COMMANDS);
 		const enablePapers = await joplin.settings.value(ENABLE_PAPERS);
-		const enableAutoAnnotationFetch = await joplin.settings.value(ENABLE_AUTO_ANNOTATION_FETCH);
 		const enablePseudocode = await joplin.settings.value(ENABLE_PSEUDOCODE);
 		const enableCustomStyle = await joplin.settings.value(ENABLE_CUSTOM_STYLE);
 
 		if (enablePapers) {
-			await initPapers(enableAutoAnnotationFetch);
+			await initPapers();
 		}
 
 		if (enableImageEnhancement) {
@@ -102,7 +99,7 @@ joplin.plugins.register({
 	},
 });
 
-async function initPapers(enableAutoAnnotationFetch) {
+async function initPapers() {
 	// init the database
 	await setupDatabase();
 
