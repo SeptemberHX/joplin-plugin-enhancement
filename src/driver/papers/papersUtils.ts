@@ -43,10 +43,9 @@ export async function createNewNotesForPapers(selectedItemIds: string[], paperIt
 
 export async function syncAllPaperItems() {
     console.log('Enhancement: In syncAllPaperItems...');
-    const paperRootFolderId = await getOrCreatePaperRootFolder();
     const papersCookie = await joplin.settings.value(PAPERS_COOKIE);
     if (papersCookie.length === 0) {
-        alert('Empty cookie for Papers. Please set it in the preferences.');
+        console.log('Empty cookie for Papers. Please set it in the preferences.');
         return;
     }
 
@@ -65,7 +64,7 @@ export async function syncAllPaperItems() {
             await createRecord(remotePaper.id, remotePaper);
         }
     }
-
+    console.log('Enhancement: syncAllPaperItems finished');
     return;
 }
 

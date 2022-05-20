@@ -20,6 +20,7 @@ import {
 import {selectPapersPopup} from "./ui/citation-popup";
 import {PaperItem} from "./lib/papers/papersLib";
 import {getAllRecords, getPaperItemByNoteId, setupDatabase} from "./lib/papers/papersDB";
+import {PapersWS} from "./lib/papers/papersWS";
 
 joplin.plugins.register({
 	onStart: async function() {
@@ -102,6 +103,7 @@ joplin.plugins.register({
 async function initPapers() {
 	// init the database
 	await setupDatabase();
+	new PapersWS();
 
 	await joplin.contentScripts.onMessage(
 		'enhancement_paper_fence_renderer',

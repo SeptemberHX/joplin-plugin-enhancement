@@ -2,13 +2,12 @@
 import fetch from 'node-fetch';
 import WebSocket from 'ws';
 import ReconnectingWebSocket from "reconnecting-websocket";
-// import {refreshItems} from "../../driver/papers/papersUtils";
-// import joplin from "../../../api";
-// import {PAPERS_COOKIE} from "../../common";
-// import PapersLib from "./papersLib";
+import joplin from "../../../api";
+import {PAPERS_COOKIE} from "../../common";
+import PapersLib from "./papersLib";
+import {deleteRecord, updateRecord} from "./papersDB";
+import {syncAllPaperItems} from "../../driver/papers/papersUtils";
 
-const papersCookie = ``;
-const collectionId = `0a55aaeb-5cc6-466b-b5e9-61df735b17f3`;
 const options = {
     WebSocket: WebSocket, // custom WebSocket constructor
     connectionTimeout: 30000,
@@ -21,6 +20,8 @@ export class PapersWS {
     clientId: null;
     lastReceivedMessageDate: Date;
     currMessageId: 1;
+    papers: PapersLib;
+    defaultCollectionId: string;
 
     constructor() {
         this.ws = new ReconnectingWebSocket('wss://push.readcube.com/bayeux', [], options);
@@ -54,14 +55,16 @@ export class PapersWS {
     }
 
     async onOpen() {
-        // const papersCookie = await joplin.settings.value(PAPERS_COOKIE);
-        // if (papersCookie.length === 0) {
-        //     alert('Empty cookie for Papers. Please set it in the preferences.');
-        //     return;
-        // }
-        //
-        // const papers = new PapersLib(papersCookie);
+        const papersCookie = await joplin.settings.value(PAPERS_COOKIE);
+        if (papersCookie.length === 0) {
+            alert('Empty cookie for Papers. Please set it in the preferences.');
+            return;
+        }
+
+        this.papers = new PapersLib(papersCookie);
+        this.defaultCollectionId = await this.papers.getDefaultCollectionId();
         this.lastReceivedMessageDate = null;
+
         let requestUrl = `https://push.readcube.com/bayeux?message=[{"channel":"/meta/handshake","version":"1.0","supportedConnectionTypes":["websocket","eventsource","long-polling","cross-origin-long-polling","callback-polling"],"id":"1"}]&jsonp=__jsonp1__`;
         const response = await fetch(requestUrl, {headers: {cookie: papersCookie}});
         const responseBody = await response.text();
@@ -71,7 +74,7 @@ export class PapersWS {
                 this.clientId = responseJson[0].clientId;
                 console.log('PapersWebSocket: clientId = ', this.clientId);
                 this.sendHeartbeat();
-                this.sendSubscribe(collectionId);
+                this.sendSubscribe(this.defaultCollectionId);
             }
         }
 
@@ -86,24 +89,41 @@ export class PapersWS {
                     this.ws.reconnect();
                 }
             }
-        }, 1000);
+        }.bind(this), 1000);
+
+        // once connect to the server successfully, update the database immediately.
+        await syncAllPaperItems();
     }
 
     async onMessage(event: any) {
         this.lastReceivedMessageDate = new Date();
-        console.log('PapersWebSocket: Receive ', event.data);
-        const message = JSON.parse(event.data);
-        if (message[0].successful && message[0].channel === '/meta/connect') {
+        const messages = JSON.parse(event.data);
+        if (messages[0].successful && messages[0].channel === '/meta/connect') {
             this.sendHeartbeat();
+            return;
         }
 
+        console.log('PapersWebSocket: Receive ', event.data);
         let changeItemIds = [];
-        if (message[0].channel.startsWith('/production/collections')) {
-            for (let change of message[0].data.changes) {
-                changeItemIds.push(change.id);
+        let removedItemIds = [];
+        for (let message of messages) {
+            if (message.channel.startsWith('/production/collections')) {  // collection change
+                for (let change of message.data.changes) {
+                    // ignore other type changes
+                    if (change.type !== 'item') {
+                        continue;
+                    }
+
+                    if (change.type === 'created' || change.type === 'updated') {  // new paper is created or updated
+                        changeItemIds.push(change.id);
+                    } else if (change.type === 'deleted') {  // paper is deleted
+                        removedItemIds.push(change.id);
+                    }
+                }
             }
         }
-        // await refreshItems(changeItemIds);
+        await this.refreshItems(changeItemIds);
+        await this.deleteItems(removedItemIds);
     }
 
     onClose(event): void {
@@ -113,6 +133,25 @@ export class PapersWS {
     onError(): void {
         console.log('PapersWebSocket: Error happened');
     }
-}
 
-new PapersWS();
+    async refreshItems(itemIds: string[]) {
+        if (this.papers) {
+            try {
+                for (let itemId of itemIds) {
+                    const item = await this.papers.getItem(this.defaultCollectionId, itemId);
+                    console.log(`PapersWebSocket: Update item ${item.id}|${item.title}`);
+                    await updateRecord(item.id, item);
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    }
+
+    async deleteItems(itemIds: string[]) {
+        for (let itemId of itemIds) {
+            console.log(`PapersWebSocket: Delete item ${itemId}`);
+            await deleteRecord(itemId);
+        }
+    }
+}

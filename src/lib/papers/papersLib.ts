@@ -58,6 +58,14 @@ export default class PapersLib {
         return results;
     }
 
+    async getDefaultCollectionId() {
+        const ids = await this.getCollections();
+        if (ids.length === 0) {
+            return undefined;
+        }
+        return ids[0].id;
+    }
+
     /**
      * Get all the items in the given collection
      * @param collection_id
@@ -66,14 +74,14 @@ export default class PapersLib {
         let requestUrl = `https://sync.readcube.com/collections/${collection_id}/items?size=50`;
         let results: PaperItem[] = [];
         while (true) {
-            console.log('In the fetching while-loop...');
+            console.log('Enhancement: In the fetching while-loop...');
             const response = await fetch(requestUrl, {headers: {cookie: this.cookie}});
             const resJson = await response.json();
             if (resJson.status === 'ok') {
                 for (let item of resJson.items) {
                     results.push(this.parseItemJson(item, collection_id));
                 }
-                console.log(results.length, '/', resJson.total);
+                console.log(`Enhancement: ${results.length}/${resJson.total} were fetched`);
                 if (resJson.items.length != 0) {
                     requestUrl = `https://sync.readcube.com/collections/${collection_id}/items?sort%5B%5D=title,asc&size=50&scroll_id=${resJson.scroll_id}`;
                 } else {

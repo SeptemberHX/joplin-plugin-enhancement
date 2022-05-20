@@ -12,18 +12,15 @@ ReadCube Papers is a reference manager: [Official website](https://www.papersapp
 
 This plugin supports:
 
-1. Create one note for each paper in your library on Papers including the following content. They are grouped by the published year.
-   1. title
-   2. authors
-   3. journal/conference name
-   4. tags
-   5. rating
-   6. abstract
-   7. user note
-   8. user annotations
-2. Each created note is named with the paper's title. You can update all the papers' information through the menu.
-3. Direct link to the PDF file.
+1. Sync your papers information to local database. [Almost real time syncing due to the websocket protocal].
+2. Render a paper info table after the note content for paper note. [Note created by the menu 'Tools -> Create notes for papers'].
+3. Direct link to the PDF file in the paper info table.
 4. Auto insert formatted references through tool button.
+
+> **ATTENTION**: this plugin use database file instead of notes to store the papers' information since v0.6.0. No notes will be deleted. Your data will be safe.
+
+> **WARNING**: DO NOT delete the note `papers.db` under `ReadCube Papers` folder. It helps to tell the renderer which notes should be rendered with a paper information table.
+
 
 > Dialog UI code from [joplin/plugin-bibtex.git](https://github.com/joplin/plugin-bibtex.git)
 
@@ -31,14 +28,11 @@ This plugin supports:
 
 ![img](https://i.imgur.com/Acri6uW.gif)
 
-Each paper note has two parts:
-* Joplin note part(the green box area): All the content in it will be saved
-* Papers data part(the purple box area): All the content in it will be overwritten when syncing with Papers.
-
 How to use:
 1. In the Joplin Settings -> Joplin Enhancement -> Set your cookie for Papers
-2. Joplin Menubar -> Tools -> Sync files with Papers: It will create notes for your papers without the annotations
-3. Open one note: the annotation will be automatically updated. Or click the sync icon on the editor toolbar.
+2. ~~Joplin Menubar -> Tools -> Sync files with Papers: It will create notes for your papers without the annotations~~
+   1. Not needed anymore. Now it will fetch the papers and keep syncing based on websocket
+3. 'Tools -> Create notes for papers'. **Only the notes created in this way can have a rendered paper information table**
 
 ### Pseudocode
 
@@ -107,6 +101,12 @@ Type `/command` in the editor for quick input of table, mermaid, etc.
 ### Auto folder in the editor
 
 Currently only the mermaid block can be folded automatically.
+
+### Custom style
+
+**Disabled on default**
+
+Personal requirements. Use font 'Time news roman' to make it look like published papers.
 
 ## Build
 
