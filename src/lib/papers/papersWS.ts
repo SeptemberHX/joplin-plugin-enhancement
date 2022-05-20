@@ -114,9 +114,9 @@ export class PapersWS {
                         continue;
                     }
 
-                    if (change.type === 'created' || change.type === 'updated') {  // new paper is created or updated
+                    if (change.action === 'created' || change.action === 'updated') {  // new paper is created or updated
                         changeItemIds.push(change.id);
-                    } else if (change.type === 'deleted') {  // paper is deleted
+                    } else if (change.action === 'deleted') {  // paper is deleted
                         removedItemIds.push(change.id);
                     }
                 }
