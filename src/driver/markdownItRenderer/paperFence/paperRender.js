@@ -29,7 +29,7 @@ function generateBodyForPaperFence(title, authors, from, tags, rating, abstract,
 </thead>
 <tbody>
   <tr>
-    <td class="paper_tg_authors" colspan="4">${authors}</td>
+    <td class="paper_tg_authors" colspan="4">${authors.join(', ')}</td>
   </tr>
   <tr>
     <td class="paper_tg_from"><i>${from}</i></td>
@@ -44,7 +44,8 @@ function generateBodyForPaperFence(title, authors, from, tags, rating, abstract,
     <td class="paper_tg_notes" colspan="4"><b>User Notes:</b><br/>${notes}</td>
   </tr>
 </tbody>
-</table>`
+</table>
+`
 }
 
 document.addEventListener('joplin-noteDidUpdate', () => {

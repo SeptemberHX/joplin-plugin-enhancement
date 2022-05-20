@@ -54,3 +54,37 @@ th.paper_tg_from {
 .paper_tg_tags {
     width: 25%;
 }
+
+
+.noteBoxes
+{
+    border: 1px solid;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+    width: 300px;
+}
+
+.type1
+{
+    border-color: #E76F51;
+    background-color: rgba(231, 111, 81, 0.1);
+}
+
+.type2
+{
+    border-color: #2A9D8F;
+    background-color: rgba(42, 157, 143, 0.1);
+}
+
+.type3
+{
+    border-color: #0096C7;
+    background-color: rgba(0, 150, 199, 0.1);
+}
+
+td.paper_tg_notes
+{
+    border-color: #00B353;
+    background-color: rgba(0, 179, 83, 0.1);
+}
