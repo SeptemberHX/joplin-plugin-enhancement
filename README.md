@@ -8,6 +8,8 @@ It contains several enhancement for both codemirror and markdown renderer.
 
 ### ReadCube Papers
 
+> 使用到的 API 接口说明见：[ReadCube Papers API](https://blog.hxgpark.com/posts/ReadCubePapersAPI/)
+
 ReadCube Papers is a reference manager: [Official website](https://www.papersapp.com/).
 
 This plugin supports:

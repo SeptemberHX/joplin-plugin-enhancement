@@ -90,7 +90,7 @@ h2 {
 
 h2::before {
     content: counter(h2N);
-    margin-left: -1em;
+    margin-left: -0.5em;
     margin-right: 1em;
 }
 
@@ -101,7 +101,7 @@ h3 {
 
 h3::before {
     content: counter(h2N) "." counter(h3N);
-    margin-left: -1em;
+    margin-left: -0.5em;
     margin-right: 1em;
 }
 
@@ -111,7 +111,7 @@ h4 {
 
 h4::before {
     content: counter(h2N) "." counter(h3N) "." counter(h4N);
-    margin-left: -1em;
+    margin-left: -0.5em;
     margin-right: 1em;
 }
 
@@ -194,6 +194,6 @@ span.katex-display span.katex span.katex-html::after {
 }
 
 sup.footnote-ref {
-    vertical-align: middle;
+    vertical-align: baseline;
     font-size: inherit;
 }
