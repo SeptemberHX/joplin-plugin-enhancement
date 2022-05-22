@@ -1,12 +1,10 @@
 import PapersLib, {PaperItem} from "../../lib/papers/papersLib";
 import joplin from "../../../api";
-import {PAPERS_COOKIE, PAPERS_FOLDER_NAME} from "../../common";
-import exp = require("constants");
+import {PAPERS_COOKIE, PAPERS_FOLDER_NAME, SOURCE_URL_PAPERS_PREFIX} from "../../common";
 import {
     createRecord,
     getAllRecords,
-    getNoteId2PaperId,
-    updateNoteId2PaperId,
+    getNoteId2PaperId, removeInvalidSourceUrlByAllItems,
     updateRecord
 } from "../../lib/papers/papersDB";
 
@@ -23,21 +21,23 @@ export async function createNewNotesForPapers(selectedItemIds: string[], paperIt
     }
 
     const rootPathId = await getOrCreatePaperRootFolder();
-    let newNoteId2PaperIdMap = {};
     let noteIds = [];
     for (let itemId of selectedItemIds) {
         if (itemId in paperId2NoteId) {
-            newNoteId2PaperIdMap[paperId2NoteId[itemId]] = itemId;
             noteIds.push(paperId2NoteId[itemId]);
         } else {
             const yearDirs = await getOrCreatePaperYearFolder(rootPathId, [paperId2Items[itemId].year.toString()])
             const targetYearDir = yearDirs[paperId2Items[itemId].year.toString()];
-            const note = await joplin.data.post(['notes'], null, {title: paperId2Items[itemId].title, parent_id: targetYearDir, body: paperId2Items[itemId].title});
-            newNoteId2PaperIdMap[note.id] = itemId;
+            const note = await joplin.data.post(['notes'], null, {
+                    title: paperId2Items[itemId].title,
+                    parent_id: targetYearDir,
+                    body: paperId2Items[itemId].title,
+                    source_url: `${SOURCE_URL_PAPERS_PREFIX}${itemId}`
+                }
+            );
             noteIds.push(note.id);
         }
     }
-    await updateNoteId2PaperId(newNoteId2PaperIdMap);
     return noteIds;
 }
 
@@ -64,6 +64,8 @@ export async function syncAllPaperItems() {
             await createRecord(remotePaper.id, remotePaper);
         }
     }
+
+    await removeInvalidSourceUrlByAllItems(allRemotePapers);
     console.log('Enhancement: syncAllPaperItems finished');
     return;
 }

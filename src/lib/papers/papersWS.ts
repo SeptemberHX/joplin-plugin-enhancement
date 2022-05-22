@@ -5,7 +5,7 @@ import ReconnectingWebSocket from "reconnecting-websocket";
 import joplin from "../../../api";
 import {PAPERS_COOKIE} from "../../common";
 import PapersLib from "./papersLib";
-import {deleteRecord, updateRecord} from "./papersDB";
+import {createRecord, deleteRecord, getRecord, removeInvalidSourceUrlByItemId, updateRecord} from "./papersDB";
 import {syncAllPaperItems} from "../../driver/papers/papersUtils";
 
 const options = {
@@ -140,7 +140,11 @@ export class PapersWS {
                 for (let itemId of itemIds) {
                     const item = await this.papers.getItem(this.defaultCollectionId, itemId);
                     console.log(`PapersWebSocket: Update item ${item.id}|${item.title}`);
-                    await updateRecord(item.id, item);
+                    if (await getRecord(itemId)) {
+                        await updateRecord(item.id, item);
+                    } else {
+                        await createRecord(item.id, item);
+                    }
                 }
             } catch (err) {
                 console.log(err);
@@ -152,6 +156,7 @@ export class PapersWS {
         for (let itemId of itemIds) {
             console.log(`PapersWebSocket: Delete item ${itemId}`);
             await deleteRecord(itemId);
+            await removeInvalidSourceUrlByItemId(itemId);
         }
     }
 }

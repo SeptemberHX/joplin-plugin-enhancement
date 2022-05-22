@@ -3,7 +3,7 @@
 import joplin from "api";
 import {PaperItem} from "./papersLib";
 import {getOrCreatePaperRootFolder} from "../../driver/papers/papersUtils";
-import {PAPERS_NOTEID_TO_PAPERID_TITLE} from "../../common";
+import {PAPERS_NOTEID_TO_PAPERID_TITLE, SOURCE_URL_PAPERS_PREFIX} from "../../common";
 
 const fs = joplin.require('fs-extra')
 const sqlite3 = joplin.require('sqlite3')
@@ -99,6 +99,7 @@ export async function updateRecord(id: string, paperItem: PaperItem) {
 }
 
 export async function getRecord(id): Promise<PaperItem>{
+    console.log(`Query paper item ${id}`);
     const record = await runQuery('get', `SELECT * FROM papers WHERE id = $id`, {$id: id})
     return getRecordAsPaperItem(record)
 }
@@ -143,68 +144,67 @@ async function runQuery(func, SQLQuery, parameters): Promise<any>{
 
 // ---------------------------- NoteId2PaperId: because we want it synced between clients, we save it in a note
 
-async function getOrCreatePaperDBNote() {
-    const rootFolderId = await getOrCreatePaperRootFolder();
-    const notes = await joplin.data.get(['folders', rootFolderId, 'notes'], { fields: ['id', 'title']});
-    for (let note of notes.items) {
-        if (note.title === PAPERS_NOTEID_TO_PAPERID_TITLE) {
-            return note.id;
-        }
-    }
-
-    return await joplin.data.post(['notes'], null, {
-        title: PAPERS_NOTEID_TO_PAPERID_TITLE,
-        parent_id: rootFolderId,
-        body: '{}'
-    });
-}
-
 export async function getNoteId2PaperId() {
-    const dbNoteId = await getOrCreatePaperDBNote();
-    const note = await joplin.data.get(['notes', dbNoteId], { fields: ['body', 'id', 'title']});
-
-    // we need to clean deleted note id here because we have no idea how to be notified when a note is deleted.
-    let existNoteIds = new Set();
+    let results = {}
     let page = 1;
-    let notes = await joplin.data.get(['notes'], {fields: ['id']});
+    let notes = await joplin.data.get(['search'], {
+        query: `sourceurl:${SOURCE_URL_PAPERS_PREFIX}*`,
+        fields: ['source_url', 'id']
+    });
     while (true) {
-        for (let noteItem of notes.items) {
-            existNoteIds.add(noteItem.id);
+        for (let item of notes.items) {
+            results[item.id] = item.source_url.substr(SOURCE_URL_PAPERS_PREFIX.length);
         }
 
         if (notes.has_more) {
             page += 1;
-            notes = await joplin.data.get(['notes'], {fields: ['id'], page: page});
+            notes = await joplin.data.get(['search'], {
+                query: `sourceurl:${SOURCE_URL_PAPERS_PREFIX}*`,
+                fields: ['source_url', 'id'],
+                page: page
+            });
         } else {
             break;
         }
     }
 
-    try {
-        const noteId2PaperId = (JSON).parse(note.body);
-        for (let noteId in noteId2PaperId) {
-            if (!existNoteIds.has(noteId)) {
-                delete noteId2PaperId[noteId];
-            }
-        }
-        return noteId2PaperId;
-    } catch (err) {
-
-    }
-
-    return {};
+    return results;
 }
 
 export async function getPaperItemByNoteId(noteId: string) {
-    return await getRecord((await getNoteId2PaperId())[noteId]);
+    let note = await joplin.data.get(['notes', noteId], {
+        fields: ['source_url', 'id']
+    });
+
+    if (!note) {
+        return undefined;
+    }
+    return await getRecord(note.source_url.substr(SOURCE_URL_PAPERS_PREFIX.length));
 }
 
-export async function updateNoteId2PaperId(items) {
-    let existMap = await getNoteId2PaperId();
-    for (let noteId in items) {
-        existMap[noteId] = items[noteId];
+export async function removeInvalidSourceUrlByAllItems(items: PaperItem[]) {
+    const noteId2PaperId = await getNoteId2PaperId();
+    let paperIdSet = new Set();
+
+    for (let item of items) {
+        paperIdSet.add(item.id);
     }
 
-    const dbNoteId = await getOrCreatePaperDBNote();
-    await joplin.data.put(['notes', dbNoteId], null, { body: JSON.stringify(existMap) });
+    for (let noteId in noteId2PaperId) {
+        // remove the source_url when the paper is removed
+        if (!paperIdSet.has(noteId2PaperId[noteId])) {
+            await joplin.data.put(['notes', noteId], null, { source_url: "" });
+        }
+    }
+}
+
+export async function removeInvalidSourceUrlByItemId(itemId) {
+    let notes = await joplin.data.get(['search'], {
+        query: `sourceurl:${SOURCE_URL_PAPERS_PREFIX}${itemId}`,
+        fields: ['id']
+    });
+
+    for (let note of notes.items) {
+        await joplin.data.put(['notes', note.id], null, { source_url: "" });
+    }
 }
