@@ -67,8 +67,9 @@ export async function syncAllPaperItems() {
         }
     }
 
-    for (let localPaperId of existedPapers) {
+    for (let localPaperId of exitedPaperItemIds) {
         if (!remotePaperIds.has(localPaperId)) {
+            console.log('Enhancement: delete non-exist paper', localPaperId);
             await deleteRecord(localPaperId);
         }
     }
