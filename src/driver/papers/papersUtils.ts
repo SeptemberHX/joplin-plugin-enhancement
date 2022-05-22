@@ -2,7 +2,7 @@ import PapersLib, {PaperItem} from "../../lib/papers/papersLib";
 import joplin from "../../../api";
 import {PAPERS_COOKIE, PAPERS_FOLDER_NAME, SOURCE_URL_PAPERS_PREFIX} from "../../common";
 import {
-    createRecord,
+    createRecord, deleteRecord,
     getAllRecords,
     getNoteId2PaperId, removeInvalidSourceUrlByAllItems,
     updateRecord
@@ -57,11 +57,19 @@ export async function syncAllPaperItems() {
         exitedPaperItemIds.add(paperItem.id);
     }
 
+    let remotePaperIds = new Set();
     for (let remotePaper of allRemotePapers) {
+        remotePaperIds.add(remotePaper.id);
         if (exitedPaperItemIds.has(remotePaper.id)) {
             await updateRecord(remotePaper.id, remotePaper);
         } else {
             await createRecord(remotePaper.id, remotePaper);
+        }
+    }
+
+    for (let localPaperId of existedPapers) {
+        if (!remotePaperIds.has(localPaperId)) {
+            await deleteRecord(localPaperId);
         }
     }
 
