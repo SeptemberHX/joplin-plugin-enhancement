@@ -21,7 +21,7 @@ This plugin supports:
 
 > **ATTENTION**: this plugin use database file instead of notes to store the papers' information since v0.6.0. No notes will be deleted. Your data will be safe.
 
-> **WARNING**: DO NOT delete the note `papers.db` under `ReadCube Papers` folder. It helps to tell the renderer which notes should be rendered with a paper information table.
+> **WARNING**: DO NOT delete the `source_url` attribute of notes. It helps to tell the renderer which notes should be rendered with a paper information table. The notes created for Papers have the `source_url` with the `papers_` prefix.
 
 
 > Dialog UI code from [joplin/plugin-bibtex.git](https://github.com/joplin/plugin-bibtex.git)
