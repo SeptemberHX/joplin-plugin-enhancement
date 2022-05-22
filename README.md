@@ -36,6 +36,12 @@ How to use:
    1. Not needed anymore. Now it will fetch the papers and keep syncing based on websocket
 3. 'Tools -> Create notes for papers'. **Only the notes created in this way can have a rendered paper information table**
 
+How to get cookies:
+1. Open your browser, go to your Papers Library
+2. Press F12 to open developer tools.
+3. Click any paper
+4. ![](./screenshot/paper_cookies.png)
+
 ### Pseudocode
 
 Pseudocode block:
