@@ -38,7 +38,7 @@ export namespace settings {
         }
 
         PLUGIN_SETTINGS[ENABLE_MERMAID_FOLDER] = {
-            value: true,
+            value: false,
             public: true,
             section: SECTION,
             type: SettingItemType.Bool,
@@ -65,7 +65,7 @@ export namespace settings {
         }
 
         PLUGIN_SETTINGS[ENABLE_QUICK_COMMANDS] = {
-            value: true,
+            value: false,
             public: true,
             section: SECTION,
             type: SettingItemType.Bool,
@@ -74,7 +74,7 @@ export namespace settings {
         }
 
         PLUGIN_SETTINGS[ENABLE_PAPERS] = {
-            value: true,
+            value: false,
             public: true,
             section: SECTION,
             type: SettingItemType.Bool,
