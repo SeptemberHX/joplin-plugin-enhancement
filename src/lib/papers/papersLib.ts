@@ -38,6 +38,8 @@ export type AnnotationItem = {
     text: string;
     note: string;
     color_id: number;
+    page: number;
+    item_id: string;  // collection_id:paper_id
 }
 
 
@@ -134,9 +136,11 @@ class PapersLibTool {
                 results.push({
                     id: anno.id,
                     type: anno.type,
-                    text: anno.text,
-                    note: anno.note,
-                    color_id: anno.color_id
+                    text: anno.text ? anno.text : "",
+                    note: anno.note ? anno.note : "",
+                    color_id: anno.color_id,
+                    page: anno.page_start,
+                    item_id: anno.item_id
                 });
             }
         }

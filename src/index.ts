@@ -9,7 +9,8 @@ import {
 	ENABLE_PAPERS,
 	ENABLE_PSEUDOCODE,
 	ENABLE_QUICK_COMMANDS,
-	ENABLE_TABLE_FORMATTER, PAPERS_COOKIE
+	ENABLE_TABLE_FORMATTER,
+	PAPERS_COOKIE
 } from "./common";
 import {
 	buildCitationForItem,
@@ -17,8 +18,8 @@ import {
 	createNewNotesForPapers,
 	syncAllPaperItems
 } from "./driver/papers/papersUtils";
-import {selectPapersPopup} from "./ui/citation-popup";
-import {PaperItem, PapersLib} from "./lib/papers/papersLib";
+import {selectAnnotationPopup, selectPapersPopup} from "./ui/citation-popup";
+import {AnnotationItem, PaperItem, PapersLib} from "./lib/papers/papersLib";
 import {getAllRecords, getPaperItemByNoteId, setupDatabase} from "./lib/papers/papersDB";
 import {PapersWS} from "./lib/papers/papersWS";
 
@@ -216,6 +217,37 @@ async function initPapers() {
 		}
 	});
 
+	await joplin.commands.register({
+		name: 'enhancement_cite_paper_annotations',
+		label: 'Cite your paper annotations',
+		iconName: 'fa fa-quote-left',
+		execute: async () => {
+			const currNote = await joplin.workspace.selectedNote();
+			if (currNote) {
+				const paper = await getPaperItemByNoteId(currNote.id);
+				if (paper) {
+					const annotations: AnnotationItem[] = await PapersLib.getAnnotation(paper.collection_id, paper.id);
+					let annoId2Anno = {};
+					for (let index in annotations) {
+						annoId2Anno[annotations[index].id] = annotations[index];
+					}
+
+					const annoIds = await selectAnnotationPopup(annotations);
+					const annos = [];
+					for (const id of annoIds) {
+						annos.push(annoId2Anno[id]);
+					}
+					await joplin.commands.execute('editor.execCommand', {
+						name: 'enhancement_insertAnnotation',
+						args: [[annos]]
+					});
+				} else {
+					await dialogs.open(copyErrHandle);
+				}
+			}
+		}
+	});
+
 	await joplin.views.menuItems.create(
 		"syncAllFilesFromPapersLib",
 		"enhancement_papers_syncAll",
@@ -231,6 +263,12 @@ async function initPapers() {
 	await joplin.views.toolbarButtons.create(
 		'enhancementCitePapers',
 		'enhancement_cite_papers',
+		ToolbarButtonLocation.EditorToolbar
+	);
+
+	await joplin.views.toolbarButtons.create(
+		'enhancementCitePaperAnnotation',
+		'enhancement_cite_paper_annotations',
 		ToolbarButtonLocation.EditorToolbar
 	);
 }

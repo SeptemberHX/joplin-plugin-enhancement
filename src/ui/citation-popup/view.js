@@ -22,7 +22,7 @@ function main() {
     /* State */
     let refs = null;
     try {
-        refs = JSON.parse(inputRefsView.textContent);
+        refs = JSON.parse(unescape(inputRefsView.textContent));
     } catch (e) {
         console.log(e);
     }

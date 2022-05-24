@@ -1,10 +1,26 @@
 import joplin from "api";
 import { encode } from "html-entities";
-import {PaperItem} from "../../lib/papers/papersLib";
+import {AnnotationItem, PaperItem} from "../../lib/papers/papersLib";
 import {CITATION_POPUP_ID} from "../../common";
 const fs = joplin.require("fs-extra");
 
 let popupHandle: string = "";
+
+
+export async function selectAnnotationPopup(refs: AnnotationItem[]): Promise<string[]> {
+    let fakePaperItems = [];
+    for (let annotation of refs) {
+        let item = new PaperItem();
+        item.id = annotation.id;
+        item.title = annotation.text ? annotation.text : "";
+        item.authors = annotation.note ? [annotation.note] : [""];
+        item.journal = annotation.type;
+        item.year = annotation.page;
+        fakePaperItems.push(item);
+    }
+    return await selectPapersPopup(fakePaperItems);
+}
+
 
 /**
  * Show a dialog for the user to choose from a list of references
@@ -75,7 +91,7 @@ function fromRefsToHTML(refs: PaperItem[]): string {
     );
     const ans: string = `
         <div id="json" style="display:none;">
-            ${encode(JSONString)}
+            ${escape(JSONString)}
         </div>
     `;
     return ans;

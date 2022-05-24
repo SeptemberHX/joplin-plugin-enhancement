@@ -6,7 +6,8 @@ module.exports = {
             plugin: function (CodeMirror) {
                 CodeMirror.defineOption("enhancement_autoCitation", [], async function(cm, val, old) {
                     const commandBridge = new InsertCitation(cm);
-                    CodeMirror.defineExtension('enhancement_insertCitation', commandBridge.insertItems.bind(commandBridge));
+                    CodeMirror.defineExtension('enhancement_insertCitation', commandBridge.insertPaperCitations.bind(commandBridge));
+                    CodeMirror.defineExtension('enhancement_insertAnnotation', commandBridge.insertAnnotationCitations.bind(commandBridge));
                 });
             },
             codeMirrorOptions: { 'enhancement_autoCitation': true },

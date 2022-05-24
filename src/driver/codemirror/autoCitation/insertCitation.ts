@@ -1,8 +1,10 @@
+import {AnnotationItem} from "../../../lib/papers/papersLib";
+
 export default class InsertCitation {
     constructor(private readonly editor) {}
     private readonly doc = this.editor.getDoc();
 
-    insertItems(options) {
+    insertPaperCitations(options) {
         const itemCitations: string[] = options[0];
         const itemRefNames: string[] = options[1];
         const selections = this.doc.listSelections();
@@ -32,5 +34,32 @@ export default class InsertCitation {
         this.doc.setValue(text);
         this.doc.replaceRange(insertRefNames.join(''), currSelection.to());
         // this.doc.setSelection(currSelection);
+    }
+
+    insertAnnotationCitations(options) {
+        const annotations: AnnotationItem[] = options[0];
+        const selections = this.doc.listSelections();
+        if (!selections || selections.length == 0) {
+            return;
+        }
+        const currSelection = selections[0];
+
+        let insertedText = "";
+        for (const anno of annotations) {
+            insertedText += '\n';
+            if (anno.text && anno.text.length > 0) {
+                insertedText += `> :scroll: ${anno.text.replace('\n', ' ')}`;
+                insertedText += '\n';
+            }
+
+            if (anno.note && anno.note.length > 0) {
+                insertedText += `> :notes: ${anno.note.replace('\n', ' ')}`;
+                insertedText += '\n';
+            }
+
+            insertedText += `> :link: [Check Annotation](https://www.readcube.com/library/${anno.item_id}#annotation:${anno.id})`;
+            insertedText += '\n';
+        }
+        this.doc.replaceRange(insertedText, currSelection.to());
     }
 }
