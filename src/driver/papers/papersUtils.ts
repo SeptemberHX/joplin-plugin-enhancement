@@ -4,7 +4,7 @@ import {PAPERS_COOKIE, PAPERS_FOLDER_NAME, SOURCE_URL_PAPERS_PREFIX} from "../..
 import {
     createRecord, deleteRecord,
     getAllRecords,
-    getNoteId2PaperId, removeInvalidSourceUrlByAllItems,
+    getNoteId2PaperId, getNoteIdByPaperId, removeInvalidSourceUrlByAllItems,
     updateRecord
 } from "../../lib/papers/papersDB";
 
@@ -122,6 +122,11 @@ async function buildCitation(title, authors, from, volume, page, year, itemId, c
 
     if (year.length > 0) {
         showText += ` ${year}.`;
+    }
+
+    const noteId = await getNoteIdByPaperId(itemId);
+    if (noteId) {
+        showText += ` [🗒](:/${noteId}).`;
     }
 
     return showText;

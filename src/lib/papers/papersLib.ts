@@ -22,6 +22,7 @@ export class PaperItem {
     url: string;
     pagination: string;
     journal_abbrev: string;
+    doi: string;
 }
 
 export type CollectionItem = {
@@ -159,7 +160,8 @@ export default class PapersLib {
             volume: 'volume' in itemData.article ? itemData.article.volume : '',
             url: 'url' in itemData.article ? itemData.article.url : '',
             pagination: 'pagination' in itemData.article ? itemData.article.pagination : '',
-            journal_abbrev: 'journal_abbrev' in itemData.article ? itemData.article.journal_abbrev : ''
+            journal_abbrev: 'journal_abbrev' in itemData.article ? itemData.article.journal_abbrev : '',
+            doi: 'doi' in itemData.ext_ids ? itemData.ext_ids.doi : ''
         }
         return item;
     }

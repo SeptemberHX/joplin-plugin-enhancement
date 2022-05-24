@@ -12,11 +12,11 @@ let databasePath = null;
 let database = null;
 
 export async function setupDatabase(){
-    var pluginDir = await joplin.plugins.dataDir()
-    databasePath = pluginDir + "/papers.sqlite3"
-    await fs.ensureDir(pluginDir)
-    database = new sqlite3.Database(databasePath)
-    await createTable()
+    var pluginDir = await joplin.plugins.dataDir();
+    databasePath = pluginDir + "/papers.sqlite3";
+    await fs.ensureDir(pluginDir);
+    database = new sqlite3.Database(databasePath);
+    await createTable();
 }
 
 async function createTable() {
@@ -36,11 +36,21 @@ async function createTable() {
             volume TEXT,
             url TEXT,
             pagination TEXT,
-            journalAbbrev TEXT
+            journalAbbrev TEXT,
+            doi TEXT
         )
     `;
 
     await runQuery('run', createQuery, {});
+
+    try {
+        const alterTable = `
+        ALTER TABLE papers ADD COLUMN doi TEXT
+        `;
+        await runQuery('run', alterTable, {});
+    } catch (e) {
+        
+    }
 }
 
 export async function getAllRecords() {
@@ -75,7 +85,8 @@ export async function updateRecord(id: string, paperItem: PaperItem) {
             "volume" = $volume,
             "url" = $url,
             "pagination" = $pagination,
-            "journalAbbrev" = $journalAbbrev
+            "journalAbbrev" = $journalAbbrev,
+            "doi" = $doi
         WHERE "id" = $id
     `;
     const updateParameters = {
@@ -93,7 +104,8 @@ export async function updateRecord(id: string, paperItem: PaperItem) {
         $volume: paperItem.volume,
         $url: paperItem.url,
         $pagination: paperItem.pagination,
-        $journalAbbrev: paperItem.journal_abbrev
+        $journalAbbrev: paperItem.journal_abbrev,
+        $doi: paperItem.doi
     };
     await runQuery('run', updateQuery, updateParameters);
 }
@@ -126,6 +138,7 @@ function getRecordAsPaperItem(record): PaperItem{
         recurrence.url = record.url;
         recurrence.pagination = record.pagination;
         recurrence.journal_abbrev = record.journalAbbrev;
+        recurrence.doi = record.doi;
         return recurrence
     }
 }
@@ -206,5 +219,18 @@ export async function removeInvalidSourceUrlByItemId(itemId) {
 
     for (let note of notes.items) {
         await joplin.data.put(['notes', note.id], null, { source_url: "" });
+    }
+}
+
+export async function getNoteIdByPaperId(paperId) {
+    let notes = await joplin.data.get(['search'], {
+        query: `sourceurl:${SOURCE_URL_PAPERS_PREFIX}${paperId}`,
+        fields: ['id']
+    });
+
+    if (notes.items.length === 0) {
+        return null;
+    } else {
+        return notes.items[0].id;
     }
 }
