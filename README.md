@@ -18,6 +18,7 @@ This plugin supports:
 2. Render a paper info table after the note content for paper note. [Note created by the menu 'Tools -> Create notes for papers'].
 3. Direct link to the PDF file in the paper info table.
 4. Auto insert formatted references through tool button.
+5. Auto insert annotations through tool button with quick-jump-to-annotation-in-browser function.
 
 > **ATTENTION**: this plugin use database file instead of notes to store the papers' information since v0.6.0. No notes will be deleted. Your data will be safe.
 
@@ -29,6 +30,8 @@ This plugin supports:
 ![](./screenshot/readcube.png)
 
 ![img](https://i.imgur.com/Acri6uW.gif)
+
+![](./screenshot/paper_annotation.png)
 
 How to use:
 1. In the Joplin Settings -> Joplin Enhancement -> Set your cookie for Papers
