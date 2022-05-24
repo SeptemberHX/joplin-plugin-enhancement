@@ -48,17 +48,14 @@ export default class InsertCitation {
         for (const anno of annotations) {
             insertedText += '\n';
             if (anno.text && anno.text.length > 0) {
-                insertedText += `> :scroll: ${anno.text.replace('\n', ' ')}`;
+                insertedText += `> [📜](https://www.readcube.com/library/${anno.item_id}#annotation:${anno.id}) ${anno.text.replace('\n', ' ')}`;
                 insertedText += '\n';
             }
 
             if (anno.note && anno.note.length > 0) {
-                insertedText += `> :notes: ${anno.note.replace('\n', ' ')}`;
+                insertedText += `> [🎶](https://www.readcube.com/library/${anno.item_id}#annotation:${anno.id}) ${anno.note.replace('\n', ' ')}`;
                 insertedText += '\n';
             }
-
-            insertedText += `> :link: [Check Annotation](https://www.readcube.com/library/${anno.item_id}#annotation:${anno.id})`;
-            insertedText += '\n';
         }
         this.doc.replaceRange(insertedText, currSelection.to());
     }
