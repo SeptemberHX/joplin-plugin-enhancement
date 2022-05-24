@@ -1,4 +1,4 @@
-import PapersLib, {PaperItem} from "../../lib/papers/papersLib";
+import {PapersLib, PaperItem} from "../../lib/papers/papersLib";
 import joplin from "../../../api";
 import {PAPERS_COOKIE, PAPERS_FOLDER_NAME, SOURCE_URL_PAPERS_PREFIX} from "../../common";
 import {
@@ -49,8 +49,7 @@ export async function syncAllPaperItems() {
         return;
     }
 
-    const papers = new PapersLib(papersCookie);
-    const allRemotePapers = await papers.getAllItems();
+    const allRemotePapers = await PapersLib.getAllItems();
     let exitedPaperItemIds = new Set();
     const existedPapers = await getAllRecords();
     for (let paperItem of existedPapers) {

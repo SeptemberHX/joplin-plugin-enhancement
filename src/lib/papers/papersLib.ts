@@ -1,4 +1,7 @@
 import fetch from 'node-fetch';
+import Joplin from "../../../api/Joplin";
+import joplin from "../../../api";
+import {PAPERS_COOKIE} from "../../common";
 
 /**
  * API utils for Readcube PapersLib. All the apis are analyzed from the web application.
@@ -38,8 +41,13 @@ export type AnnotationItem = {
 }
 
 
-export default class PapersLib {
-    constructor(private readonly cookie) {
+class PapersLibTool {
+    cookie: string;
+    defaultCollectionId: string;
+
+    async init(cookie) {
+        this.cookie = cookie;
+        this.defaultCollectionId = await this.getDefaultCollectionId();
     }
 
     /**
@@ -139,8 +147,7 @@ export default class PapersLib {
      * Get all the paper items in the first collections
      */
     async getAllItems() {
-        const collections = await this.getCollections();
-        return await this.getItems(collections[0].id);
+        return await this.getItems(this.defaultCollectionId);
     }
 
     parseItemJson(itemData, collection_id) {
@@ -166,3 +173,5 @@ export default class PapersLib {
         return item;
     }
 }
+
+export const PapersLib = new PapersLibTool();

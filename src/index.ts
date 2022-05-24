@@ -9,7 +9,7 @@ import {
 	ENABLE_PAPERS,
 	ENABLE_PSEUDOCODE,
 	ENABLE_QUICK_COMMANDS,
-	ENABLE_TABLE_FORMATTER
+	ENABLE_TABLE_FORMATTER, PAPERS_COOKIE
 } from "./common";
 import {
 	buildCitationForItem,
@@ -18,7 +18,7 @@ import {
 	syncAllPaperItems
 } from "./driver/papers/papersUtils";
 import {selectPapersPopup} from "./ui/citation-popup";
-import {PaperItem} from "./lib/papers/papersLib";
+import {PaperItem, PapersLib} from "./lib/papers/papersLib";
 import {getAllRecords, getPaperItemByNoteId, setupDatabase} from "./lib/papers/papersDB";
 import {PapersWS} from "./lib/papers/papersWS";
 
@@ -103,6 +103,7 @@ joplin.plugins.register({
 async function initPapers() {
 	// init the database
 	await setupDatabase();
+	await PapersLib.init(await joplin.settings.value(PAPERS_COOKIE));
 	new PapersWS();
 
 	await joplin.contentScripts.onMessage(
