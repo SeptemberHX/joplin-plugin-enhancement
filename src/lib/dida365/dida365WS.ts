@@ -15,6 +15,7 @@ export class Dida365WS {
     ws: ReconnectingWebSocket;
     clientId: null;
     lastReceivedMessageDate: Date;
+    dida365HBInterval;
 
     constructor() {
         this.ws = new ReconnectingWebSocket('wss://wss.dida365.com/web', [], options);
@@ -26,6 +27,15 @@ export class Dida365WS {
 
     async onOpen(event) {
         await Dida365.init();
+
+        this.dida365HBInterval = setInterval((() => {
+            this.sendHeartbeat();
+        }).bind(this), 300000);  // 5 min
+    }
+
+    sendHeartbeat(): void {
+        console.log('Dida365WebSocket: sent heartbeat message...');
+        this.ws.send(`hello`);
     }
 
     async onMessage(event) {
@@ -39,6 +49,9 @@ export class Dida365WS {
 
     onClose(event): void {
         console.log('Dida365WebSocket: Connection Closed.');
+        if (this.dida365HBInterval) {
+            clearInterval(this.dida365HBInterval);
+        }
     }
 
     onError(): void {
