@@ -206,15 +206,33 @@ class Dida365Lib {
         }
     }
 
-    async batchCheckGet(checkPoint) {
-        const requestUrl = `https://api.dida365.com/api/v2/batch/check/0`;
+    async batchCheckUpdate() {
+        const requestUrl = `https://api.dida365.com/api/v2/batch/check/${this.checkPoint}`;
         const response = await fetch(requestUrl, { headers: this.headers() });
+        let tasks = [];
         if (response.ok) {
             const resJson = await response.json();
             this.checkPoint = resJson.checkPoint;
 
+            for (const item of resJson.syncTaskBean.update) {  // current we only care the changes
+                let task = new DidaTask();
+                task.id = item.id;
+                task.projectId = item.projectId;
+                task.title = item.title;
+                task.status = item.status;
+                task.items = [];
 
+                for (const subItem of item.items) {
+                    let subTask = new DidaSubTask();
+                    subTask.id = subItem.id;
+                    subTask.title = subItem.title;
+                    subTask.status = subItem.status;
+                    task.items.push(subTask);
+                }
+                tasks.push(task);
+            }
         }
+        return tasks;
     }
 }
 

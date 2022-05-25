@@ -31,6 +31,8 @@ export class Dida365WS {
         this.dida365HBInterval = setInterval((() => {
             this.sendHeartbeat();
         }).bind(this), 300000);  // 5 min
+
+        await Dida365.batchCheckUpdate();  // first batch request with checkpoint 0
     }
 
     sendHeartbeat(): void {
@@ -44,6 +46,16 @@ export class Dida365WS {
             await Dida365.pushRegister(event.data);
         } else {
             console.log(event.data);
+            const dataJson = JSON.parse(event.data);
+
+            switch (dataJson.type) {
+                case 'needSync':
+                    const updatedTasks = await Dida365.batchCheckUpdate();
+                    console.log(updatedTasks);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
