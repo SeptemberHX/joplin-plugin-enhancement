@@ -2,7 +2,7 @@
 
 import joplin from "api";
 import {PaperItem} from "./papersLib";
-import {getOrCreatePaperRootFolder} from "../../driver/papers/papersUtils";
+import {getOrCreatePaperRootFolder} from "./papersUtils";
 import {PAPERS_NOTEID_TO_PAPERID_TITLE, SOURCE_URL_PAPERS_PREFIX} from "../../common";
 
 const fs = joplin.require('fs-extra')

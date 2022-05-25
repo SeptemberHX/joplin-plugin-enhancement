@@ -15,7 +15,7 @@ body {
 
 /* blockquote */
 blockquote {
-    border-left: 4px solid #0087ed;
+    border-left: 4px solid #0087ed !important;
     border-radius: 2px;
 }
 
@@ -115,7 +115,7 @@ h4::before {
     margin-right: 1em;
 }
 
-p, span, blockquote, li, td {
+p, blockquote, li, td {
     font-family: var(--toc-font), var(--base-Latin-font), var(--base-Chinese-font), serif !important;
 }
 

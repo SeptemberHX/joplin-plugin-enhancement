@@ -1,4 +1,4 @@
-import {PapersLib, PaperItem} from "../../lib/papers/papersLib";
+import {PapersLib, PaperItem} from "./papersLib";
 import joplin from "../../../api";
 import {PAPERS_COOKIE, PAPERS_FOLDER_NAME, SOURCE_URL_PAPERS_PREFIX} from "../../common";
 import {
@@ -6,7 +6,7 @@ import {
     getAllRecords,
     getNoteId2PaperId, getNoteIdByPaperId, removeInvalidSourceUrlByAllItems,
     updateRecord
-} from "../../lib/papers/papersDB";
+} from "./papersDB";
 
 export async function createNewNotesForPapers(selectedItemIds: string[], paperItems: PaperItem[]) {
     let noteId2PaperId = await getNoteId2PaperId();

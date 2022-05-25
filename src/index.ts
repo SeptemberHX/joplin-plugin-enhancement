@@ -17,7 +17,7 @@ import {
 	buildRefName,
 	createNewNotesForPapers,
 	syncAllPaperItems
-} from "./driver/papers/papersUtils";
+} from "./lib/papers/papersUtils";
 import {selectAnnotationPopup, selectPapersPopup} from "./ui/citation-popup";
 import {AnnotationItem, PaperItem, PapersLib} from "./lib/papers/papersLib";
 import {getAllRecords, getPaperItemByNoteId, setupDatabase} from "./lib/papers/papersDB";

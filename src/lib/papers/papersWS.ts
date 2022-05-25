@@ -6,7 +6,7 @@ import joplin from "../../../api";
 import {PAPERS_COOKIE} from "../../common";
 import { PapersLib } from "./papersLib";
 import {createRecord, deleteRecord, getRecord, removeInvalidSourceUrlByItemId, updateRecord} from "./papersDB";
-import {syncAllPaperItems} from "../../driver/papers/papersUtils";
+import {syncAllPaperItems} from "./papersUtils";
 
 const options = {
     WebSocket: WebSocket, // custom WebSocket constructor
