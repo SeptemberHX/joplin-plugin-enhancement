@@ -25,6 +25,31 @@ export class DidaTask {
             this.status = 0;
         }
     }
+
+    contentEquals(o) {
+        if (this.title === o.title && this.status === o.status) {
+            if (this.items.length === o.items.length) {
+                for (const item of this.items) {
+                    let findEqual = false;
+                    for (const oItem of o.items) {
+                        if (oItem.contentEquals(item)) {
+                            findEqual = true;
+                            break;
+                        }
+                    }
+
+                    if (!findEqual) {
+                        return false;
+                    }
+                }
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
 }
 
 export class DidaSubTask {
@@ -38,6 +63,10 @@ export class DidaSubTask {
         } else {
             this.status = 0;
         }
+    }
+
+    contentEquals(o) {
+        return this.title === o.title && this.status === o.status;
     }
 }
 
@@ -196,30 +225,62 @@ class Dida365Lib {
     // }
 
     async createJoplinTask(task: DidaTask) {
+        let subItems = [];
+        for (let subTask of task.items) {
+            subItems.push({
+                "id": subTask.id,
+                "title": subTask.title
+            });
+        }
+
+        let changeBody = {
+            "items": subItems,
+            "title": task.title,
+            "projectId": this.joplinProjectId
+        };
+
         const requestUrl = `https://api.dida365.com/api/v2/task/`;
         const response = await fetch(requestUrl, {
             headers: this.headers(),
             method: 'POST',
-            body: JSON.stringify(task)
+            body: JSON.stringify(changeBody)
         });
         if (response.ok) {
-            console.log('Dida365Lib: update successfully')
-            return this.buildDidaTaskFromJsonObj(response.json());
+            console.log('Dida365Lib: create successfully')
+            return this.buildDidaTaskFromJsonObj(await response.json());
         } else {
-            console.log('Dida365Lib: update failed')
+            console.log('Dida365Lib: create failed')
             return null;
         }
     }
 
     async updateJoplinTask(task: DidaTask) {
+        let subItems = [];
+        for (let subTask of task.items) {
+            subItems.push({
+                "id": subTask.id,
+                "title": subTask.title,
+                "status": subTask.status
+            });
+        }
+
+        let changeBody = {
+            "items": subItems,
+            "title": task.title,
+            "projectId": this.joplinProjectId,
+            "status": task.status,
+            "id": task.id
+        };
+
         const requestUrl = `https://api.dida365.com/api/v2/task/${task.id}`;
         const response = await fetch(requestUrl, {
             headers: this.headers(),
             method: 'POST',
-            body: JSON.stringify(task)
+            body: JSON.stringify(changeBody)
         });
         if (response.ok) {
             console.log('Dida365Lib: update successfully')
+            return this.buildDidaTaskFromJsonObj(await response.json());
         } else {
             console.log('Dida365Lib: update failed')
         }
@@ -270,12 +331,14 @@ class Dida365Lib {
         task.status = jsonObj.status;
         task.items = [];
 
-        for (const subItem of jsonObj.items) {
-            let subTask = new DidaSubTask();
-            subTask.id = subItem.id;
-            subTask.title = subItem.title;
-            subTask.status = subItem.status;
-            task.items.push(subTask);
+        if (jsonObj.items) {
+            for (const subItem of jsonObj.items) {
+                let subTask = new DidaSubTask();
+                subTask.id = subItem.id;
+                subTask.title = subItem.title;
+                subTask.status = subItem.status;
+                task.items.push(subTask);
+            }
         }
         return task;
     }

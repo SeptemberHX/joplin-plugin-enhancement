@@ -1,7 +1,8 @@
 import fetch from 'node-fetch';
 import WebSocket from 'ws';
 import ReconnectingWebSocket from "reconnecting-websocket";
-import { Dida365 } from "./Dida365Lib";
+import {Dida365, DidaTask} from "./Dida365Lib";
+import {syncStatusFromDidaToNote} from "./Dida365Init";
 
 
 const options = {
@@ -9,6 +10,38 @@ const options = {
     connectionTimeout: 30000,
     maxReconnectInterval: 5000
 };
+
+class Dida365TaskCache {
+    tasks: {};
+
+    constructor() {
+        this.clear();
+    }
+
+    clear() {
+        this.tasks = {};
+    }
+
+    update(didaTask: DidaTask) {
+        if (didaTask.id) {
+            this.tasks[didaTask.id] = didaTask;
+        }
+    }
+
+    updateBatch(didaTasks: DidaTask[]) {
+        for (const task of didaTasks) {
+            this.update(task);
+        }
+    }
+
+    delete(didaTaskId) {
+        delete this.tasks[didaTaskId];
+    }
+
+    get(didaTaskId) {
+        return this.tasks[didaTaskId];
+    }
+}
 
 
 export class Dida365WS {
@@ -32,7 +65,7 @@ export class Dida365WS {
             this.sendHeartbeat();
         }).bind(this), 300000);  // 5 min
 
-        await Dida365.batchCheckUpdate();  // first batch request with checkpoint 0
+        dida365Cache.updateBatch(await Dida365.batchCheckUpdate());  // first batch request with checkpoint 0
     }
 
     sendHeartbeat(): void {
@@ -45,13 +78,18 @@ export class Dida365WS {
             console.log('Dida365WebSocket: pushToken =', event.data);
             await Dida365.pushRegister(event.data);
         } else {
-            console.log(event.data);
+            console.log('Dida365WebSocket:', event.data);
             const dataJson = JSON.parse(event.data);
 
             switch (dataJson.type) {
                 case 'needSync':
+                    console.log('Dida365WebSocket: sync the remote task changes...');
                     const updatedTasks = await Dida365.batchCheckUpdate();
-                    console.log(updatedTasks);
+                    dida365Cache.updateBatch(updatedTasks);
+                    for (const task of updatedTasks) {
+                        await syncStatusFromDidaToNote(task);
+                    }
+                    console.log('Dida365WebSocket: sync the remote task changes finished');
                     break;
                 default:
                     break;
@@ -71,4 +109,4 @@ export class Dida365WS {
     }
 }
 
-const dws = new Dida365WS();
+export let dida365Cache = new Dida365TaskCache();
