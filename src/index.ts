@@ -22,6 +22,7 @@ import {selectAnnotationPopup, selectPapersPopup} from "./ui/citation-popup";
 import {AnnotationItem, PaperItem, PapersLib} from "./lib/papers/papersLib";
 import {getAllRecords, getPaperItemByNoteId, setupDatabase} from "./lib/papers/papersDB";
 import {PapersWS} from "./lib/papers/papersWS";
+import {dida365_init} from "./lib/dida365/Dida365Init";
 
 joplin.plugins.register({
 	onStart: async function() {
@@ -98,6 +99,8 @@ joplin.plugins.register({
 		if (enableTableFormatter) {
 			await initTableFormatter();
 		}
+
+		await dida365_init();
 	},
 });
 

@@ -3,7 +3,7 @@
 import joplin from "api";
 import {PaperItem} from "./papersLib";
 import {getOrCreatePaperRootFolder} from "./papersUtils";
-import {PAPERS_NOTEID_TO_PAPERID_TITLE, SOURCE_URL_PAPERS_PREFIX} from "../../common";
+import {extractInfo, PAPERS_NOTEID_TO_PAPERID_TITLE, SOURCE_URL_PAPERS_PREFIX} from "../../common";
 
 const fs = joplin.require('fs-extra')
 const sqlite3 = joplin.require('sqlite3')
@@ -161,18 +161,19 @@ export async function getNoteId2PaperId() {
     let results = {}
     let page = 1;
     let notes = await joplin.data.get(['search'], {
-        query: `sourceurl:${SOURCE_URL_PAPERS_PREFIX}*`,
+        query: `sourceurl:*${SOURCE_URL_PAPERS_PREFIX}*`,
         fields: ['source_url', 'id']
     });
     while (true) {
         for (let item of notes.items) {
-            results[item.id] = item.source_url.substr(SOURCE_URL_PAPERS_PREFIX.length);
+            const itemInfo = extractInfo(item.source_url);
+            results[item.id] = itemInfo[SOURCE_URL_PAPERS_PREFIX];
         }
 
         if (notes.has_more) {
             page += 1;
             notes = await joplin.data.get(['search'], {
-                query: `sourceurl:${SOURCE_URL_PAPERS_PREFIX}*`,
+                query: `*sourceurl:${SOURCE_URL_PAPERS_PREFIX}*`,
                 fields: ['source_url', 'id'],
                 page: page
             });
@@ -189,10 +190,10 @@ export async function getPaperItemByNoteId(noteId: string) {
         fields: ['source_url', 'id']
     });
 
-    if (!note) {
+    if (!note || !note.source_url.includes(SOURCE_URL_PAPERS_PREFIX)) {
         return undefined;
     }
-    return await getRecord(note.source_url.substr(SOURCE_URL_PAPERS_PREFIX.length));
+    return await getRecord(extractInfo(note.source_url)[SOURCE_URL_PAPERS_PREFIX]);
 }
 
 export async function removeInvalidSourceUrlByAllItems(items: PaperItem[]) {
@@ -213,7 +214,7 @@ export async function removeInvalidSourceUrlByAllItems(items: PaperItem[]) {
 
 export async function removeInvalidSourceUrlByItemId(itemId) {
     let notes = await joplin.data.get(['search'], {
-        query: `sourceurl:${SOURCE_URL_PAPERS_PREFIX}${itemId}`,
+        query: `sourceurl:*${SOURCE_URL_PAPERS_PREFIX}${itemId}*`,
         fields: ['id']
     });
 
@@ -224,7 +225,7 @@ export async function removeInvalidSourceUrlByItemId(itemId) {
 
 export async function getNoteIdByPaperId(paperId) {
     let notes = await joplin.data.get(['search'], {
-        query: `sourceurl:${SOURCE_URL_PAPERS_PREFIX}${paperId}`,
+        query: `sourceurl:*${SOURCE_URL_PAPERS_PREFIX}${paperId}*`,
         fields: ['id']
     });
 

@@ -3,9 +3,9 @@
 
 import joplin from "../../../api";
 
-const list_regex = {
+export const list_regex = {
     title: 'Confluence Style',
-    regex: /^\s*- \[ \]\s.*(?<=\s)(?:(@[^\s]+)|(\/\/[^\s]+)|(\+[^\s]+))(?:[^\n]*)?$/gm,
+    regex: /^\s*- \[[xX ]\]\s.*(?<=\s)(?:[^\n]*)?$/gm,
     query: '/"- [ ]"',
     assignee: (todo: string[]) => {
         const result = todo[0].match(/(?<=\s@)([^\s]+)/);
@@ -24,9 +24,13 @@ const list_regex = {
         let result = todo[0].split(/\s@[^\s]+/).join('');
         result = result.split(/\s\/\/[^\s]+/).join('');
         result = result.split(/\s\+[^\s]+/).join('');
-        result = result.split(/- \[ \]/).join('');
+        result = result.split(/- \[[xX ]\]/).join('');
 
         return result.trim();
+    },
+    done: (todo: string[]) => {
+        const result = todo[0].match(/- \[[xX]\]/);
+        return !!result;
     }
 }
 
@@ -114,6 +118,10 @@ class SummaryBuilder {
 
         return this._folders[id];
     }
+}
+
+export async function convertNoteToTodo(noteId, flag) {
+    await joplin.data.put(['notes', noteId], null, {is_todo: flag});
 }
 
 export const summaryBuilder = new SummaryBuilder();

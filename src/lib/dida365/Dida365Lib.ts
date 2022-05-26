@@ -162,31 +162,61 @@ class Dida365Lib {
         }
     }
 
-    async updateJoplinTask(
-        taskId: string,             // dida task id. It should be stored as the source_url attribute of each note
-        taskTitle: string,          // dida task title. It should be the same as the note title
-        subTasks: DidaSubTask[]        // sub dida tasks
-    ) {
-        let subItems = [];
-        for (let subTask of subTasks) {
-            subItems.push({
-                "id": subTask.id,
-                "title": subTask.title
-            });
-        }
+    // async updateJoplinTask(
+    //     taskId: string,             // dida task id. It should be stored as the source_url attribute of each note
+    //     taskTitle: string,          // dida task title. It should be the same as the note title
+    //     subTasks: DidaSubTask[]        // sub dida tasks
+    // ) {
+    //     let subItems = [];
+    //     for (let subTask of subTasks) {
+    //         subItems.push({
+    //             "id": subTask.id,
+    //             "title": subTask.title
+    //         });
+    //     }
+    //
+    //     let changeBody = {
+    //         "items": subItems,
+    //         "title": taskTitle,
+    //         "projectId": this.joplinProjectId,
+    //         "id": taskId,
+    //     };
+    //
+    //     const requestUrl = `https://api.dida365.com/api/v2/task/${taskId}`;
+    //     const response = await fetch(requestUrl, {
+    //         headers: this.headers(),
+    //         method: 'POST',
+    //         body: JSON.stringify(changeBody)
+    //     });
+    //     if (response.ok) {
+    //         console.log('Dida365Lib: update successfully')
+    //     } else {
+    //         console.log('Dida365Lib: update failed')
+    //     }
+    // }
 
-        let changeBody = {
-            "items": subItems,
-            "title": taskTitle,
-            "projectId": this.joplinProjectId,
-            "id": taskId,
-        };
-
-        const requestUrl = `https://api.dida365.com/api/v2/task/${taskId}`;
+    async createJoplinTask(task: DidaTask) {
+        const requestUrl = `https://api.dida365.com/api/v2/task/`;
         const response = await fetch(requestUrl, {
             headers: this.headers(),
             method: 'POST',
-            body: JSON.stringify(changeBody)
+            body: JSON.stringify(task)
+        });
+        if (response.ok) {
+            console.log('Dida365Lib: update successfully')
+            return this.buildDidaTaskFromJsonObj(response.json());
+        } else {
+            console.log('Dida365Lib: update failed')
+            return null;
+        }
+    }
+
+    async updateJoplinTask(task: DidaTask) {
+        const requestUrl = `https://api.dida365.com/api/v2/task/${task.id}`;
+        const response = await fetch(requestUrl, {
+            headers: this.headers(),
+            method: 'POST',
+            body: JSON.stringify(task)
         });
         if (response.ok) {
             console.log('Dida365Lib: update successfully')
@@ -198,12 +228,23 @@ class Dida365Lib {
     async getJoplinTasks() {
         const requestUrl = `https://api.dida365.com/api/v2/project/${this.joplinProjectId}/tasks`;
         const response = await fetch(requestUrl, { headers: this.headers() });
+        let results = [];
         if (response.ok) {
             const resJson = await response.json();
-
-
-
+            for (const item of resJson) {
+                results.push(this.buildDidaTaskFromJsonObj(item));
+            }
         }
+
+        const completedRequestUrl = `https://api.dida365.com/api/v2/project/${this.joplinProjectId}/completed`;
+        const completedResponse = await fetch(completedRequestUrl, { headers: this.headers() });
+        if (completedResponse.ok) {
+            const resJson = await response.json();
+            for (const item of resJson) {
+                results.push(this.buildDidaTaskFromJsonObj(item));
+            }
+        }
+        return results;
     }
 
     async batchCheckUpdate() {
@@ -215,24 +256,28 @@ class Dida365Lib {
             this.checkPoint = resJson.checkPoint;
 
             for (const item of resJson.syncTaskBean.update) {  // current we only care the changes
-                let task = new DidaTask();
-                task.id = item.id;
-                task.projectId = item.projectId;
-                task.title = item.title;
-                task.status = item.status;
-                task.items = [];
-
-                for (const subItem of item.items) {
-                    let subTask = new DidaSubTask();
-                    subTask.id = subItem.id;
-                    subTask.title = subItem.title;
-                    subTask.status = subItem.status;
-                    task.items.push(subTask);
-                }
-                tasks.push(task);
+                tasks.push(this.buildDidaTaskFromJsonObj(item));
             }
         }
         return tasks;
+    }
+
+    buildDidaTaskFromJsonObj(jsonObj) {
+        let task = new DidaTask();
+        task.id = jsonObj.id;
+        task.projectId = jsonObj.projectId;
+        task.title = jsonObj.title;
+        task.status = jsonObj.status;
+        task.items = [];
+
+        for (const subItem of jsonObj.items) {
+            let subTask = new DidaSubTask();
+            subTask.id = subItem.id;
+            subTask.title = subItem.title;
+            subTask.status = subItem.status;
+            task.items.push(subTask);
+        }
+        return task;
     }
 }
 

@@ -1,6 +1,6 @@
 import {PapersLib, PaperItem} from "./papersLib";
 import joplin from "../../../api";
-import {PAPERS_COOKIE, PAPERS_FOLDER_NAME, SOURCE_URL_PAPERS_PREFIX} from "../../common";
+import {PAPERS_COOKIE, PAPERS_FOLDER_NAME, SOURCE_URL_PAPERS_PREFIX, updateInfo} from "../../common";
 import {
     createRecord, deleteRecord,
     getAllRecords,
@@ -32,7 +32,7 @@ export async function createNewNotesForPapers(selectedItemIds: string[], paperIt
                     title: paperId2Items[itemId].title,
                     parent_id: targetYearDir,
                     body: paperId2Items[itemId].title,
-                    source_url: `${SOURCE_URL_PAPERS_PREFIX}${itemId}`
+                    source_url: `${updateInfo('', SOURCE_URL_PAPERS_PREFIX, itemId)}`
                 }
             );
             noteIds.push(note.id);
