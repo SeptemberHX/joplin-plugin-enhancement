@@ -8,7 +8,7 @@ import {dida365Cache, Dida365WS} from "./dida365WS";
 let debounce_dealNote = debounce(async function() {
     const currNote = await joplin.workspace.selectedNote();
     await dida365_dealNote(currNote);
-}, 5000);
+}, 1000);
 
 export async function dida365_init() {
     const dws = new Dida365WS();
@@ -39,7 +39,7 @@ async function dida365_dealNote(currNote) {
         let subDidaTask = new DidaSubTask();
         subDidaTask.title = task.msg;
         subDidaTask.status = task.done ? 2 : 0;
-        subDidaTask.id = `${subDidaTasks.length}`;
+        subDidaTask.id = `${currNote.id}-${subDidaTasks.length}`;
         subDidaTasks.push(subDidaTask);
     }
 
