@@ -1,6 +1,6 @@
 import joplin from "../../../api";
 import {debounce} from "ts-debounce";
-import {convertNoteToTodo, list_regex} from "./didaUtils";
+import {list_regex} from "./didaUtils";
 import {Dida365, DidaSubTask, DidaTask} from "./Dida365Lib";
 import {DIDA_IGNORE_NOTE_TAG_NAME, ENABLE_DIDA365, extractInfo, SOURCE_URL_DIDA_PREFIX, updateInfo} from "../../common";
 import {dida365Cache, Dida365WS} from "./dida365WS";
@@ -18,6 +18,10 @@ export async function dida365_init() {
     }
 }
 
+/*
+ * This function aims to sync the given note to remote dida365.
+ *   It generates a didaTask from the notebody and updates/creates remote dida task
+ */
 export async function syncNoteToDida365(currNote) {
     const tags = await joplin.data.get(['notes', currNote.id, 'tags']);
     let tagCheck = false;
@@ -83,8 +87,16 @@ export async function syncNoteToDida365(currNote) {
     }
 }
 
+/*
+ * This function aims to update the given didaTask to dida365 if task exists,
+ *   otherwise, new task is created ONLY WHEN the given task IS NOT FINISHED
+ */
 async function syncTaskToDida365(didaTask: DidaTask) {
-    if (!didaTask.id || !dida365Cache.get(didaTask.id)) {
+    if (!didaTask.id || !dida365Cache.get(didaTask.id)) {   // we need create new remote task here
+        if (didaTask.status === 2) {                        // ignore the finished task
+            return;
+        }
+
         const returnedTask = await Dida365.createJoplinTask(didaTask);
         console.log('Create remote task:', didaTask);
         console.log('Returned:', returnedTask);
@@ -105,6 +117,10 @@ async function syncTaskToDida365(didaTask: DidaTask) {
     return null;
 }
 
+/*
+ * This function aims to find the note which is connected to the remote dida task by its task id
+ *   The remote task id is stored as the source_url attribute
+ */
 async function getNoteIdByDidaTaskId(didaTaskId) {
     let notes = await joplin.data.get(['search'], {
         query: `sourceurl:*${SOURCE_URL_DIDA_PREFIX}${didaTaskId}*`,
@@ -118,6 +134,9 @@ async function getNoteIdByDidaTaskId(didaTaskId) {
     }
 }
 
+/*
+ * This function aims to sync the remote dida task's status to joplin note by modifying note body
+ */
 export async function syncStatusFromDidaToNote(didaTask: DidaTask) {
     const noteId = await getNoteIdByDidaTaskId(didaTask.id);
     if (!noteId) return;
@@ -146,6 +165,9 @@ export async function syncStatusFromDidaToNote(didaTask: DidaTask) {
     }
 }
 
+/*
+ * This function aims to check all the notes and update all the found todo items to remote dida365
+ */
 export async function checkAllNotes() {
     let page = 0;
     let r;
@@ -167,4 +189,8 @@ export async function checkAllNotes() {
             await new Promise(res => setTimeout(res, 1000));
         }
     } while(r.has_more);
+}
+
+async function convertNoteToTodo(noteId, flag) {
+    await joplin.data.put(['notes', noteId], null, {is_todo: flag});
 }
