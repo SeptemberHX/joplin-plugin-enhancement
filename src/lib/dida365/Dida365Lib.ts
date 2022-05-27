@@ -1,5 +1,6 @@
 import fetch from 'node-fetch';
-import {DIDA_COOKIE} from "../../../dev_commons";
+import joplin from "../../../api";
+import {DIDA365_COOKIE} from "../../common";
 
 const DIDA_JOPLIN_PROJECT_NAME = 'Joplin';
 
@@ -81,11 +82,11 @@ class Dida365Lib {
     checkPoint: number;
 
     constructor() {
-        this.cookie = DIDA_COOKIE;
         this.checkPoint = 0;
     }
 
     async init() {
+        this.cookie = await joplin.settings.value(DIDA365_COOKIE);
         this.joplinProjectId = await this.getJoplinProjectId();
         console.log('Dida365Lib: joplin project id =', this.joplinProjectId);
     }

@@ -2,20 +2,23 @@ import joplin from "../../../api";
 import {debounce} from "ts-debounce";
 import {convertNoteToTodo, list_regex} from "./didaUtils";
 import {Dida365, DidaSubTask, DidaTask} from "./Dida365Lib";
-import {extractInfo, SOURCE_URL_DIDA_PREFIX, SOURCE_URL_PAPERS_PREFIX, updateInfo} from "../../common";
+import {ENABLE_DIDA365, extractInfo, SOURCE_URL_DIDA_PREFIX, updateInfo} from "../../common";
 import {dida365Cache, Dida365WS} from "./dida365WS";
 
 let debounce_dealNote = debounce(async function() {
     const currNote = await joplin.workspace.selectedNote();
-    await dida365_dealNote(currNote);
-}, 1000);
+    await syncNoteToDida365(currNote);
+}, 5000);
 
 export async function dida365_init() {
-    const dws = new Dida365WS();
-    await joplin.workspace.onNoteContentChange(debounce_dealNote);
+    const dida365EnableFlag = await joplin.settings.value(ENABLE_DIDA365);
+    if (dida365EnableFlag) {
+        const dws = new Dida365WS();
+        await joplin.workspace.onNoteContentChange(debounce_dealNote);
+    }
 }
 
-async function dida365_dealNote(currNote) {
+async function syncNoteToDida365(currNote) {
     let match;
     let tasks = [];
     let allFinished = true;

@@ -7,6 +7,8 @@ export const ENABLE_PAPERS = 'enablePapers';
 export const PAPERS_COOKIE = 'papersCookie';
 export const ENABLE_PSEUDOCODE = 'enablePseudocode';
 export const ENABLE_CUSTOM_STYLE = 'enableCustomStyle';
+export const ENABLE_DIDA365 = 'enableDida365';
+export const DIDA365_COOKIE = 'dida365Cookie';
 
 export const PAPERS_FOLDER_NAME = 'ReadCube Papers';
 

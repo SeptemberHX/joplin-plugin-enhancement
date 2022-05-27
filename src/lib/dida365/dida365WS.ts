@@ -59,7 +59,13 @@ export class Dida365WS {
     }
 
     async onOpen(event) {
-        await Dida365.init();
+        if (!Dida365.cookie) {
+            await Dida365.init();
+        }
+
+        if (Dida365.cookie.length === 0) {
+            return;
+        }
 
         this.dida365HBInterval = setInterval((() => {
             this.sendHeartbeat();
@@ -74,6 +80,14 @@ export class Dida365WS {
     }
 
     async onMessage(event) {
+        if (!Dida365.cookie) {
+            await Dida365.init();
+        }
+
+        if (Dida365.cookie.length === 0) {
+            return;
+        }
+
         if (event.data.length === 60 && event.data[16] === '-' && event.data[25] === '-' && event.data[34] === '-' && event.data[51] === '-') {
             console.log('Dida365WebSocket: pushToken =', event.data);
             await Dida365.pushRegister(event.data);
