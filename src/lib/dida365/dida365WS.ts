@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 import WebSocket from 'ws';
 import ReconnectingWebSocket from "reconnecting-websocket";
 import {Dida365, DidaTask} from "./Dida365Lib";
-import {syncStatusFromDidaToNote} from "./Dida365Init";
+import {checkAllNotes, syncStatusFromDidaToNote} from "./Dida365Init";
 
 
 const options = {
@@ -71,7 +71,19 @@ export class Dida365WS {
             this.sendHeartbeat();
         }).bind(this), 300000);  // 5 min
 
-        dida365Cache.updateBatch(await Dida365.batchCheckUpdate());  // first batch request with checkpoint 0
+        // first batch request with checkpoint 0 in joplin project list
+        const remoteTasks = await Dida365.batchCheckUpdate();
+
+        // sync the task status from the remote to joplin notes
+        for (const task of remoteTasks) {
+            await syncStatusFromDidaToNote(task);
+        }
+
+        // update the cache
+        dida365Cache.updateBatch(remoteTasks);
+
+        // sync joplin notes to remote
+        await checkAllNotes();
     }
 
     sendHeartbeat(): void {

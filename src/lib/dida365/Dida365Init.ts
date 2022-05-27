@@ -2,7 +2,7 @@ import joplin from "../../../api";
 import {debounce} from "ts-debounce";
 import {convertNoteToTodo, list_regex} from "./didaUtils";
 import {Dida365, DidaSubTask, DidaTask} from "./Dida365Lib";
-import {ENABLE_DIDA365, extractInfo, SOURCE_URL_DIDA_PREFIX, updateInfo} from "../../common";
+import {DIDA_IGNORE_NOTE_TAG_NAME, ENABLE_DIDA365, extractInfo, SOURCE_URL_DIDA_PREFIX, updateInfo} from "../../common";
 import {dida365Cache, Dida365WS} from "./dida365WS";
 
 let debounce_dealNote = debounce(async function() {
@@ -14,11 +14,25 @@ export async function dida365_init() {
     const dida365EnableFlag = await joplin.settings.value(ENABLE_DIDA365);
     if (dida365EnableFlag) {
         const dws = new Dida365WS();
-        await joplin.workspace.onNoteContentChange(debounce_dealNote);
+        await joplin.workspace.onNoteChange(debounce_dealNote);
     }
 }
 
-async function syncNoteToDida365(currNote) {
+export async function syncNoteToDida365(currNote) {
+    const tags = await joplin.data.get(['notes', currNote.id, 'tags']);
+    let tagCheck = false;
+    for (const tag of tags.items) {
+        if (tag.title === DIDA_IGNORE_NOTE_TAG_NAME.toLowerCase()) {
+            tagCheck = true;
+        }
+        break;
+    }
+
+    // ignore the note with 'Dida365Ignore' tag
+    if (tagCheck) {
+        return;
+    }
+
     let match;
     let tasks = [];
     let allFinished = true;
@@ -46,6 +60,11 @@ async function syncNoteToDida365(currNote) {
         subDidaTasks.push(subDidaTask);
     }
 
+    // Not support joplin todo note! We only accept the notes with todo items in note body
+    if (subDidaTasks.length === 0) {
+        return;
+    }
+
     let didaTask = new DidaTask();
     didaTask.id = extractInfo(currNote.source_url)[SOURCE_URL_DIDA_PREFIX];
     didaTask.items = subDidaTasks;
@@ -65,7 +84,7 @@ async function syncNoteToDida365(currNote) {
 }
 
 async function syncTaskToDida365(didaTask: DidaTask) {
-    if (!didaTask.id) {
+    if (!didaTask.id || !dida365Cache.get(didaTask.id)) {
         const returnedTask = await Dida365.createJoplinTask(didaTask);
         console.log('Create remote task:', didaTask);
         console.log('Returned:', returnedTask);
@@ -125,4 +144,27 @@ export async function syncStatusFromDidaToNote(didaTask: DidaTask) {
     } else {
         console.log('Dida365: note was not updated due to the same status');
     }
+}
+
+export async function checkAllNotes() {
+    let page = 0;
+    let r;
+    do {
+        page += 1;
+        // I don't know how the basic search is implemented, it could be that it runs a regex
+        // query on each note under the hood. If that is the case and this behaviour crushed
+        // some slow clients, I should consider reverting this back to searching all notes
+        // (with the rate limiter)
+        r = await joplin.data.get(['search'], { query: list_regex.query,  fields: ['id', 'body', 'title', 'parent_id', 'source_url'], page: page });
+        if (r.items) {
+            for (let note of r.items) {
+                await syncNoteToDida365(note);
+            }
+        }
+        // This is a rate limiter that prevents us from pinning the CPU
+        if (r.has_more == 0) {
+            // sleep
+            await new Promise(res => setTimeout(res, 1000));
+        }
+    } while(r.has_more);
 }

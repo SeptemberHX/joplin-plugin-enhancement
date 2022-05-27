@@ -18,6 +18,7 @@ export const PAPERS_NOTEID_TO_PAPERID_TITLE = 'papers.db';
 export const SOURCE_URL_PAPERS_PREFIX = 'papers_';
 
 export const SOURCE_URL_DIDA_PREFIX = 'dida_';
+export const DIDA_IGNORE_NOTE_TAG_NAME = 'Dida365Ignore';
 
 export function extractInfo(data: string) {
     const splitResults = data.split(':');

@@ -230,14 +230,16 @@ class Dida365Lib {
         for (let subTask of task.items) {
             subItems.push({
                 "id": subTask.id,
-                "title": subTask.title
+                "title": subTask.title,
+                "status": subTask.status
             });
         }
 
         let changeBody = {
             "items": subItems,
             "title": task.title,
-            "projectId": this.joplinProjectId
+            "projectId": this.joplinProjectId,
+            "status": task.status
         };
 
         const requestUrl = `https://api.dida365.com/api/v2/task/`;
@@ -318,6 +320,9 @@ class Dida365Lib {
             this.checkPoint = resJson.checkPoint;
 
             for (const item of resJson.syncTaskBean.update) {  // current we only care the changes
+                if (item.projectId != this.joplinProjectId) {  // ignore the items in other project
+                    continue;
+                }
                 tasks.push(this.buildDidaTaskFromJsonObj(item));
             }
         }
