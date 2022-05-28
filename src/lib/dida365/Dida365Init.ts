@@ -41,6 +41,7 @@ export async function syncNoteToDida365(currNote) {
     let tasks = [];
     let allFinished = true;
     let subDidaTasks: DidaSubTask[] = [];
+    let taskTags = [];
     while ((match = list_regex.regex.exec(currNote.body)) !== null) {
         const task = {
             note: currNote.id,
@@ -52,9 +53,13 @@ export async function syncNoteToDida365(currNote) {
             tags: list_regex.tags(match),
             done: list_regex.done(match)
         };
+
         tasks.push(task);
         if (!task.done) {
             allFinished = false;
+            for (const tag of task.tags) {
+                taskTags.push(tag);
+            }
         }
 
         let subDidaTask = new DidaSubTask();
@@ -82,6 +87,7 @@ export async function syncNoteToDida365(currNote) {
     didaTask.items = subDidaTasks;
     didaTask.status = allFinished ? 2 : 0;
     didaTask.title = currNote.title;
+    didaTask.tags = new Set(taskTags);
 
     const taskId = await syncTaskToDida365(didaTask);
     if (taskId && taskId !== didaTask.id) {

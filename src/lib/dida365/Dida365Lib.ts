@@ -18,6 +18,7 @@ export class DidaTask {
     title: string;
     status: number;
     items: DidaSubTask[];
+    tags: Set<string>;
 
     setFinished(isFinished) {
         if (isFinished) {
@@ -27,7 +28,7 @@ export class DidaTask {
         }
     }
 
-    contentEquals(o) {
+    contentEquals(o: DidaTask) {
         if (this.title === o.title && this.status === o.status) {
             if (this.items.length === o.items.length) {
                 for (const item of this.items) {
@@ -43,7 +44,16 @@ export class DidaTask {
                         return false;
                     }
                 }
-                return true;
+
+                if (this.tags.size === o.tags.size) {
+                    for (const tag of this.tags) {
+                        if (!o.tags.has(tag)) {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+                return false;
             } else {
                 return false;
             }
@@ -241,6 +251,10 @@ class Dida365Lib {
             "status": task.status
         };
 
+        if (task.tags) {
+            changeBody['tags'] = Array.from(task.tags);
+        }
+
         return changeBody;
     }
 
@@ -327,6 +341,11 @@ class Dida365Lib {
         task.title = jsonObj.title;
         task.status = jsonObj.status;
         task.items = [];
+        if ('tags' in jsonObj) {
+            task.tags = new Set(jsonObj.tags);
+        } else {
+            task.tags = new Set();
+        }
 
         if (jsonObj.items) {
             for (const subItem of jsonObj.items) {
