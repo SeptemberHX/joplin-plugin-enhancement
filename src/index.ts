@@ -1,5 +1,5 @@
 import joplin from 'api';
-import {ContentScriptType, MenuItemLocation, ToolbarButtonLocation} from "api/types";
+import {ContentScriptType, MenuItem, MenuItemLocation, ToolbarButtonLocation} from "api/types";
 import {settings} from "./settings";
 import {
 	ENABLE_CUSTOM_STYLE,
@@ -12,12 +12,7 @@ import {
 	ENABLE_TABLE_FORMATTER,
 	PAPERS_COOKIE
 } from "./common";
-import {
-	buildCitationForItem,
-	buildRefName,
-	createNewNotesForPapers,
-	syncAllPaperItems
-} from "./lib/papers/papersUtils";
+import {buildCitationForItem, buildRefName, createNewNotesForPapers, syncAllPaperItems} from "./lib/papers/papersUtils";
 import {selectAnnotationPopup, selectPapersPopup} from "./ui/citation-popup";
 import {AnnotationItem, PaperItem, PapersLib} from "./lib/papers/papersLib";
 import {getAllRecords, getPaperItemByNoteId, setupDatabase} from "./lib/papers/papersDB";
@@ -251,17 +246,17 @@ async function initPapers() {
 		}
 	});
 
-	await joplin.views.menuItems.create(
-		"syncAllFilesFromPapersLib",
-		"enhancement_papers_syncAll",
-		MenuItemLocation.Tools
-	);
-
-	await joplin.views.menuItems.create(
-		'createNoteForPaper',
-		'enhancement_papers_createNoteForPaper',
-		MenuItemLocation.Tools,
-	);
+	const commandsSubMenu: MenuItem[] = [
+		{
+			commandName: 'enhancement_papers_syncAll',
+			label: 'Sync All Files from Papers'
+		},
+		{
+			commandName: 'enhancement_papers_createNoteForPaper',
+			label: 'Create notes for papers'
+		},
+	];
+	await joplin.views.menus.create('enhancementToolMenu', 'Enhancement', commandsSubMenu, MenuItemLocation.Tools);
 
 	await joplin.views.toolbarButtons.create(
 		'enhancementCitePapers',

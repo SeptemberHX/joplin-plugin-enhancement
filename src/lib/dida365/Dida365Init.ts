@@ -61,6 +61,14 @@ export async function syncNoteToDida365(currNote) {
         subDidaTask.title = task.msg;
         subDidaTask.status = task.done ? 2 : 0;
         subDidaTask.id = `${currNote.id}-${subDidaTasks.length}`;
+
+        if (task.date && task.date.length > 0) {
+            const taskDate = new Date(task.date);
+            if (!isNaN(taskDate.getTime())) {
+                subDidaTask.startDate = taskDate;
+            }
+        }
+
         subDidaTasks.push(subDidaTask);
     }
 

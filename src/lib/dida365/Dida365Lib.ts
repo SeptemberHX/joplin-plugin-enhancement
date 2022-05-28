@@ -57,17 +57,10 @@ export class DidaSubTask {
     id: string;
     title: string;
     status: number;
-
-    setFinished(isFinished) {
-        if (isFinished) {
-            this.status = 2;
-        } else {
-            this.status = 0;
-        }
-    }
+    startDate: Date;
 
     contentEquals(o) {
-        return this.title === o.title && this.status === o.status;
+        return this.title === o.title && this.status === o.status && this.startDate === o.startDate;
     }
 }
 
@@ -225,14 +218,20 @@ class Dida365Lib {
     //     }
     // }
 
-    async createJoplinTask(task: DidaTask) {
+    convertTaskToJson(task: DidaTask) {
         let subItems = [];
         for (let subTask of task.items) {
-            subItems.push({
+            let subItem = {
                 "id": subTask.id,
                 "title": subTask.title,
                 "status": subTask.status
-            });
+            };
+
+            if (subTask.startDate) {
+                subItem['startDate'] = subTask.startDate.toISOString();
+                subItem['isAllDay'] = true;
+            }
+            subItems.push(subItem);
         }
 
         let changeBody = {
@@ -241,6 +240,12 @@ class Dida365Lib {
             "projectId": this.joplinProjectId,
             "status": task.status
         };
+
+        return changeBody;
+    }
+
+    async createJoplinTask(task: DidaTask) {
+        const changeBody = this.convertTaskToJson(task);
 
         const requestUrl = `https://api.dida365.com/api/v2/task/`;
         const response = await fetch(requestUrl, {
@@ -258,22 +263,7 @@ class Dida365Lib {
     }
 
     async updateJoplinTask(task: DidaTask) {
-        let subItems = [];
-        for (let subTask of task.items) {
-            subItems.push({
-                "id": subTask.id,
-                "title": subTask.title,
-                "status": subTask.status
-            });
-        }
-
-        let changeBody = {
-            "items": subItems,
-            "title": task.title,
-            "projectId": this.joplinProjectId,
-            "status": task.status,
-            "id": task.id
-        };
+        const changeBody = this.convertTaskToJson(task);
 
         const requestUrl = `https://api.dida365.com/api/v2/task/${task.id}`;
         const response = await fetch(requestUrl, {
@@ -285,7 +275,8 @@ class Dida365Lib {
             console.log('Dida365Lib: update successfully')
             return this.buildDidaTaskFromJsonObj(await response.json());
         } else {
-            console.log('Dida365Lib: update failed')
+            console.log('Dida365Lib: update failed');
+            console.log(changeBody);
         }
     }
 
