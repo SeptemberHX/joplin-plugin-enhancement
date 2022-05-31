@@ -6,45 +6,6 @@ It contains several enhancement for both codemirror and markdown renderer.
 
 ## Features
 
-### ReadCube Papers
-
-> 使用到的 API 接口说明见：[ReadCube Papers API](https://blog.hxgpark.com/posts/ReadCubePapersAPI/)
-
-ReadCube Papers is a reference manager: [Official website](https://www.papersapp.com/).
-
-This plugin supports:
-
-1. Sync your papers information to local database. [Almost real time syncing due to the websocket protocal].
-2. Render a paper info table after the note content for paper note. [Note created by the menu 'Tools -> Create notes for papers'].
-3. Direct link to the PDF file in the paper info table.
-4. Auto insert formatted references through tool button.
-5. Auto insert annotations through tool button with quick-jump-to-annotation-in-browser function.
-
-> **ATTENTION**: this plugin use database file instead of notes to store the papers' information since v0.6.0. No notes will be deleted. Your data will be safe.
-
-> **WARNING**: DO NOT delete the `source_url` attribute of notes. It helps to tell the renderer which notes should be rendered with a paper information table. The notes created for Papers have the `source_url` with the `papers_` prefix.
-
-
-> Dialog UI code from [joplin/plugin-bibtex.git](https://github.com/joplin/plugin-bibtex.git)
-
-![](./screenshot/readcube.png)
-
-![img](https://i.imgur.com/Acri6uW.gif)
-
-![](./screenshot/paper_annotation.png)
-
-How to use:
-1. In the Joplin Settings -> Joplin Enhancement -> Set your cookie for Papers
-2. ~~Joplin Menubar -> Tools -> Sync files with Papers: It will create notes for your papers without the annotations~~
-   1. Not needed anymore. Now it will fetch the papers and keep syncing based on websocket
-3. 'Tools -> Create notes for papers'. **Only the notes created in this way can have a rendered paper information table**
-
-How to get cookies:
-1. Open your browser, go to your Papers Library
-2. Press F12 to open developer tools.
-3. Click any paper
-4. ![](./screenshot/paper_cookies.png)
-
 ### Pseudocode
 
 Pseudocode block:
@@ -112,12 +73,6 @@ Type `/command` in the editor for quick input of table, mermaid, etc.
 ### Auto folder in the editor
 
 Currently only the mermaid block can be folded automatically.
-
-### Custom style
-
-**Disabled on default**
-
-Personal requirements. Use font 'Time news roman' to make it look like published papers.
 
 ## Build
 
