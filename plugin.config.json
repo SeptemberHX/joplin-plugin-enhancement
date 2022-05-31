@@ -1,7 +1,6 @@
 {
 	"extraScripts": [
 		"driver/codemirror/tableFormatter/index.ts",
-		"driver/codemirror/autoCitation/index.ts",
 
 		"driver/codemirror/mermaidFolder/index.ts",
 
@@ -9,12 +8,9 @@
 
 		"driver/markdownItRenderer/filePreview/index.ts",
 		"driver/markdownItRenderer/image/index.ts",
-		"driver/markdownItRenderer/paperFence/index.ts",
 		"driver/markdownItRenderer/pseudocode/index.ts",
 
 		"driver/markdownItRuler/index.ts",
-		"driver/markdownItRuler/utils.ts",
-
-		"driver/style/index.ts"
+		"driver/markdownItRuler/utils.ts"
 	]
 }

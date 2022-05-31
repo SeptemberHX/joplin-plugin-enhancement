@@ -5,8 +5,7 @@ import {
     ENABLE_LOCAL_PDF_PREVIEW,
     ENABLE_MERMAID_FOLDER, ENABLE_QUICK_COMMANDS,
     ENABLE_TABLE_FORMATTER,
-    ENABLE_PAPERS, PAPERS_COOKIE, ENABLE_PSEUDOCODE, ENABLE_CUSTOM_STYLE,
-    ENABLE_DIDA365, DIDA365_COOKIE,
+    ENABLE_PSEUDOCODE,
 } from "./common";
 
 export namespace settings {
@@ -72,51 +71,6 @@ export namespace settings {
             type: SettingItemType.Bool,
             label: 'Enable quick commands for quick input',
             description: "Insert mermaid graph, tables, etc. with /commands. (requires restart)",
-        }
-
-        PLUGIN_SETTINGS[ENABLE_PAPERS] = {
-            value: false,
-            public: true,
-            section: SECTION,
-            type: SettingItemType.Bool,
-            label: 'Enable fetch data from ReadCube Papers',
-            description: "Fetch your files from ReadCube Papers and create notes for each file. (requires restart)",
-        }
-
-        PLUGIN_SETTINGS[PAPERS_COOKIE] = {
-            value: '',
-            public: true,
-            section: SECTION,
-            type: SettingItemType.String,
-            label: 'Cookie for ReadCube Papers',
-            description: "Visit ReadCube Papers web app in your web browser, open development tools and copy your cookies (requires restart)",
-        }
-
-        PLUGIN_SETTINGS[ENABLE_CUSTOM_STYLE] = {
-            value: false,
-            public: true,
-            section: SECTION,
-            type: SettingItemType.Bool,
-            label: 'Enable Custom CSS style',
-            description: "Header auto numbering, Times New Roman font family, and more (requires restart)",
-        }
-
-        PLUGIN_SETTINGS[ENABLE_DIDA365] = {
-            value: false,
-            public: true,
-            section: SECTION,
-            type: SettingItemType.Bool,
-            label: 'Enable Automatically sync your todo items to your dida365 application',
-            description: "Sync all your todo items to your dida365 application so that you can enjoy the robustly notification (requires restart)",
-        }
-
-        PLUGIN_SETTINGS[DIDA365_COOKIE] = {
-            value: '',
-            public: true,
-            section: SECTION,
-            type: SettingItemType.String,
-            label: 'Cookie for Dida365',
-            description: "Visit Dida365 web app in your web browser, open development tools and copy your cookies (requires restart)",
         }
 
         await joplin.settings.registerSettings(PLUGIN_SETTINGS);
