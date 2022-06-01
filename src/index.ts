@@ -77,6 +77,12 @@ joplin.plugins.register({
 			'enhancement_codemirror_mode',
 			'./driver/codemirror/mode/index.js'
 		);
+
+		await joplin.contentScripts.register(
+			ContentScriptType.MarkdownItPlugin,
+			'enhancement_mindmap_renderer',
+			'./driver/markdownItRenderer/mindmap/index.js'
+		);
 	},
 });
 
