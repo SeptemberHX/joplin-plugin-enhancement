@@ -71,6 +71,12 @@ joplin.plugins.register({
 		if (enableTableFormatter) {
 			await initTableFormatter();
 		}
+
+		await joplin.contentScripts.register(
+			ContentScriptType.CodeMirrorPlugin,
+			'enhancement_codemirror_mode',
+			'./driver/codemirror/mode/index.js'
+		);
 	},
 });
 

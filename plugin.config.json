@@ -11,6 +11,8 @@
 		"driver/markdownItRenderer/pseudocode/index.ts",
 
 		"driver/markdownItRuler/index.ts",
-		"driver/markdownItRuler/utils.ts"
+		"driver/markdownItRuler/utils.ts",
+
+		"driver/codemirror/mode/index.ts"
 	]
 }
