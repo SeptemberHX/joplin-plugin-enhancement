@@ -2,6 +2,7 @@
 
 import {Editor, Position} from "codemirror";
 import CodeMirror from "codemirror";
+import PlantumlHints from './PlantumlHints'
 
 const TRIGGER_SYMBOL = '/';
 const HINT_ITEM_CLASS = 'quick-commands-hint';
@@ -17,7 +18,7 @@ export interface Hint {
     // hint?: (cm: typeof CodeMirror, completion: Completion, hint: Hint) => void;
 }
 
-let customHints = [
+let customHints: Hint[] = [
     {
         text: '|     |     |     |\r\n| --- | --- | --- |\r\n|     |     |     |',
         displayText: '/table',
@@ -72,6 +73,8 @@ let customHints = [
         description: 'mermaid journey diagram',
     }
 ]
+
+customHints = customHints.concat(PlantumlHints)
 
 interface Completion {
     from: Position;
