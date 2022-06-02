@@ -1,14 +1,14 @@
 // implemented according to https://github.com/ylc395/joplin-plugin-note-link-system/blob/main/src/driver/codeMirror/QuickLinker.ts
 
 import {Editor, Position} from "codemirror";
-import CodeMirror = require("codemirror");
+import CodeMirror from "codemirror";
 
 const TRIGGER_SYMBOL = '/';
 const HINT_ITEM_CLASS = 'quick-commands-hint';
 const HINT_ITEM_PATH_CLASS = 'quick-commands-hint-path';
 
 // @see https://codemirror.net/doc/manual.html#addon_show-hint
-interface Hint {
+export interface Hint {
     text: string;
     displayText?: string;
     className?: string;
