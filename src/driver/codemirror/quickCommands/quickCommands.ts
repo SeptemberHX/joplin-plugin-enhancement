@@ -3,6 +3,7 @@
 import {Editor, Position} from "codemirror";
 import CodeMirror from "codemirror";
 import PlantumlHints from './PlantumlHints'
+import DateHints from "./DateHints";
 
 const TRIGGER_SYMBOL = '/';
 const HINT_ITEM_CLASS = 'quick-commands-hint';
@@ -75,6 +76,7 @@ let customHints: Hint[] = [
 ]
 
 customHints = customHints.concat(PlantumlHints)
+customHints = customHints.concat(DateHints)
 
 interface Completion {
     from: Position;
