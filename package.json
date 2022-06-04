@@ -30,6 +30,7 @@
     "yargs": "^16.2.0"
   },
   "dependencies": {
+    "dayjs": "^1.11.2",
     "html-entities": "^2.3.3",
     "katex": "^0.15.3",
     "mime-types": "^2.1.35",

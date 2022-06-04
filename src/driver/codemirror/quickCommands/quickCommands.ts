@@ -3,6 +3,7 @@
 import {Editor, Position} from "codemirror";
 import CodeMirror from "codemirror";
 import PlantumlHints from './PlantumlHints'
+import DateHints from "./DateHints";
 
 const TRIGGER_SYMBOL = '/';
 const HINT_ITEM_CLASS = 'quick-commands-hint';
@@ -75,6 +76,7 @@ let customHints: Hint[] = [
 ]
 
 customHints = customHints.concat(PlantumlHints)
+customHints = customHints.concat(DateHints)
 
 interface Completion {
     from: Position;
@@ -142,34 +144,20 @@ export default class QuickCommands {
         const completion: Completion = {
             from: completionFrom,
             to: completionTo,
-            list: this.getCommandHints(
-                keyword,
-                this.doc.getRange({line: cursorLine, ch: 0}, {line: cursorLine, ch: cursorCh - 1}) // string before '/'
-            ),
+            list: this.getCommandHints(keyword),
         };
         return completion;
     }
 
-    private getCommandHints(keyword: string, indent) : Hint[] {
+    private getCommandHints(keyword: string) : Hint[] {
         let hints = [];
-
-        // add indent when there exists 'tab' before or add a new line
-        let indentText = '';
-        if (indent.trim().length != 0) {
-            indent = indent.replace(indent.trim(), '');
-            indentText += '\n';
-        }
 
         for (let customHint of customHints) {
             // filter the hints by keyword
             if (customHint.displayText.includes(keyword)) {
-                let lines = customHint.text.split('\n');
-                for (let i = 0; i < lines.length; ++i) {
-                    indentText += indent + lines[i] + '\n';
-                }
 
                 hints.push({
-                    text: indentText,
+                    text: customHint.text,
                     displayText: customHint.displayText,
                     className: HINT_ITEM_CLASS,
                     render(container) {
