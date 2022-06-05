@@ -5,7 +5,7 @@ import {
     ENABLE_LOCAL_PDF_PREVIEW,
     ENABLE_MERMAID_FOLDER, ENABLE_QUICK_COMMANDS,
     ENABLE_TABLE_FORMATTER,
-    ENABLE_PSEUDOCODE,
+    ENABLE_PSEUDOCODE, ENABLE_ADMONITION_CM_RENDER,
 } from "./common";
 
 export namespace settings {
@@ -71,6 +71,15 @@ export namespace settings {
             type: SettingItemType.Bool,
             label: 'Enable quick commands for quick input',
             description: "Insert mermaid graph, tables, etc. with /commands. (requires restart)",
+        }
+
+        PLUGIN_SETTINGS[ENABLE_ADMONITION_CM_RENDER] = {
+            value: true,
+            public: true,
+            section: SECTION,
+            type: SettingItemType.Bool,
+            label: 'Enable the admonition styling in the markdown editor',
+            description: "Decorate the admonition area in the editor. [It conflicts with the 'Align wrapped list items' of Rich Markdown plugin]. (requires restart)",
         }
 
         await joplin.settings.registerSettings(PLUGIN_SETTINGS);

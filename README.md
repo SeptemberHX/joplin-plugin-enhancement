@@ -53,6 +53,16 @@ Because I have no idea how to create a context menu, currently all the operation
 
 ![tableFormatter](https://i.imgur.com/mqHdvTm.gif)
 
+### Admonition Renderer in markdown editor
+
+It supports both `!!!` style and `:::` style admonitions.
+
+> It conflicts with the 'Align wrapped list items' of Rich Markdown plugin.
+
+> This feature could be removed if the conflicts are solved, and it will be pushed to the Rich Markdown plugin. 
+
+![Admonition Editor Renderer](./screenshot/admonition.png)
+
 ### Local file preview
 
 Currently only local pdf file can be previewed.
@@ -69,6 +79,9 @@ Type `/command` in the editor for quick input of table, mermaid, etc.
 * `/classDiagram`
 * `/erDiagram`
 * `/journey`
+* `/now`
+* `/tommorow`
+* `/today`
 
 ### Auto folder in the editor
 

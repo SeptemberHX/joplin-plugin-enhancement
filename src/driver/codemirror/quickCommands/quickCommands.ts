@@ -4,6 +4,7 @@ import {Editor, Position} from "codemirror";
 import CodeMirror from "codemirror";
 import PlantumlHints from './PlantumlHints'
 import DateHints from "./DateHints";
+import MermaidHints from "./MermaidHints";
 
 const TRIGGER_SYMBOL = '/';
 const HINT_ITEM_CLASS = 'quick-commands-hint';
@@ -17,6 +18,7 @@ export interface Hint {
     description?: string;
     render?: (container: Element, completion: Completion, hint: Hint) => void;
     // hint?: (cm: typeof CodeMirror, completion: Completion, hint: Hint) => void;
+    inline: boolean;
 }
 
 let customHints: Hint[] = [
@@ -24,59 +26,13 @@ let customHints: Hint[] = [
         text: '|     |     |     |\r\n| --- | --- | --- |\r\n|     |     |     |',
         displayText: '/table',
         description: 'markdown table',
-    },
-    {
-        text: '```mermaid\n' +
-            'graph\n' +
-            '\n' +
-            '```',
-        displayText: '/flowchart',
-        description: 'mermaid flowchart',
-    },
-    {
-        text: '```mermaid\n' +
-            'sequenceDiagram\n' +
-            '\n' +
-            '```',
-        displayText: '/sequenceDiagram',
-        description: 'mermaid sequence diagram',
-    },
-    {
-        text: '```mermaid\n' +
-            'gantt\n' +
-            '\n' +
-            '```',
-        displayText: '/gantt',
-        description: 'mermaid gantt diagram',
-    },
-    {
-        text: '```mermaid\n' +
-            'classDiagram\n' +
-            '\n' +
-            '```',
-        displayText: '/classDiagram',
-        description: 'mermaid class diagram',
-    },
-    {
-        text: '```mermaid\n' +
-            'erDiagram\n' +
-            '\n' +
-            '```',
-        displayText: '/erDiagram',
-        description: 'mermaid entity relationship diagram',
-    },
-    {
-        text: '```mermaid\n' +
-            'journey\n' +
-            '\n' +
-            '```',
-        displayText: '/journey',
-        description: 'mermaid journey diagram',
+        inline: false
     }
 ]
 
 customHints = customHints.concat(PlantumlHints)
 customHints = customHints.concat(DateHints)
+customHints = customHints.concat(MermaidHints);
 
 interface Completion {
     from: Position;
@@ -152,22 +108,31 @@ export default class QuickCommands {
         return completion;
     }
 
-    private getCommandHints(keyword: string, indent) : Hint[] {
+    private getCommandHints(keyword: string, indent: string) : Hint[] {
         let hints = [];
 
-        // add indent when there exists 'tab' before or add a new line
-        let indentText = '';
-        if (indent.trim().length != 0) {
-            indent = indent.replace(indent.trim(), '');
-            indentText += '\n';
+        let commandTextIndent = '';
+        const matchIndex = indent.search(/\S/);
+        if (matchIndex > 0) {
+            commandTextIndent = indent.substr(matchIndex);
         }
 
+        // add indent when there exists 'tab' before or add a new line for non-inline hints
         for (let customHint of customHints) {
             // filter the hints by keyword
             if (customHint.displayText.includes(keyword)) {
-                let lines = customHint.text.split('\n');
-                for (let i = 0; i < lines.length; ++i) {
-                    indentText += indent + lines[i] + '\n';
+                let indentText = '';
+                if (!customHint.inline) {
+                    if (commandTextIndent.length != 0 || (commandTextIndent.length == 0 && indent.length != 0)) {
+                        indentText += '\n';
+                    }
+
+                    let lines = customHint.text.split('\n');
+                    for (let i = 0; i < lines.length; ++i) {
+                        indentText += commandTextIndent + lines[i] + '\n';
+                    }
+                } else {
+                    indentText = customHint.text;
                 }
 
                 hints.push({
@@ -181,6 +146,15 @@ export default class QuickCommands {
                 })
             }
         }
-        return hints;
+
+        return hints.sort((h1: Hint, h2: Hint) => {
+            if (h1.displayText > h2.displayText) {
+                return 1;
+            } else if (h1.displayText < h2.displayText) {
+                return -1;
+            } else {
+                return 0;
+            }
+        });
     }
 }

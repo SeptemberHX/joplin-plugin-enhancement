@@ -2,6 +2,7 @@ import joplin from 'api';
 import {ContentScriptType, ToolbarButtonLocation} from "api/types";
 import {settings} from "./settings";
 import {
+	ENABLE_ADMONITION_CM_RENDER,
 	ENABLE_IMAGE_ENHANCEMENT,
 	ENABLE_LOCAL_PDF_PREVIEW,
 	ENABLE_MERMAID_FOLDER,
@@ -20,6 +21,7 @@ joplin.plugins.register({
 		const enableImageEnhancement = await joplin.settings.value(ENABLE_IMAGE_ENHANCEMENT);
 		const enableQuickCommands = await joplin.settings.value(ENABLE_QUICK_COMMANDS);
 		const enablePseudocode = await joplin.settings.value(ENABLE_PSEUDOCODE);
+		const enableAdmonitionCmRender = await joplin.settings.value(ENABLE_ADMONITION_CM_RENDER);
 
 		if (enableImageEnhancement) {
 			await joplin.contentScripts.register(
@@ -77,6 +79,14 @@ joplin.plugins.register({
 			'enhancement_codemirror_mode',
 			'./driver/codemirror/mode/index.js'
 		);
+
+		if (enableAdmonitionCmRender) {
+			await joplin.contentScripts.register(
+				ContentScriptType.CodeMirrorPlugin,
+				'cm_admonition_renderer',
+				'./driver/codemirror/admonition/index.js'
+			);
+		}
 	},
 });
 

@@ -13,6 +13,7 @@
 		"driver/markdownItRuler/index.ts",
 		"driver/markdownItRuler/utils.ts",
 
-		"driver/codemirror/mode/index.ts"
+		"driver/codemirror/mode/index.ts",
+		"driver/codemirror/admonition/index.ts"
 	]
 }

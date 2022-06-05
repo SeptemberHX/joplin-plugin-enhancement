@@ -36,11 +36,13 @@ const PlantumlHints: Hint[] = [
     text: sequanceDiagramText(),
     displayText: "/psequenceDiagram",
     description: 'Sequence diagram | plantuml',
+    inline: false
   },
   {
     text: classDiagramText(),
     displayText: "/pclassDiagramText",
     description: 'Class diagram | plantuml',
+    inline: false
   }
 ];
 

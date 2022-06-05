@@ -4,3 +4,4 @@ export const ENABLE_LOCAL_PDF_PREVIEW = 'enableLocalPDFPreview';
 export const ENABLE_IMAGE_ENHANCEMENT = 'enableImageEnhancement';
 export const ENABLE_QUICK_COMMANDS = 'enableQuickCommands';
 export const ENABLE_PSEUDOCODE = 'enablePseudocode';
+export const ENABLE_ADMONITION_CM_RENDER = 'enableAdmonitionCmRender';
