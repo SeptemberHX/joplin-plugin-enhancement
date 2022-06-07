@@ -2,7 +2,7 @@ import joplin from 'api';
 import {ContentScriptType, ToolbarButtonLocation} from "api/types";
 import {settings} from "./settings";
 import {
-	ENABLE_ADMONITION_CM_RENDER,
+	ENABLE_ADMONITION_CM_RENDER, ENABLE_FRONT_MATTER,
 	ENABLE_IMAGE_ENHANCEMENT,
 	ENABLE_LOCAL_PDF_PREVIEW,
 	ENABLE_MERMAID_FOLDER,
@@ -22,12 +22,13 @@ joplin.plugins.register({
 		const enableQuickCommands = await joplin.settings.value(ENABLE_QUICK_COMMANDS);
 		const enablePseudocode = await joplin.settings.value(ENABLE_PSEUDOCODE);
 		const enableAdmonitionCmRender = await joplin.settings.value(ENABLE_ADMONITION_CM_RENDER);
+		const enableFrontMatter = await joplin.settings.value(ENABLE_FRONT_MATTER);
 
 		if (enableImageEnhancement) {
 			await joplin.contentScripts.register(
 				ContentScriptType.MarkdownItPlugin,
 				'enhancement_figure_width',
-				'./driver/markdownItRuler/index.js'
+				'./driver/markdownItRuler/image/index.js'
 			);
 
 			await joplin.contentScripts.register(
@@ -85,6 +86,14 @@ joplin.plugins.register({
 				ContentScriptType.CodeMirrorPlugin,
 				'cm_admonition_renderer',
 				'./driver/codemirror/admonition/index.js'
+			);
+		}
+
+		if (enableFrontMatter) {
+			await joplin.contentScripts.register(
+				ContentScriptType.MarkdownItPlugin,
+				'enhancement_front_matter',
+				'./driver/markdownItRuler/frontMatter/index.js'
 			);
 		}
 	},

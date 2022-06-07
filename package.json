@@ -34,12 +34,8 @@
     "html-entities": "^2.3.3",
     "katex": "^0.15.3",
     "mime-types": "^2.1.35",
-    "net": "^1.0.2",
     "node-fetch": "^2.6.1",
     "pseudocode": "^2.2.0",
-    "reconnecting-websocket": "^4.4.0",
-    "tls": "^0.0.1",
-    "ts-debounce": "^4.0.0",
-    "ws": "^8.6.0"
+    "ts-debounce": "^4.0.0"
   }
 }

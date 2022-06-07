@@ -5,7 +5,7 @@ import {
     ENABLE_LOCAL_PDF_PREVIEW,
     ENABLE_MERMAID_FOLDER, ENABLE_QUICK_COMMANDS,
     ENABLE_TABLE_FORMATTER,
-    ENABLE_PSEUDOCODE, ENABLE_ADMONITION_CM_RENDER,
+    ENABLE_PSEUDOCODE, ENABLE_ADMONITION_CM_RENDER, ENABLE_FRONT_MATTER,
 } from "./common";
 
 export namespace settings {
@@ -80,6 +80,15 @@ export namespace settings {
             type: SettingItemType.Bool,
             label: 'Enable the admonition styling in the markdown editor',
             description: "Decorate the admonition area in the editor. [It conflicts with the 'Align wrapped list items' of Rich Markdown plugin]. (requires restart)",
+        }
+
+        PLUGIN_SETTINGS[ENABLE_FRONT_MATTER] = {
+            value: false,
+            public: true,
+            section: SECTION,
+            type: SettingItemType.Bool,
+            label: 'Enable front matter markdown-it rule',
+            description: "It just ignores the front matter instead of rendering them as content between two lines. It is used to allow other plugins can take use of the front matter without breaking the rendered html. (requires restart)",
         }
 
         await joplin.settings.registerSettings(PLUGIN_SETTINGS);

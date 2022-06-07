@@ -10,8 +10,8 @@
 		"driver/markdownItRenderer/image/index.ts",
 		"driver/markdownItRenderer/pseudocode/index.ts",
 
-		"driver/markdownItRuler/index.ts",
-		"driver/markdownItRuler/utils.ts",
+		"driver/markdownItRuler/image/index.ts",
+		"driver/markdownItRuler/frontMatter/index.ts",
 
 		"driver/codemirror/mode/index.ts",
 		"driver/codemirror/admonition/index.ts"
