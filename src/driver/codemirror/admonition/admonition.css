@@ -175,3 +175,7 @@
 span.cm-katex-marker-open, span.cm-katex-marker-close {
     color: burlywood;
 }
+
+span.cm-overlay.cm-enhancement-image-size {
+    color: gray;
+}
