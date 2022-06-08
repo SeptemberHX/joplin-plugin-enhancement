@@ -26,6 +26,10 @@
     color: orange;
 }
 
+.admonition.header {
+    border-radius: 0.25em 0.25em 0 0;
+}
+
 /* From joplin-plugin-admonition */
 
 .admonition.header.note {
