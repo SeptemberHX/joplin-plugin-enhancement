@@ -6,3 +6,4 @@ export const ENABLE_QUICK_COMMANDS = 'enableQuickCommands';
 export const ENABLE_PSEUDOCODE = 'enablePseudocode';
 export const ENABLE_ADMONITION_CM_RENDER = 'enableAdmonitionCmRender';
 export const ENABLE_FRONT_MATTER = 'enhancementEnableFrontMatter';
+export const ENABLE_COLORFUL_QUOTE = 'enhancementEnableColorfulQuote';

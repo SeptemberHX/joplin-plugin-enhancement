@@ -2,7 +2,7 @@ import joplin from 'api';
 import {ContentScriptType, ToolbarButtonLocation} from "api/types";
 import {settings} from "./settings";
 import {
-	ENABLE_ADMONITION_CM_RENDER, ENABLE_FRONT_MATTER,
+	ENABLE_ADMONITION_CM_RENDER, ENABLE_COLORFUL_QUOTE, ENABLE_FRONT_MATTER,
 	ENABLE_IMAGE_ENHANCEMENT,
 	ENABLE_LOCAL_PDF_PREVIEW,
 	ENABLE_MERMAID_FOLDER,
@@ -23,6 +23,7 @@ joplin.plugins.register({
 		const enablePseudocode = await joplin.settings.value(ENABLE_PSEUDOCODE);
 		const enableAdmonitionCmRender = await joplin.settings.value(ENABLE_ADMONITION_CM_RENDER);
 		const enableFrontMatter = await joplin.settings.value(ENABLE_FRONT_MATTER);
+		const enableColorfulQuote = await joplin.settings.value(ENABLE_COLORFUL_QUOTE);
 
 		if (enableImageEnhancement) {
 			await joplin.contentScripts.register(
@@ -94,6 +95,14 @@ joplin.plugins.register({
 				ContentScriptType.MarkdownItPlugin,
 				'enhancement_front_matter',
 				'./driver/markdownItRuler/frontMatter/index.js'
+			);
+		}
+
+		if (enableColorfulQuote) {
+			await joplin.contentScripts.register(
+				ContentScriptType.MarkdownItPlugin,
+				'enhancement_colorful_quote',
+				'./driver/markdownItRenderer/quote/index.js'
 			);
 		}
 	},

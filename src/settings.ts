@@ -5,7 +5,7 @@ import {
     ENABLE_LOCAL_PDF_PREVIEW,
     ENABLE_MERMAID_FOLDER, ENABLE_QUICK_COMMANDS,
     ENABLE_TABLE_FORMATTER,
-    ENABLE_PSEUDOCODE, ENABLE_ADMONITION_CM_RENDER, ENABLE_FRONT_MATTER,
+    ENABLE_PSEUDOCODE, ENABLE_ADMONITION_CM_RENDER, ENABLE_FRONT_MATTER, ENABLE_COLORFUL_QUOTE,
 } from "./common";
 
 export namespace settings {
@@ -89,6 +89,15 @@ export namespace settings {
             type: SettingItemType.Bool,
             label: 'Enable front matter markdown-it rule',
             description: "It just ignores the front matter instead of rendering them as content between two lines. It is used to allow other plugins can take use of the front matter without breaking the rendered html. (requires restart)",
+        }
+
+        PLUGIN_SETTINGS[ENABLE_COLORFUL_QUOTE] = {
+            value: false,
+            public: true,
+            section: SECTION,
+            type: SettingItemType.Bool,
+            label: 'Enable hackmd style colorful quote',
+            description: "Render the quote with the given color [color=red]. (requires restart)",
         }
 
         await joplin.settings.registerSettings(PLUGIN_SETTINGS);
