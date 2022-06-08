@@ -63,6 +63,12 @@ It supports both `!!!` style and `:::` style admonitions.
 
 ![Admonition Editor Renderer](./screenshot/admonition.png)
 
+### Colorful blockquote support
+
+It supports `[color=red]` item in blockquote area so that the blockquote can be rendered with the given color border.
+
+![ColorfulBlockquote](./screenshot/colorfulBlockquote.png)
+
 ### Local file preview
 
 Currently only local pdf file can be previewed.
