@@ -11,7 +11,13 @@ span.blockquote-name.blockquote-enhancement {
 }
 
 small.blockquote-enhancement-wrap::before {
-    content: '-- ';
+    content: '\2014 \00A0';
+}
+
+small.blockquote-enhancement-wrap {
+    background: lightgrey;
+    padding: 2px 6px 2px 4px;
+    border-radius: 6px;
 }
 
 blockquote > p {

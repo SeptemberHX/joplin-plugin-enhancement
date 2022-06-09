@@ -96,8 +96,8 @@ export namespace settings {
             public: true,
             section: SECTION,
             type: SettingItemType.Bool,
-            label: 'Enable hackmd style colorful quote',
-            description: "Render the quote with the given color [color=red]. (requires restart)",
+            label: 'Enable hackmd style quote',
+            description: "Render the quote with the given color [color=red], name [name=SeptemberHX], and date [date=20220202]. (requires restart)",
         }
 
         await joplin.settings.registerSettings(PLUGIN_SETTINGS);

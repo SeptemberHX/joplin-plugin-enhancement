@@ -26,7 +26,6 @@ export function quoteRenderer(markdownIt, _options) {
                         continue;
                     }
 
-                    console.log(child.content);
                     let realColorMatch = colorRegex.exec(child.content);
                     if (realColorMatch) {
                         child.content = child.content.replace(colorRegex, '');

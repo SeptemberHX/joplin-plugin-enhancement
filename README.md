@@ -63,11 +63,14 @@ It supports both `!!!` style and `:::` style admonitions.
 
 ![Admonition Editor Renderer](./screenshot/admonition.png)
 
-### Colorful blockquote support
+### Enhanced blockquote support
 
-It supports `[color=red]` item in blockquote area so that the blockquote can be rendered with the given color border.
+* It supports `[color=red]` item in blockquote area so that the blockquote can be rendered with the given color border.
+* `[name=SeptemberHX]` and `[date=20220202]`
 
 ![ColorfulBlockquote](./screenshot/colorfulBlockquote.png)
+
+![EnhancedQuote](./screenshot/enhancedQuote.png)
 
 ### Local file preview
 
