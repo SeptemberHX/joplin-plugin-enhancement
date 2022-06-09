@@ -9,6 +9,9 @@ export default function (context) {
         },
         assets: function() {
             return [
+                {
+                    name: 'quoteRender.css'
+                }
             ];
         },
     }

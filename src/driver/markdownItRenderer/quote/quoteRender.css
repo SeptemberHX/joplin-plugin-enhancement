@@ -1,0 +1,19 @@
+span.blockquote-name.blockquote-enhancement::before {
+    content: '🐹 ';
+}
+
+span.blockquote-date.blockquote-enhancement::before {
+    content: '🕰 ';
+}
+
+span.blockquote-name.blockquote-enhancement {
+    padding-right: 1em;
+}
+
+small.blockquote-enhancement-wrap::before {
+    content: '-- ';
+}
+
+blockquote > p {
+    margin-top: 0;
+}
