@@ -32,7 +32,6 @@ export default class BlockquoteEnhancedFolder {
 
             const lineTokens = this.editor.getLineTokens(lineNo);
             for (const [tokenIndex, token] of lineTokens.entries()) {
-                console.log(token);
                 if (token.type?.includes('quote')) {
                     meetBlockquote = true;
                     break;
@@ -54,17 +53,17 @@ export default class BlockquoteEnhancedFolder {
                 .findMarksAt({line: lineNo, ch: match.index})
                 .find((marker) => marker.className === MARKER_CLASS_NAME)) {
 
-                const from = {line: lineNo, ch: match.index};
-                const to = {line: lineNo, ch: match.index + match[0].length};
+                const from = {line: lineNo, ch: match.index + 1};
+                const to = {line: lineNo, ch: match.index + match[0].length - 1};
                 let color = match[1];
 
                 // not fold when the cursor is in the block
-                if (!(cursor.line <= lineNo && cursor.line >= from.line)) {
+                if (!(cursor.line === lineNo && cursor.ch >= from.ch - 1 && cursor.ch <= to.ch)) {
                     doc.markText(
                         from,
                         to,
                         {
-                            replacedWith: this.createFoldMarker(type),
+                            replacedWith: this.createFoldMarker(type, color),
                             handleMouseEvents: true,
                             className: MARKER_CLASS_NAME, // class name is not renderer in DOM
                         },
@@ -85,21 +84,24 @@ export default class BlockquoteEnhancedFolder {
         }
     }
 
-    private createFoldMarker(type) {
+    private createFoldMarker(type, color) {
         const markEl = document.createElement('span');
         markEl.classList.add(MARKER_CLASS_NAME);
         switch (type) {
             case 'color':
-                markEl.textContent = `[🎨]`;
+                markEl.textContent = `■`;
+                markEl.style.cssText = `color: ${color}; font-size: large; vertical-align: middle;`
                 break;
             case 'name':
-                markEl.textContent = `[🐹]`;
+                markEl.textContent = `🐹`;
                 break;
             case 'date':
-                markEl.textContent = `[🕰]`;
+                markEl.textContent = `🕰`;
                 break;
         }
-        markEl.style.cssText = 'color: darkgray;';
+        if (type !== 'color') {
+            markEl.style.cssText = 'color: darkgray;';
+        }
         return markEl;
     }
 }
