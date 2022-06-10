@@ -15,6 +15,7 @@
 		"driver/markdownItRuler/frontMatter/index.ts",
 
 		"driver/codemirror/mode/index.ts",
-		"driver/codemirror/admonition/index.ts"
+		"driver/codemirror/admonition/index.ts",
+		"driver/codemirror/blockquote/index.ts"
 	]
 }

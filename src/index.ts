@@ -104,6 +104,11 @@ joplin.plugins.register({
 				'enhancement_colorful_quote',
 				'./driver/markdownItRenderer/quote/index.js'
 			);
+			await joplin.contentScripts.register(
+				ContentScriptType.CodeMirrorPlugin,
+				'enhancement_quote_folder',
+				'./driver/codemirror/blockquote/index.js'
+			);
 		}
 	},
 });
