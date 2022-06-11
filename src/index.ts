@@ -109,6 +109,12 @@ joplin.plugins.register({
 				'enhancement_quote_folder',
 				'./driver/codemirror/blockquote/index.js'
 			);
+			await joplin.workspace.onNoteSelectionChange(async function() {
+				await joplin.commands.execute('editor.execCommand', {
+					name: 'cm-enhanced-quote-marker',
+					args: []
+				});
+			});
 		}
 	},
 });
