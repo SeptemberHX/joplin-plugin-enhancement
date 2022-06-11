@@ -183,3 +183,7 @@ span.cm-katex-marker-open, span.cm-katex-marker-close {
 span.cm-overlay.cm-enhancement-image-size {
     color: gray;
 }
+
+.cm-overlay.cm-enhancement-katex-inline-math {
+    color: gray !important;
+}
