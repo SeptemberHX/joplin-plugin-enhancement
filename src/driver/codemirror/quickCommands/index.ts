@@ -10,6 +10,7 @@ module.exports = {
                 });
             },
             codeMirrorOptions: { 'quickCommands': true },
+            codeMirrorResources: ['addon/hint/show-hint'],
             assets: function() {
                 return [ {name: 'quickCommands.css'} ];
             }
