@@ -67,6 +67,7 @@ It supports both `!!!` style and `:::` style admonitions.
 
 * It supports `[color=red]` item in blockquote area so that the blockquote can be rendered with the given color border.
 * `[name=SeptemberHX]` and `[date=20220202]`
+* Automatically fold the `[xxx=xxx]` to keep the editor clean
 
 ![ColorfulBlockquote](./screenshot/colorfulBlockquote.png)
 
@@ -94,7 +95,8 @@ Type `/command` in the editor for quick input of table, mermaid, etc.
 
 ### Auto folder in the editor
 
-Currently only the mermaid block can be folded automatically.
+* mermaid block (separate setting)
+* link (separate setting)
 
 ## Build
 
