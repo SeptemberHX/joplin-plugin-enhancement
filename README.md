@@ -73,6 +73,12 @@ It supports both `!!!` style and `:::` style admonitions.
 
 ![EnhancedQuote](./screenshot/enhancedQuote.png)
 
+### Render Front Matter to Nothing
+
+It just renders the front matter to nothing. It is helpful when you try to keep the front matter part and avoid the unwanted rendered content.
+
+![frontMatter](./screenshot/frontmatter.png)
+
 ### Local file preview
 
 Currently only local pdf file can be previewed.
