@@ -1,5 +1,5 @@
 span.blockquote-name.blockquote-enhancement::before {
-    content: '🐹 ';
+    content: '🖇 ';
 }
 
 span.blockquote-date.blockquote-enhancement::before {

@@ -2,7 +2,7 @@ import joplin from 'api';
 import {ContentScriptType, ToolbarButtonLocation} from "api/types";
 import {settings} from "./settings";
 import {
-	ENABLE_ADMONITION_CM_RENDER, ENABLE_COLORFUL_QUOTE, ENABLE_FRONT_MATTER,
+	ENABLE_ADMONITION_CM_RENDER, ENABLE_BETTER_LINK_FOLDER, ENABLE_COLORFUL_QUOTE, ENABLE_FRONT_MATTER,
 	ENABLE_IMAGE_ENHANCEMENT,
 	ENABLE_LOCAL_PDF_PREVIEW,
 	ENABLE_MERMAID_FOLDER,
@@ -24,6 +24,7 @@ joplin.plugins.register({
 		const enableAdmonitionCmRender = await joplin.settings.value(ENABLE_ADMONITION_CM_RENDER);
 		const enableFrontMatter = await joplin.settings.value(ENABLE_FRONT_MATTER);
 		const enableColorfulQuote = await joplin.settings.value(ENABLE_COLORFUL_QUOTE);
+		const enableLinkFolder = await joplin.settings.value(ENABLE_BETTER_LINK_FOLDER);
 
 		if (enableImageEnhancement) {
 			await joplin.contentScripts.register(
@@ -112,6 +113,20 @@ joplin.plugins.register({
 			await joplin.workspace.onNoteSelectionChange(async function() {
 				await joplin.commands.execute('editor.execCommand', {
 					name: 'cm-enhanced-quote-marker',
+					args: []
+				});
+			});
+		}
+
+		if (enableLinkFolder) {
+			await joplin.contentScripts.register(
+				ContentScriptType.CodeMirrorPlugin,
+				'enhancement_link_folder',
+				'./driver/codemirror/linkFolder/index.js'
+			);
+			await joplin.workspace.onNoteSelectionChange(async function() {
+				await joplin.commands.execute('editor.execCommand', {
+					name: 'cm-enhanced-link-marker',
 					args: []
 				});
 			});

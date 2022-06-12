@@ -3,9 +3,14 @@ import { SettingItemType } from "api/types";
 import {
     ENABLE_IMAGE_ENHANCEMENT,
     ENABLE_LOCAL_PDF_PREVIEW,
-    ENABLE_MERMAID_FOLDER, ENABLE_QUICK_COMMANDS,
+    ENABLE_MERMAID_FOLDER,
+    ENABLE_QUICK_COMMANDS,
     ENABLE_TABLE_FORMATTER,
-    ENABLE_PSEUDOCODE, ENABLE_ADMONITION_CM_RENDER, ENABLE_FRONT_MATTER, ENABLE_COLORFUL_QUOTE,
+    ENABLE_PSEUDOCODE,
+    ENABLE_ADMONITION_CM_RENDER,
+    ENABLE_FRONT_MATTER,
+    ENABLE_COLORFUL_QUOTE,
+    ENABLE_BETTER_LINK_FOLDER,
 } from "./common";
 
 export namespace settings {
@@ -98,6 +103,15 @@ export namespace settings {
             type: SettingItemType.Bool,
             label: 'Enable hackmd style quote',
             description: "Render the quote with the given color [color=red], name [name=SeptemberHX], and date [date=20220202]. (requires restart)",
+        }
+
+        PLUGIN_SETTINGS[ENABLE_BETTER_LINK_FOLDER] = {
+            value: false,
+            public: true,
+            section: SECTION,
+            type: SettingItemType.Bool,
+            label: 'Enable better link folder',
+            description: "Fold link. (requires restart)",
         }
 
         await joplin.settings.registerSettings(PLUGIN_SETTINGS);

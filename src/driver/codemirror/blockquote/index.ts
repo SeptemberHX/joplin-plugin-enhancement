@@ -1,7 +1,10 @@
-import CMMarkerHelper from "./CMMarkerHelper";
+import CMMarkerHelper from "../../../utils/CMMarkerHelper";
 import {debounce} from "ts-debounce";
 
 const ENHANCED_QUOTE_MARKER = 'enhancement-folded-blockquotes';
+const ENHANCED_QUOTE_MARKER_NAME = 'enhancement-folded-blockquotes-name';
+const ENHANCED_QUOTE_MARKER_DATE = 'enhancement-folded-blockquotes-date';
+
 const regexList = [
     /\[color=(.*?)\]/g,
     /\[name=(.*?)\]/g,
@@ -22,10 +25,10 @@ module.exports = {
                                 markEl.style.cssText = `color: ${matched}; font-size: large; vertical-align: middle;`
                                 break;
                             case 1:
-                                markEl.textContent = `🐹`;
+                                markEl.classList.add('fas', 'fa-user', ENHANCED_QUOTE_MARKER_NAME);
                                 break;
                             case 2:
-                                markEl.textContent = `🕰`;
+                                markEl.classList.add('fas', 'fa-clock', ENHANCED_QUOTE_MARKER_DATE);
                                 break;
                             default:
                                 console.log(regIndex);
@@ -45,12 +48,16 @@ module.exports = {
                         return false;
                     });
 
-                    CodeMirror.defineExtension('cm-enhanced-quote-marker', debounce(mathMarkerHelper.foldAll.bind(mathMarkerHelper), 200));
+                    CodeMirror.defineExtension('cm-enhanced-quote-marker', debounce(mathMarkerHelper.foldAll.bind(mathMarkerHelper), 50));
                 });
             },
             codeMirrorOptions: {'quoteFolder': true},
             assets: function () {
-                return [];
+                return [
+                    {
+                        name: "blockquote.css"
+                    }
+                ];
             }
         }
     },

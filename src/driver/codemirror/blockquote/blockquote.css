@@ -1,0 +1,4 @@
+span.enhancement-folded-blockquotes-name, span.enhancement-folded-blockquotes-date {
+    font-family: 'Font Awesome 5 Free' !important;
+    color: var(--joplin-color-faded);
+}
