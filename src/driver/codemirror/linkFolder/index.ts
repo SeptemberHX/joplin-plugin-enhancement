@@ -29,8 +29,6 @@ module.exports = {
                     }, ENHANCED_LINK_MARKER, {prefixLength: 0, suffixLength: 0}, function (line, lineTokens) {
                         return true;
                     });
-
-                    CodeMirror.defineExtension('cm-enhanced-link-marker', debounce(mathMarkerHelper.foldAll.bind(mathMarkerHelper), 50));
                 });
             },
             codeMirrorOptions: {'enhancementLinkFolder': true},

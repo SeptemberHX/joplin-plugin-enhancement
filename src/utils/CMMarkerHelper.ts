@@ -27,6 +27,11 @@ export default class CMMarkerHelper {
         await this.foldAll();
         this.editor.on('cursorActivity', this.unfoldAtCursor.bind(this));
         this.editor.on('cursorActivity', debounce(this.onCursorActivity.bind(this), 200));
+        this.editor.on('change', function (cm, changeObjs) {
+            if (changeObjs.origin === 'setValue') {
+                this.foldAll();
+            }
+        }.bind(this));
     }
 
     private async onCursorActivity() {
@@ -41,23 +46,25 @@ export default class CMMarkerHelper {
     }
 
     private foldBetweenLines(doc, fromLine, toLine, currentCursor) {
-        for (let lineNo = fromLine; lineNo <= toLine; ++lineNo) {
-            const line = doc.getLine(lineNo);
-            const lineTokens = this.editor.getLineTokens(lineNo);
-            if (this.lineFilter) {
-                if (!this.lineFilter(line, lineTokens)) {
-                    continue;
+        this.editor.operation(function () {
+            for (let lineNo = fromLine; lineNo <= toLine; ++lineNo) {
+                const line = doc.getLine(lineNo);
+                const lineTokens = this.editor.getLineTokens(lineNo);
+                if (this.lineFilter) {
+                    if (!this.lineFilter(line, lineTokens)) {
+                        continue;
+                    }
                 }
-            }
 
-            for (let regIndex = 0; regIndex < this.regexList.length; ++regIndex) {
-                let match = this.regexList[regIndex].exec(line);
-                while (match) {
-                    this.foldByMatch(doc, lineNo, currentCursor, match, regIndex);
-                    match = this.regexList[regIndex].exec(line);
+                for (let regIndex = 0; regIndex < this.regexList.length; ++regIndex) {
+                    let match = this.regexList[regIndex].exec(line);
+                    while (match) {
+                        this.foldByMatch(doc, lineNo, currentCursor, match, regIndex);
+                        match = this.regexList[regIndex].exec(line);
+                    }
                 }
             }
-        }
+        }.bind(this));
     }
 
     public foldAll() {

@@ -110,12 +110,6 @@ joplin.plugins.register({
 				'enhancement_quote_folder',
 				'./driver/codemirror/blockquote/index.js'
 			);
-			await joplin.workspace.onNoteSelectionChange(async function() {
-				await joplin.commands.execute('editor.execCommand', {
-					name: 'cm-enhanced-quote-marker',
-					args: []
-				});
-			});
 		}
 
 		if (enableLinkFolder) {
@@ -124,12 +118,6 @@ joplin.plugins.register({
 				'enhancement_link_folder',
 				'./driver/codemirror/linkFolder/index.js'
 			);
-			await joplin.workspace.onNoteSelectionChange(async function() {
-				await joplin.commands.execute('editor.execCommand', {
-					name: 'cm-enhanced-link-marker',
-					args: []
-				});
-			});
 		}
 	},
 });

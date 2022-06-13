@@ -47,8 +47,6 @@ module.exports = {
                         }
                         return false;
                     });
-
-                    CodeMirror.defineExtension('cm-enhanced-quote-marker', debounce(mathMarkerHelper.foldAll.bind(mathMarkerHelper), 50));
                 });
             },
             codeMirrorOptions: {'quoteFolder': true},
