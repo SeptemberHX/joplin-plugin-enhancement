@@ -2,9 +2,12 @@ import CMMarkerHelper from "../../../utils/CMMarkerHelper";
 import {debounce} from "ts-debounce";
 
 const ENHANCED_LINK_MARKER = 'enhancement-folded-link';
+const ENHANCED_LINK_MARKER_ICON = 'enhancement-folded-link-icon';
+const ENHANCED_LINK_MARKER_TEXT = 'enhancement-folded-link-text';
 const regexList = [
-    /(?<=((?<!\!)\[.*?\]))\((.*?)\)/g,
-]
+    // /(?<=((?<!\!)\[.*?\]))\((.*?)\)/g,
+    /(?<!\!)\[([^\[]*?)\]\(.*?\)/g
+];
 
 module.exports = {
     default: function (_context) {
@@ -14,9 +17,16 @@ module.exports = {
                     const mathMarkerHelper = new CMMarkerHelper(_context, cm, regexList, function (matched: string, regIndex: number) {
                         const markEl = document.createElement('span');
                         markEl.classList.add(ENHANCED_LINK_MARKER);
-                        markEl.classList.add('fa', 'fa-ellipsis-h', 'fa-xs');
+                        const iconEl = document.createElement('i');
+                        iconEl.classList.add(ENHANCED_LINK_MARKER_ICON, 'fas', 'fa-link');
+                        markEl.appendChild(iconEl);
+
+                        const textEl = document.createElement('span');
+                        textEl.classList.add(ENHANCED_LINK_MARKER_TEXT);
+                        markEl.appendChild(textEl);
+                        textEl.textContent = matched;
                         return markEl;
-                    }, ENHANCED_LINK_MARKER, {prefixLength: 1, suffixLength: 1}, function (line, lineTokens) {
+                    }, ENHANCED_LINK_MARKER, {prefixLength: 0, suffixLength: 0}, function (line, lineTokens) {
                         return true;
                     });
 

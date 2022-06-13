@@ -1,4 +1,10 @@
-span.enhancement-folded-link {
+.enhancement-folded-link {
+    color: rgba(0, 104, 218, 1);
+    text-decoration: underline;
+}
+
+i.enhancement-folded-link-icon {
     font-family: 'Font Awesome 5 Free' !important;
-    color: var(--joplin-color-faded);
+    font-size: small;
+    margin-right: 0.15em;
 }
