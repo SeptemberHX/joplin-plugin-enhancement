@@ -31,8 +31,9 @@ module.exports = {
                             token: function(stream, state) {
                                 if(stream.sol()){
                                     if(!state.isAdmonition) {
-                                        if (stream.match(new RegExp(token + admonitionTypes), false)) {
+                                        if (stream.match(new RegExp(token + "\\s*" + admonitionTypes), false)) {
                                             stream.eatWhile(single_token);
+                                            stream.eatWhile(' ');
                                             state.admonitionType = stream.match(new RegExp('^' + admonitionTypes))[0].toLowerCase();
                                             state.isAdmonition = true;
                                             return `line-admonition line-background-admonition line-background-header line-background-${state.admonitionType} admonition admonition-type ${state.admonitionType}`
