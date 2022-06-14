@@ -16,7 +16,7 @@ module.exports = {
         return {
             plugin: function (CodeMirror) {
                 CodeMirror.defineOption("quoteFolder", [], async function (cm, val, old) {
-                    const mathMarkerHelper = new CMMarkerHelper(_context, cm, regexList, function (match, regIndex: number) {
+                    const mathMarkerHelper = new CMMarkerHelper(_context, cm, regexList, function (match, regIndex: number, from, to) {
                         const markEl = document.createElement('span');
                         markEl.classList.add(ENHANCED_QUOTE_MARKER);
                         switch (regIndex) {
@@ -39,7 +39,7 @@ module.exports = {
                             markEl.style.cssText = 'color: darkgray;';
                         }
                         return markEl;
-                    }, ENHANCED_QUOTE_MARKER, {prefixLength: 1, suffixLength: 1}, function (line, lineTokens) {
+                    }, [ENHANCED_QUOTE_MARKER], {prefixLength: 1, suffixLength: 1}, function (line, lineTokens) {
                         for (const [tokenIndex, token] of lineTokens.entries()) {
                             if (token.type?.includes('quote')) {
                                 return true;
