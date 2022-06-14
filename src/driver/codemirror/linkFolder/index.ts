@@ -30,7 +30,7 @@ module.exports = {
         return {
             plugin: function (CodeMirror) {
                 CodeMirror.defineOption("enhancementLinkFolder", [], async function (cm, val, old) {
-                    const mathMarkerHelper = new CMMarkerHelper(_context, cm, regexList, function (matched: string, regIndex: number) {
+                    const mathMarkerHelper = new CMMarkerHelper(_context, cm, regexList, function (match, regIndex: number) {
                         if (regIndex === 0) {  // link
                             const markEl = document.createElement('span');
                             markEl.classList.add(ENHANCED_LINK_MARKER);
@@ -41,62 +41,62 @@ module.exports = {
                             const textEl = document.createElement('span');
                             textEl.classList.add(ENHANCED_LINK_MARKER_TEXT);
                             markEl.appendChild(textEl);
-                            textEl.textContent = matched;
+                            textEl.textContent = match[1];
                             return markEl;
                         } else if (regIndex === 1) {  // highlight
                             const markEl = document.createElement('span');
                             markEl.classList.add(ENHANCED_HIGHLIGHT_MARKER);
-                            markEl.textContent = matched;
+                            markEl.textContent = match[1];
                             markEl.style.cssText = 'background-color: var(--joplin-search-marker-background-color) !important;';
                             return markEl;
                         } else if (regIndex === 2) {  // insert
                             const markEl = document.createElement('span');
                             markEl.classList.add(ENHANCED_INSERT_MARKER);
-                            markEl.textContent = matched;
+                            markEl.textContent = match[1];
                             markEl.style.cssText = 'text-decoration: underline;';
                             return markEl;
                         } else if (regIndex === 3) {  // emphasis
                             const markEl = document.createElement('span');
                             markEl.classList.add(ENHANCED_EMPHASIS_MARKER);
-                            markEl.textContent = matched;
+                            markEl.textContent = match[1];
                             markEl.style.cssText = 'font-weight: bold;';
                             return markEl;
                         } else if (regIndex === 4) {  // strikethrough
                             const markEl = document.createElement('span');
                             markEl.classList.add(ENHANCED_STRIKETHROUGH_MARKER);
-                            markEl.textContent = matched;
+                            markEl.textContent = match[1];
                             markEl.style.cssText = 'text-decoration: line-through;';
                             return markEl;
                         } else if (regIndex === 5) {  // sub
                             const markEl = document.createElement('span');
                             markEl.classList.add(ENHANCED_SUB_MARKER);
-                            markEl.textContent = matched;
+                            markEl.textContent = match[1];
                             markEl.style.cssText = 'vertical-align: sub; font-size: smaller';
                             return markEl;
                         } else if (regIndex === 6) {  // sub
                             const markEl = document.createElement('span');
                             markEl.classList.add(ENHANCED_SUP_MARKER);
-                            markEl.textContent = matched;
+                            markEl.textContent = match[1];
                             markEl.style.cssText = 'vertical-align: super; font-size: smaller';
                             return markEl;
                         } else if (regIndex === 7) {  // italic
                             const markEl = document.createElement('span');
                             markEl.classList.add(ENHANCED_ITALIC_MARKER);
-                            markEl.textContent = matched;
+                            markEl.textContent = match[1];
                             markEl.style.cssText = 'font-style: italic;';
                             return markEl;
                         } else if (regIndex === 8) {  // headers
                             const markEl = document.createElement('span');
                             markEl.classList.add(ENHANCED_HEADER_MARKER, 'cm-header');
                             let startIndex = 0;
-                            for (let i = 0; i < matched.length; ++i) {
-                                if (matched[i] !== '#') {
+                            for (let i = 0; i < match[1].length; ++i) {
+                                if (match[1][i] !== '#') {
                                     startIndex = i;
                                     break;
                                 }
                             }
 
-                            markEl.textContent = matched.substr(startIndex).trim();
+                            markEl.textContent = match[1].substr(startIndex).trim();
                             markEl.classList.add(`cm-header-${startIndex}`);
                             return markEl;
                         }

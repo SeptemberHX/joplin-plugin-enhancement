@@ -5,7 +5,7 @@ import { debounce } from "ts-debounce";
 
 export default class CMMarkerHelper {
     lastCursor;
-    renderer: (matched: string, regIndex: number) => any;
+    renderer: (match, regIndex: number) => any;
     lineFilter: (line: string, lineToken: []) => boolean;
     options: {
         prefixLength: number,
@@ -83,7 +83,6 @@ export default class CMMarkerHelper {
 
                 const from = {line: lineNo, ch: match.index + this.options.prefixLength};
                 const to = {line: lineNo, ch: match.index + match[0].length - this.options.suffixLength};
-                let matched = match[1];
 
                 // not fold when the cursor is in the block
                 if (!(cursor.line === lineNo && cursor.ch >= from.ch - 1 && cursor.ch <= to.ch)) {
@@ -91,7 +90,7 @@ export default class CMMarkerHelper {
                         from,
                         to,
                         {
-                            replacedWith: this.renderer(matched, regIndex),
+                            replacedWith: this.renderer(match, regIndex),
                             handleMouseEvents: true,
                             className: this.MARKER_CLASS_NAME, // class name is not renderer in DOM
                         },

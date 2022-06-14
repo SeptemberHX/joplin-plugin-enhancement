@@ -16,13 +16,13 @@ module.exports = {
         return {
             plugin: function (CodeMirror) {
                 CodeMirror.defineOption("quoteFolder", [], async function (cm, val, old) {
-                    const mathMarkerHelper = new CMMarkerHelper(_context, cm, regexList, function (matched: string, regIndex: number) {
+                    const mathMarkerHelper = new CMMarkerHelper(_context, cm, regexList, function (match, regIndex: number) {
                         const markEl = document.createElement('span');
                         markEl.classList.add(ENHANCED_QUOTE_MARKER);
                         switch (regIndex) {
                             case 0:
                                 markEl.textContent = `■`;
-                                markEl.style.cssText = `color: ${matched}; font-size: large; vertical-align: middle;`
+                                markEl.style.cssText = `color: ${match[1]}; font-size: large; vertical-align: middle;`
                                 break;
                             case 1:
                                 markEl.classList.add('fas', 'fa-user', ENHANCED_QUOTE_MARKER_NAME);
