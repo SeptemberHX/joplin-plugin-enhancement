@@ -10,7 +10,7 @@ import {
     ENABLE_ADMONITION_CM_RENDER,
     ENABLE_FRONT_MATTER,
     ENABLE_COLORFUL_QUOTE,
-    ENABLE_INLINE_LIVE_PREVIEW,
+    ENABLE_INLINE_LIVE_PREVIEW, ENABLE_LINK_FOLDER,
 } from "./common";
 
 export namespace settings {
@@ -103,6 +103,15 @@ export namespace settings {
             type: SettingItemType.Bool,
             label: 'Enable hackmd style quote',
             description: "Render the quote with the given color [color=red], name [name=SeptemberHX], and date [date=20220202]. (requires restart)",
+        }
+
+        PLUGIN_SETTINGS[ENABLE_LINK_FOLDER] = {
+            value: true,
+            public: true,
+            section: SECTION,
+            type: SettingItemType.Bool,
+            label: 'Enable link folder',
+            description: "Fold your link for clean UI (requires restart)",
         }
 
         PLUGIN_SETTINGS[ENABLE_INLINE_LIVE_PREVIEW] = {

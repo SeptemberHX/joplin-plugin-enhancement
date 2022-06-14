@@ -7,4 +7,5 @@ export const ENABLE_PSEUDOCODE = 'enablePseudocode';
 export const ENABLE_ADMONITION_CM_RENDER = 'enableAdmonitionCmRender';
 export const ENABLE_FRONT_MATTER = 'enhancementEnableFrontMatter';
 export const ENABLE_COLORFUL_QUOTE = 'enhancementEnableColorfulQuote';
+export const ENABLE_LINK_FOLDER = 'enhancementEnableLinkFolder';
 export const ENABLE_INLINE_LIVE_PREVIEW = 'enhancementInlineLivePreview';

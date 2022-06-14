@@ -2,23 +2,22 @@
 
 import { debounce } from "ts-debounce";
 
+interface MarkerMatch {
+    regIndex: number;
+    match;
+}
 
 export default class CMMarkerHelper {
     lastCursor;
-    renderer: (match, regIndex: number, from, to) => any;
+    renderer: (match, regIndex: number, from, to, innerDomEleCopy, lastMatchFrom, lastMatchTo) => any;
     lineFilter: (line: string, lineToken: []) => boolean;
-    options: {
-        prefixLength: number,
-        suffixLength: number
-    };
     regexList;
     MARKER_CLASS_NAMES: string[];
 
-    constructor(private readonly context, private readonly editor, regexList, renderer, MARKER_CLASS_NAMES, options, lineFilter?) {
+    constructor(private readonly context, private readonly editor, regexList, renderer, MARKER_CLASS_NAMES, lineFilter?) {
         this.regexList = regexList;
         this.renderer = renderer;
         this.lineFilter = lineFilter;
-        this.options = options;
         this.MARKER_CLASS_NAMES = MARKER_CLASS_NAMES;
         setTimeout(this.init.bind(this), 100);
     }
@@ -40,15 +39,19 @@ export default class CMMarkerHelper {
         const doc = this.editor.getDoc();
         let fromLine = Math.min(this.lastCursor.line, cursor.line);
         let toLine = Math.max(this.lastCursor.line, cursor.line);
-        this.foldBetweenLines(doc, fromLine, toLine, cursor);
+        this.foldBetweenLines(doc, fromLine, toLine + 1, cursor);
 
         this.lastCursor = cursor;
     }
 
     private foldBetweenLines(doc, fromLine, toLine, currentCursor) {
         this.editor.operation(function () {
-            for (let lineNo = fromLine; lineNo <= toLine; ++lineNo) {
+            for (let lineNo = fromLine; lineNo < toLine; ++lineNo) {
                 const line = doc.getLine(lineNo);
+                if (!line) {
+                    continue;
+                }
+
                 const lineTokens = this.editor.getLineTokens(lineNo);
                 if (this.lineFilter) {
                     if (!this.lineFilter(line, lineTokens)) {
@@ -56,18 +59,60 @@ export default class CMMarkerHelper {
                     }
                 }
 
-                // todo: 需要大改这块逻辑。由于会有嵌套的情况存在，需要从里到外排序处理才行
-                //  比如 ==Hello, **World**== 需要先处理 **World**，同时保存起止位置，复制 replacedWith 的 dom 节点数据
-                //  然后在处理 == == 的时候，在 ** ** 范围内，直接使用已有的 dom 节点数据替代
+                // to process the situations like ==Hello **World**== correctly
+                //   we need to get all match and process with specific orders
+                let lineMatches: MarkerMatch[] = [];
                 for (let regIndex = 0; regIndex < this.regexList.length; ++regIndex) {
-                    let match = this.regexList[regIndex].exec(line);
-                    while (match) {
-                        this.foldByMatch(doc, lineNo, currentCursor, match, regIndex);
-                        match = this.regexList[regIndex].exec(line);
+                    for (const match of line.matchAll(this.regexList[regIndex])) {
+                        lineMatches.push({
+                            regIndex: regIndex,
+                            match: match
+                        });
                     }
+                }
+
+                // sort all the matches according to the matched from index
+                lineMatches.sort(function (a, b) {
+                    if (a.match.index < b.match.index) {
+                        return -1;
+                    } else if (a.match.index > b.match.index) {
+                        return 1;
+                    } else {  // it should be impossible, otherwise there exist conflicts in the regList.
+                        return 0;
+                    }
+                })
+
+                // process independent matches separately: ==Hello, **world**==!, *Cheers*
+                //                                         |     part 1        |  part 2 |
+                let startIndex = 0;
+                for (let currIndex = 1; currIndex < lineMatches.length; ++currIndex) {
+                    if (lineMatches[currIndex].match.index >=
+                        lineMatches[startIndex].match.index + lineMatches[startIndex].match[0].length) {
+                        this.processGroupedMatch(lineMatches.slice(startIndex, currIndex), doc, lineNo, currentCursor);
+                        startIndex = currIndex;
+                    }
+                }
+                if (startIndex < lineMatches.length) {
+                    this.processGroupedMatch(lineMatches.slice(startIndex, lineMatches.length), doc, lineNo, currentCursor);
                 }
             }
         }.bind(this));
+    }
+
+    /*
+     * The matches [1:] should be contained in the matches[0]
+     */
+    private processGroupedMatch(markerMatches: MarkerMatch[], doc, lineNo, cursor) {
+        // we need to process from inside out, which means we need to process them in reverse order
+        let innerDomEleCopy = null;
+        let lastMatchFrom = null;
+        let lastMatchTo = null;
+        for (let currIndex = markerMatches.length - 1; currIndex >= 0; --currIndex) {
+            const markerMatch = markerMatches[currIndex];
+            innerDomEleCopy = this.foldByMatch(doc, lineNo, cursor, markerMatch.match, markerMatch.regIndex, innerDomEleCopy, lastMatchFrom, lastMatchTo);
+            lastMatchFrom = markerMatch.match.index;
+            lastMatchTo = markerMatch.match.index + markerMatch.match[0].length;
+        }
     }
 
     public foldAll() {
@@ -77,7 +122,7 @@ export default class CMMarkerHelper {
         this.foldBetweenLines(doc, 0, doc.lineCount(), cursor);
     }
 
-    private foldByMatch(doc, lineNo, cursor, match, regIndex) {
+    private foldByMatch(doc, lineNo, cursor, match, regIndex, innerDomEleCopy, lastMatchFrom, lastMatchTo) {
         if (match) {
             // not fold when it is folded ?
             this.editor.findMarksAt({line: lineNo, ch: match.index}).find((marker) => {
@@ -86,30 +131,33 @@ export default class CMMarkerHelper {
                 }
             });
 
-            const from = {line: lineNo, ch: match.index + this.options.prefixLength};
-            const to = {line: lineNo, ch: match.index + match[0].length - this.options.suffixLength};
+            const from = {line: lineNo, ch: match.index};
+            const to = {line: lineNo, ch: match.index + match[0].length};
 
             // not fold when the cursor is in the block
             if (!(cursor.line === lineNo && cursor.ch >= from.ch - 1 && cursor.ch <= to.ch)) {
+                const element = this.renderer(match, regIndex, from, to, innerDomEleCopy, lastMatchFrom, lastMatchTo);
                 doc.markText(
                     from,
                     to,
                     {
-                        replacedWith: this.renderer(match, regIndex, from, to),
+                        replacedWith: element,
                         handleMouseEvents: true,
                         className: this.MARKER_CLASS_NAMES[regIndex], // class name is not renderer in DOM
                     },
                 );
+                return element.cloneNode(true);
             }
         }
+        return null;
     }
 
     private unfoldAtCursor() {
         const cursor = this.editor.getCursor();
-        const markers = this.editor.findMarksAt(cursor);
+        const markers = this.editor.findMarksAt({line: cursor.line, ch: cursor.ch});
 
         for (const marker of markers) {
-            if (marker.className in this.MARKER_CLASS_NAMES) {
+            if (this.MARKER_CLASS_NAMES.includes(marker.className)) {
                 marker.clear();
             }
         }
