@@ -2,7 +2,7 @@ import joplin from 'api';
 import {ContentScriptType, ToolbarButtonLocation} from "api/types";
 import {settings} from "./settings";
 import {
-	ENABLE_ADMONITION_CM_RENDER, ENABLE_INLINE_LIVE_PREVIEW, ENABLE_COLORFUL_QUOTE, ENABLE_FRONT_MATTER,
+	ENABLE_ADMONITION_CM_RENDER, ENABLE_COLORFUL_QUOTE, ENABLE_FRONT_MATTER,
 	ENABLE_IMAGE_ENHANCEMENT,
 	ENABLE_LOCAL_PDF_PREVIEW,
 	ENABLE_MERMAID_FOLDER,
@@ -25,7 +25,6 @@ joplin.plugins.register({
 		const enableFrontMatter = await joplin.settings.value(ENABLE_FRONT_MATTER);
 		const enableColorfulQuote = await joplin.settings.value(ENABLE_COLORFUL_QUOTE);
 		const enableLinkFolder = await joplin.settings.value(ENABLE_LINK_FOLDER);
-		const enableLivePreview = await joplin.settings.value(ENABLE_INLINE_LIVE_PREVIEW);
 
 		if (enableImageEnhancement) {
 			await joplin.contentScripts.register(
@@ -118,14 +117,6 @@ joplin.plugins.register({
 				ContentScriptType.CodeMirrorPlugin,
 				'enhancement_link_folder',
 				'./driver/codemirror/linkFolder/index.js'
-			);
-		}
-
-		if (enableLivePreview) {
-			await joplin.contentScripts.register(
-				ContentScriptType.CodeMirrorPlugin,
-				'enhancement_link_folder',
-				'./driver/codemirror/livePreview/index.js'
 			);
 		}
 	},
