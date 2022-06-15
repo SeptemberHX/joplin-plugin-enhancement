@@ -109,8 +109,8 @@ export namespace settings {
             public: true,
             section: SECTION,
             type: SettingItemType.Bool,
-            label: 'Enable link folder',
-            description: "Fold your link for clean UI (requires restart)",
+            label: 'Enable link & image folder',
+            description: "Fold your link & image for clean UI (requires restart)",
         }
 
         await joplin.settings.registerSettings(PLUGIN_SETTINGS);

@@ -1,10 +1,16 @@
-.enhancement-folded-link {
+.enhancement-link-marker, .enhancement-image-marker {
     color: rgba(0, 104, 218, 1);
     text-decoration: underline;
 }
 
-i.enhancement-folded-link-icon {
+i.enhancement-link-marker-icon, i.enhancement-image-marker-icon {
     font-family: 'Font Awesome 5 Free' !important;
     font-size: small;
-    margin-right: 0.15em;
+    margin-right: 0.2em;
+}
+
+span.enhancement-image-size-text {
+    color: gray;
+    font-size: smaller;
+    margin-left: 0.2em;
 }

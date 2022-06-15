@@ -25,7 +25,7 @@ export default class CMMarkerHelper {
     private async init() {
         await this.foldAll();
         this.editor.on('cursorActivity', this.unfoldAtCursor.bind(this));
-        this.editor.on('cursorActivity', debounce(this.onCursorActivity.bind(this), 200));
+        this.editor.on('cursorActivity', debounce(this.onCursorActivity.bind(this), 100));
         this.editor.on('change', function (cm, changeObjs) {
             if (changeObjs.origin === 'setValue') {
                 this.foldAll();
