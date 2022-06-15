@@ -1,4 +1,5 @@
 import CMMarkerHelper from "../../../utils/CMMarkerHelper";
+import clickAndClear from "../../../utils/click-and-clear";
 
 const ENHANCED_LINK_MARKER = 'enhancement-link-marker';
 const ENHANCED_IMAGE_MARKER = 'enhancement-image-marker';
@@ -36,7 +37,18 @@ module.exports = {
                             const textEl = document.createElement('span');
                             textEl.classList.add(ENHANCED_LINK_MARKER_TEXT);
                             markEl.appendChild(textEl);
-                            textEl.textContent = match[1];
+
+                            let regularLinkCaption = match[1];
+                            regularLinkCaption = regularLinkCaption.replace(/\*\*([^*]+?)\*\*/g, '<strong>$1</strong>')
+                            regularLinkCaption = regularLinkCaption.replace(/__([^_]+?)__/g, '<strong>$1</strong>')
+                            regularLinkCaption = regularLinkCaption.replace(/\*([^*]+?)\*/g, '<em>$1</em>')
+                            regularLinkCaption = regularLinkCaption.replace(/\s_([^_]+?)_/g, ' <em>$1</em>')
+                            regularLinkCaption = regularLinkCaption.replace(/^_([^_]+?)_/, '<em>$1</em>')
+                            regularLinkCaption = regularLinkCaption.replace(/~~([^~]+?)~~/g, '<del>$1</del>')
+                            regularLinkCaption = regularLinkCaption.replace(/`([^`]+?)`/g, '<code>$1</code>')
+                            regularLinkCaption = regularLinkCaption.replace(/==([^=]+?)==/g, '<mark>$1</mark>')
+                            regularLinkCaption = regularLinkCaption.replace(/\+\+([^\+]+?)\+\+/g, '<ins>$1</ins>')
+                            textEl.innerHTML = regularLinkCaption;
                         } else if (regIndex === 1) {
                             markEl.classList.add(ENHANCED_IMAGE_MARKER);
                             const iconEl = document.createElement('i');

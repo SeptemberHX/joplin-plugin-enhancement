@@ -1,6 +1,7 @@
 // implemented according to https://github.com/ylc395/joplin-plugin-note-link-system/blob/main/src/driver/codeMirror/UrlFolder.ts
 
 import { debounce } from "ts-debounce";
+import clickAndClear from "./click-and-clear";
 
 interface MarkerMatch {
     regIndex: number;
@@ -24,7 +25,7 @@ export default class CMMarkerHelper {
 
     private async init() {
         await this.foldAll();
-        this.editor.on('cursorActivity', this.unfoldAtCursor.bind(this));
+        // this.editor.on('cursorActivity', this.unfoldAtCursor.bind(this));
         this.editor.on('cursorActivity', debounce(this.onCursorActivity.bind(this), 100));
         this.editor.on('change', function (cm, changeObjs) {
             if (changeObjs.origin === 'setValue') {
@@ -137,15 +138,23 @@ export default class CMMarkerHelper {
             // not fold when the cursor is in the block
             if (!(cursor.line === lineNo && cursor.ch >= from.ch - 1 && cursor.ch <= to.ch)) {
                 const element = this.renderer(match, regIndex, from, to, innerDomEleCopy, lastMatchFrom, lastMatchTo);
-                doc.markText(
+                const textMarker = doc.markText(
                     from,
                     to,
                     {
                         replacedWith: element,
                         handleMouseEvents: true,
                         className: this.MARKER_CLASS_NAMES[regIndex], // class name is not renderer in DOM
+                        clearOnEnter: true,
+                        inclusiveLeft: false,
+                        inclusiveRight: false
                     },
                 );
+
+                element.onclick = (e) => {
+                    clickAndClear(textMarker, this.editor)(e);
+                };
+
                 return element.cloneNode(true);
             }
         }
