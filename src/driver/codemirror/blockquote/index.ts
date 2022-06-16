@@ -31,8 +31,6 @@ module.exports = {
                                 markEl.classList.add('fas', 'fa-clock', ENHANCED_QUOTE_MARKER_DATE);
                                 break;
                             default:
-                                console.log(regIndex);
-                                console.log(regIndex === 2);
                                 break;
                         }
                         if (regIndex !== 0) {
