@@ -1,6 +1,6 @@
 // code from https://github.com/codemirror/CodeMirror/pull/6426/files
 
-const admonitionTypes = '(note|abstract|info|tip|success|question|warning|failure|danger|bug|example|quote\"|NOTE|ABSTRACT|INFO|TIP|SUCCESS|QUESTION|WARNING|FAILURE|DANGER|BUG|EXAMPLE|QUOTE")';
+const admonitionTypes = '(note|abstract|info|tip|success|question|warning|failure|danger|bug|example|quote|NOTE|ABSTRACT|INFO|TIP|SUCCESS|QUESTION|WARNING|FAILURE|DANGER|BUG|EXAMPLE|QUOTE)';
 
 module.exports = {
     default: function(_context) {
