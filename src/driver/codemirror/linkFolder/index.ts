@@ -3,9 +3,12 @@ import clickAndClear from "../../../utils/click-and-clear";
 
 const ENHANCED_LINK_MARKER = 'enhancement-link-marker';
 const ENHANCED_IMAGE_MARKER = 'enhancement-image-marker';
+const ENHANCED_FOOTNOTE_MARKER = 'enhancement-footnote-marker';
 
 const ENHANCED_LINK_MARKER_ICON = 'enhancement-link-marker-icon';
 const ENHANCED_LINK_MARKER_TEXT = 'enhancement-link-marker-text';
+
+const ENHANCED_FOOTNOTE_MARKER_TEXT = 'enhancement-footnote-marker-text';
 
 const ENHANCED_IMAGE_MARKER_ICON = 'enhancement-image-marker-icon';
 const ENHANCED_IMAGE_MARKER_TEXT = 'enhancement-image-marker-text';
@@ -13,12 +16,14 @@ const ENHANCED_IMAGE_SIZE_TEXT = 'enhancement-image-size-text';
 
 const ENHANCED_MARKER_LIST = [
     ENHANCED_LINK_MARKER,
-    ENHANCED_IMAGE_MARKER
+    ENHANCED_IMAGE_MARKER,
+    ENHANCED_FOOTNOTE_MARKER
 ];
 
 const regexList = [
     /(?<!\!)\[([^\[]*?)\]\(.*?\)/g,                 // link
     /\!\[([^\[]*?)\]\(.*?\)(\{.*?\})?/g,            // image
+    /(?<!(^\s*))\[\^(.*?)\]/g,                      // footnote
 ];
 
 module.exports = {
@@ -66,6 +71,12 @@ module.exports = {
                                 sizeEl.textContent = match[2].substr(1, match[2].length - 2);
                                 markEl.appendChild(sizeEl);
                             }
+                        } else if (regIndex === 2) {
+                            markEl.classList.add(ENHANCED_FOOTNOTE_MARKER);
+                            const textEl = document.createElement('span');
+                            textEl.classList.add(ENHANCED_FOOTNOTE_MARKER_TEXT);
+                            textEl.textContent = match[2];
+                            markEl.appendChild(textEl);
                         }
 
                         const typesStr = cm.getTokenTypeAt(from);
@@ -77,11 +88,11 @@ module.exports = {
 
                         return markEl;
                     }, ENHANCED_MARKER_LIST, function (line, lineTokens) {
-                        for (const [tokenIndex, token] of lineTokens.entries()) {
-                            if (token.type?.includes('katex')) {
-                                return false;
-                            }
-                        }
+                        // for (const [tokenIndex, token] of lineTokens.entries()) {
+                        //     if (token.type?.includes('katex')) {
+                        //         return false;
+                        //     }
+                        // }
                         return true;
                     });
                 });

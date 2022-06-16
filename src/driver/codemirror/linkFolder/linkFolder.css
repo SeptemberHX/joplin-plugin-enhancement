@@ -14,3 +14,11 @@ span.enhancement-image-size-text {
     font-size: smaller;
     margin-left: 0.2em;
 }
+
+.enhancement-footnote-marker {
+    font-size: smaller;
+    background-color: lightgrey;
+    vertical-align: super;
+    border-radius: 3px;
+    padding: 0px 2px;
+}
