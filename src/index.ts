@@ -8,7 +8,7 @@ import {
 	ENABLE_MERMAID_FOLDER,
 	ENABLE_PSEUDOCODE,
 	ENABLE_QUICK_COMMANDS,
-	ENABLE_TABLE_FORMATTER, ENABLE_LINK_FOLDER,
+	ENABLE_TABLE_FORMATTER, ENABLE_LINK_FOLDER, ENABLE_EDITOR_MATH,
 } from "./common";
 
 joplin.plugins.register({
@@ -25,6 +25,7 @@ joplin.plugins.register({
 		const enableFrontMatter = await joplin.settings.value(ENABLE_FRONT_MATTER);
 		const enableColorfulQuote = await joplin.settings.value(ENABLE_COLORFUL_QUOTE);
 		const enableLinkFolder = await joplin.settings.value(ENABLE_LINK_FOLDER);
+		const enableMathRender = await joplin.settings.value(ENABLE_EDITOR_MATH);
 
 		if (enableImageEnhancement) {
 			await joplin.contentScripts.register(
@@ -117,6 +118,14 @@ joplin.plugins.register({
 				ContentScriptType.CodeMirrorPlugin,
 				'enhancement_link_folder',
 				'./driver/codemirror/linkFolder/index.js'
+			);
+		}
+
+		if (enableMathRender) {
+			await joplin.contentScripts.register(
+				ContentScriptType.CodeMirrorPlugin,
+				'enhancement_math_render',
+				'./driver/codemirror/math/index.js'
 			);
 		}
 	},
