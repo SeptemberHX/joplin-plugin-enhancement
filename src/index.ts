@@ -118,6 +118,18 @@ joplin.plugins.register({
 				'enhancement_link_folder',
 				'./driver/codemirror/linkFolder/index.js'
 			);
+
+			await joplin.contentScripts.onMessage(
+				'enhancement_link_folder',
+				async (msg) => {
+					console.log(msg);
+					if (msg.startsWith(':/')) {
+						return await joplin.data.resourcePath(msg.substr(2));
+					} else {
+						return msg;
+					}
+				}
+			);
 		}
 	},
 });
