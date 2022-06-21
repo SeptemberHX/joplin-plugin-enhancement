@@ -1,4 +1,4 @@
-import CMMarkerHelper from "../../../utils/CMMarkerHelper";
+import CMInlineMarkerHelper from "../../../utils/CMInlineMarkerHelper";
 import {debounce} from "ts-debounce";
 
 const ENHANCED_QUOTE_MARKER = 'enhancement-folded-blockquotes';
@@ -16,7 +16,7 @@ module.exports = {
         return {
             plugin: function (CodeMirror) {
                 CodeMirror.defineOption("quoteFolder", [], async function (cm, val, old) {
-                    const mathMarkerHelper = new CMMarkerHelper(_context, cm, regexList, function (match, regIndex: number, from, to, innerDomEleCopy, lastMatchFrom, lastMatchTo) {
+                    const mathMarkerHelper = new CMInlineMarkerHelper(_context, cm, regexList, function (match, regIndex: number, from, to, innerDomEleCopy, lastMatchFrom, lastMatchTo) {
                         const markEl = document.createElement('span');
                         markEl.classList.add(ENHANCED_QUOTE_MARKER);
                         switch (regIndex) {

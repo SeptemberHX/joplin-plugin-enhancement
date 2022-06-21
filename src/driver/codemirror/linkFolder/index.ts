@@ -1,5 +1,4 @@
-import CMMarkerHelper from "../../../utils/CMMarkerHelper";
-import clickAndClear from "../../../utils/click-and-clear";
+import CMInlineMarkerHelper from "../../../utils/CMInlineMarkerHelper";
 
 const ENHANCED_LINK_MARKER = 'enhancement-link-marker';
 const ENHANCED_IMAGE_MARKER = 'enhancement-image-marker';
@@ -22,7 +21,7 @@ const ENHANCED_MARKER_LIST = [
 
 const regexList = [
     /(?<!\!)\[([^\[]*?)\]\(.*?\)/g,                 // link
-    /\!\[([^\[]*?)\]\(.*?\)(\{.*?\})?/g,            // image
+    /\!\[([^\[]*?)\]\((.*?)\)(\{.*?\})?/g,            // image
     /(?<!(^\s*))\[\^(.*?)\]/g,                      // footnote
 ];
 
@@ -31,7 +30,7 @@ module.exports = {
         return {
             plugin: function (CodeMirror) {
                 CodeMirror.defineOption("enhancementLinkFolder", [], async function (cm, val, old) {
-                    const mathMarkerHelper = new CMMarkerHelper(_context, cm, regexList, function (match, regIndex: number, from, to, innerDomEleCopy, lastMatchFrom, lastMatchTo) {
+                    const mathMarkerHelper = new CMInlineMarkerHelper(_context, cm, regexList, async function (match, regIndex: number, from, to, innerDomEleCopy, lastMatchFrom, lastMatchTo) {
                         const markEl = document.createElement('span');
                         if (regIndex === 0) {  // link
                             markEl.classList.add(ENHANCED_LINK_MARKER);
@@ -65,11 +64,55 @@ module.exports = {
                             textEl.textContent = match[1];
                             markEl.appendChild(textEl);
 
-                            if (match[2]) {
+                            if (match[3]) {
                                 const sizeEl = document.createElement('span');
                                 sizeEl.classList.add(ENHANCED_IMAGE_SIZE_TEXT);
-                                sizeEl.textContent = match[2].substr(1, match[2].length - 2);
+                                sizeEl.textContent = match[3].substr(1, match[3].length - 2);
                                 markEl.appendChild(sizeEl);
+                            }
+
+                            if (match[2]) {
+                                const imageEl = document.createElement('img');
+                                console.log(match[2]);
+                                imageEl.src = await _context.postMessage(match[2]);
+                                imageEl.style.maxWidth = '100%';
+                                imageEl.style.margin = 'auto';
+                                imageEl.style.display = 'block';
+                                markEl.appendChild(imageEl);
+
+                                if (match[3]) {
+                                    const sizeStr = match[3].substr(1, match[3].length - 2);
+                                    let width, height;
+                                    let widthReg = /width=(\d+)/;
+                                    let widthResult = sizeStr.match(widthReg);
+                                    if (widthResult && widthResult.length >= 2) {
+                                        width = widthResult[1];
+                                        const nextIndex = widthResult.from + widthResult.length + 1;
+                                        if (nextIndex < sizeStr.length && sizeStr[nextIndex] == 0x25/* % */) {
+                                            width += '%';
+                                        } else {
+                                            width += 'px';
+                                        }
+                                    }
+                                    if (width) {
+                                        imageEl.style.width = width;
+                                    }
+
+                                    let heightReg = /height=(\d+)/;
+                                    let heightResult = sizeStr.match(heightReg);
+                                    if (heightResult && heightResult.length >= 2) {
+                                        height = heightResult[1];
+                                        const nextIndex = heightResult.from + heightResult.length + 1;
+                                        if (nextIndex < sizeStr.length && sizeStr[nextIndex] == 0x25/* % */) {
+                                            height += '%';
+                                        } else {
+                                            height += 'px';
+                                        }
+                                    }
+                                    if (height) {
+                                        imageEl.style.height = height;
+                                    }
+                                }
                             }
                         } else if (regIndex === 2) {
                             markEl.classList.add(ENHANCED_FOOTNOTE_MARKER);
