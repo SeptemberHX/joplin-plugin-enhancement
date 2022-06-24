@@ -324,7 +324,7 @@ export function searchReplace(CodeMirror) {
                 cursor = cm.getDoc().getCursor();
                 value = cm.getDoc().getValue();
                 value = value.replace(reg, to);
-                
+
                 cm.getDoc().setValue(value);
                 cm.getDoc().setCursor(cursor);
             }
