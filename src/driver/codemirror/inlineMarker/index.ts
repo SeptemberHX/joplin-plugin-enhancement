@@ -23,7 +23,7 @@ module.exports = {
                             } else if (match && match.index === stream.pos) {
                                 // advance
                                 stream.pos += match[0].length || 1;
-                                return `editor-marker-keyword`;
+                                return `editor-marker-keyword editor-marker-keyword-${match[0].substr(0, match[0].length - 2)}`;
                             } else if (match) {
                                 // jump to the next match
                                 stream.pos = match.index;
