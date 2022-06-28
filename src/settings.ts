@@ -9,7 +9,7 @@ import {
     ENABLE_PSEUDOCODE,
     ENABLE_ADMONITION_CM_RENDER,
     ENABLE_FRONT_MATTER,
-    ENABLE_COLORFUL_QUOTE, ENABLE_LINK_FOLDER, ENABLE_SEARCH_REPLACE,
+    ENABLE_COLORFUL_QUOTE, ENABLE_LINK_FOLDER, ENABLE_SEARCH_REPLACE, ENABLE_INLINE_MARKER,
 } from "./common";
 
 export namespace settings {
@@ -120,6 +120,15 @@ export namespace settings {
             type: SettingItemType.Bool,
             label: 'Enable Search & Replace in note editor',
             description: "It will take over the original Ctrl/Cmd + F behavior with top-right search & replace widget (requires restart)",
+        }
+
+        PLUGIN_SETTINGS[ENABLE_INLINE_MARKER] = {
+            value: false,
+            public: true,
+            section: SECTION,
+            type: SettingItemType.Bool,
+            label: 'Enable inline marker in note editor and pdf',
+            description: "[tag::content] (requires restart)",
         }
 
         await joplin.settings.registerSettings(PLUGIN_SETTINGS);

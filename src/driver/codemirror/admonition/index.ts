@@ -1,5 +1,7 @@
 // code from https://github.com/codemirror/CodeMirror/pull/6426/files
 
+import {exec} from "../../../utils/reg";
+
 const admonitionTypes = '(note|abstract|info|tip|success|question|warning|failure|danger|bug|example|quote|NOTE|ABSTRACT|INFO|TIP|SUCCESS|QUESTION|WARNING|FAILURE|DANGER|BUG|EXAMPLE|QUOTE)';
 
 module.exports = {
@@ -131,9 +133,4 @@ module.exports = {
             }
         }
     },
-}
-
-function exec(query: RegExp, stream: any) {
-    query.lastIndex = stream.pos;
-    return query.exec(stream.string);
 }

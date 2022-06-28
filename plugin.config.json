@@ -18,6 +18,7 @@
 		"driver/codemirror/admonition/index.ts",
 		"driver/codemirror/blockquote/index.ts",
 		"driver/codemirror/linkFolder/index.ts",
-		"driver/codemirror/searchReplace/index.ts"
+		"driver/codemirror/searchReplace/index.ts",
+		"driver/codemirror/inlineMarker/index.ts"
 	]
 }

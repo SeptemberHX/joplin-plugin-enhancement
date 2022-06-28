@@ -8,7 +8,7 @@ import {
 	ENABLE_MERMAID_FOLDER,
 	ENABLE_PSEUDOCODE,
 	ENABLE_QUICK_COMMANDS,
-	ENABLE_TABLE_FORMATTER, ENABLE_LINK_FOLDER, ENABLE_SEARCH_REPLACE,
+	ENABLE_TABLE_FORMATTER, ENABLE_LINK_FOLDER, ENABLE_SEARCH_REPLACE, ENABLE_INLINE_MARKER,
 } from "./common";
 
 joplin.plugins.register({
@@ -26,6 +26,7 @@ joplin.plugins.register({
 		const enableColorfulQuote = await joplin.settings.value(ENABLE_COLORFUL_QUOTE);
 		const enableLinkFolder = await joplin.settings.value(ENABLE_LINK_FOLDER);
 		const enableSearchReplace = await joplin.settings.value(ENABLE_SEARCH_REPLACE);
+		const enableInlineMarker = await joplin.settings.value(ENABLE_INLINE_MARKER);
 
 		if (enableImageEnhancement) {
 			await joplin.contentScripts.register(
@@ -138,6 +139,14 @@ joplin.plugins.register({
 				ContentScriptType.CodeMirrorPlugin,
 				'enhancement_search_replace',
 				'./driver/codemirror/searchReplace/index.js'
+			);
+		}
+
+		if (enableInlineMarker) {
+			await joplin.contentScripts.register(
+				ContentScriptType.CodeMirrorPlugin,
+				'enhancement_inline_marker',
+				'./driver/codemirror/inlineMarker/index.js'
 			);
 		}
 	},

@@ -1,0 +1,19 @@
+.cm-editor-marker-revisit {
+    padding: 3px 4px;
+    background-color: antiquewhite;
+    border-radius: 2px;
+}
+
+.cm-editor-marker-rewrite {
+    padding: 3px 4px;
+    background-color: #fceaee;
+    border-radius: 2px;
+}
+
+.cm-editor-marker-keyword {
+    color: red !important;
+    font-weight: bold;
+    padding: 0 0 0.8em 0;
+    vertical-align: super;
+    font-size: smaller;
+}
