@@ -14,12 +14,14 @@ export default class CMInlineMarkerHelper {
     lineFilter: (line: string, lineToken: []) => boolean;
     regexList;
     MARKER_CLASS_NAMES: string[];
+    onclick?;
 
-    constructor(private readonly context, private readonly editor, regexList, renderer, MARKER_CLASS_NAMES, lineFilter?) {
+    constructor(private readonly context, private readonly editor, regexList, renderer, MARKER_CLASS_NAMES, lineFilter?, onclick?) {
         this.regexList = regexList;
         this.renderer = renderer;
         this.lineFilter = lineFilter;
         this.MARKER_CLASS_NAMES = MARKER_CLASS_NAMES;
+        this.onclick = onclick;
         setTimeout(this.init.bind(this), 100);
     }
 
@@ -152,6 +154,11 @@ export default class CMInlineMarkerHelper {
                 );
 
                 element.onclick = (e) => {
+                    if (this.onclick && this.onclick(match, regIndex, e)) {
+                        console.log('========> In click');
+                        return;
+                    }
+                    console.log('===========> Click without meta key');
                     clickAndClear(textMarker, this.editor)(e);
                 };
 

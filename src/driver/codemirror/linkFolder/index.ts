@@ -20,7 +20,7 @@ const ENHANCED_MARKER_LIST = [
 ];
 
 const regexList = [
-    /(?<!\!)\[([^\[]*?)\]\(.*?\)/g,                 // link
+    /(?<!\!)\[([^\[]*?)\]\((.*?)\)/g,                 // link
     /\!\[([^\[]*?)\]\((.*?)\)(\{.*?\})?/g,            // image
     /(?<!(^\s*))\[\^(.*?)\]/g,                      // footnote
 ];
@@ -137,6 +137,35 @@ module.exports = {
                         //     }
                         // }
                         return true;
+                    }, function (match, regIndex, e) {
+                        if (regIndex !== 0) {
+                            return false;
+                        }
+
+                        // Only open while either Ctrl or Cmd is pressed.
+                        let darwinCmd = process.platform === 'darwin' && e.metaKey
+                        let otherCtrl = process.platform !== 'darwin' && e.ctrlKey
+
+                        console.log('======================');
+
+                        if (darwinCmd || otherCtrl) {
+                            e.preventDefault()
+
+                            console.log('=------============------=', match[2])
+
+                            // On ALT-Clicks, use the callback to have the user decide
+                            // what should happen when they click on links, defined
+                            // in the markdownOnLinkOpen option.
+                            postMessage({
+                                target: 'main',
+                                name: match[2],
+                                args: [{
+                                    resourceId: ''
+                                }]
+                            }, '*');
+                            return true;
+                        }
+                        return false;
                     });
                 });
             },
