@@ -1,5 +1,7 @@
 # Joplin Plugin Enhancement
 
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/septemberhx)
+
 > Generate from the Joplin plugin template: https://joplinapp.org/api/get_started/plugins/
 
 It contains several enhancement for both codemirror and markdown renderer.
