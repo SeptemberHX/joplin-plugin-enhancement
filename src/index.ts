@@ -2,13 +2,19 @@ import joplin from 'api';
 import {ContentScriptType, ToolbarButtonLocation} from "api/types";
 import {settings} from "./settings";
 import {
-	ENABLE_ADMONITION_CM_RENDER, ENABLE_COLORFUL_QUOTE, ENABLE_FRONT_MATTER,
+	ENABLE_ADMONITION_CM_RENDER,
+	ENABLE_COLORFUL_QUOTE,
+	ENABLE_FOCUS_MODE,
+	ENABLE_FRONT_MATTER,
 	ENABLE_IMAGE_ENHANCEMENT,
+	ENABLE_INLINE_MARKER,
+	ENABLE_LINK_FOLDER,
 	ENABLE_LOCAL_PDF_PREVIEW,
 	ENABLE_MERMAID_FOLDER,
 	ENABLE_PSEUDOCODE,
 	ENABLE_QUICK_COMMANDS,
-	ENABLE_TABLE_FORMATTER, ENABLE_LINK_FOLDER, ENABLE_SEARCH_REPLACE, ENABLE_INLINE_MARKER,
+	ENABLE_SEARCH_REPLACE,
+	ENABLE_TABLE_FORMATTER,
 } from "./common";
 
 joplin.plugins.register({
@@ -27,6 +33,7 @@ joplin.plugins.register({
 		const enableLinkFolder = await joplin.settings.value(ENABLE_LINK_FOLDER);
 		const enableSearchReplace = await joplin.settings.value(ENABLE_SEARCH_REPLACE);
 		const enableInlineMarker = await joplin.settings.value(ENABLE_INLINE_MARKER);
+		const enableFocusMode = await joplin.settings.value(ENABLE_FOCUS_MODE);
 
 		if (enableImageEnhancement) {
 			await joplin.contentScripts.register(
@@ -148,6 +155,30 @@ joplin.plugins.register({
 				'enhancement_inline_marker',
 				'./driver/codemirror/inlineMarker/index.js'
 			);
+		}
+
+		if (enableFocusMode) {
+			await joplin.contentScripts.register(
+				ContentScriptType.CodeMirrorPlugin,
+				'enhancement_focus_mode',
+				'./driver/codemirror/focusMode/index.js'
+			);
+
+			await joplin.commands.register({
+				name: 'toggleSideBarAndNoteList',
+				label: 'Toggle Side Bar and Note List',
+				iconName: 'fa fa-bullseye',
+				execute: async () => {
+					await joplin.commands.execute('toggleSideBar', { });
+					await joplin.commands.execute('toggleNoteList', { });
+				},
+			})
+
+			await joplin.views.toolbarButtons.create(
+				'enhancmode_focus_mode',
+				'toggleSideBarAndNoteList',
+				ToolbarButtonLocation.NoteToolbar
+			)
 		}
 	},
 });
