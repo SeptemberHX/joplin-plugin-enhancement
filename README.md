@@ -77,6 +77,12 @@ It supports both `!!!` style and `:::` style admonitions.
 
 ![IndentBorder](./screenshot/indentBorder.png)
 
+### Clickable task checkbox in markdown editor
+
+> Codes mainly comes from [Zettlr](https://github.com/Zettlr/Zettlr)
+
+![TaskRender](./screenshot/taskRender.png)
+
 ### Render Front Matter to Nothing
 
 It just renders the front matter to nothing. It is helpful when you try to keep the front matter part and avoid the unwanted rendered content.
