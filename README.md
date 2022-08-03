@@ -83,6 +83,14 @@ It supports both `!!!` style and `:::` style admonitions.
 
 ![TaskRender](./screenshot/taskRender.png)
 
+### Toggle Sidebar and Note List panel together
+
+A button on the note toolbar to toggle the sidebar and note list panel together.
+
+It should be useful when the horizontal space of your screen is tight :)
+
+![Imgur](https://i.imgur.com/KbJFwy8.gif)
+
 ### Render Front Matter to Nothing
 
 It just renders the front matter to nothing. It is helpful when you try to keep the front matter part and avoid the unwanted rendered content.
