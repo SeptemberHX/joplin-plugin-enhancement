@@ -71,6 +71,15 @@ It supports both `!!!` style and `:::` style admonitions.
 
 ![EnhancedQuote](./screenshot/enhancedQuote.png)
 
+### Search & Replace
+
+> Code mainly comes from https://github.com/zhuhs/codemirror-search-replace
+
+> **Current Bug**: Cannot save after replacement. User needs to manually modify the note to save the change (for example: add a space)
+> It is disabled by default
+
+![Imgur](https://i.imgur.com/klMdYwJ.gif)
+
 ### Border for indent list in markdown editor
 
 > It needs the joplin-rich-markdown plugin installed and the feature 'indent list' enabled
