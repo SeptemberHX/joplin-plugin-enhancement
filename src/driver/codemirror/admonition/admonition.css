@@ -1,17 +1,15 @@
+.CodeMirror-sizer {
+    padding-left: 1em;
+}
+
 .CodeMirror-linebackground.admonition {
     border-left: 0.35em solid blue;
     background-color: transparent;
+    margin-left: -0.8em;
 }
 
 .CodeMirror-linebackground.admonition.header {
     background-color: rgba(68,138,255,.1);
-}
-
-.CodeMirror-line.admonition {
-    padding-left: 0.65em !important;
-}
-.CodeMirror-line.admonition.content {
-    padding-left: 1.5em !important;
 }
 
 .cm-admonition-type, .cm-admonition-end {

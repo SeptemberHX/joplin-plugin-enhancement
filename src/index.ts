@@ -175,7 +175,7 @@ joplin.plugins.register({
 			})
 
 			await joplin.views.toolbarButtons.create(
-				'enhancmode_focus_mode',
+				'enhancement_focus_mode',
 				'toggleSideBarAndNoteList',
 				ToolbarButtonLocation.NoteToolbar
 			)

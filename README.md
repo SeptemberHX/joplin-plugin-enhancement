@@ -59,10 +59,6 @@ Because I have no idea how to create a context menu, currently all the operation
 
 It supports both `!!!` style and `:::` style admonitions.
 
-> It conflicts with the 'Align wrapped list items' of Rich Markdown plugin.
-
-> This feature could be removed if the conflicts are solved, and it will be pushed to the Rich Markdown plugin. 
-
 ![Admonition Editor Renderer](./screenshot/admonition.png)
 
 ### Enhanced blockquote support
