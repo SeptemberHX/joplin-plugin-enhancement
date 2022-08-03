@@ -9,7 +9,12 @@ import {
     ENABLE_PSEUDOCODE,
     ENABLE_ADMONITION_CM_RENDER,
     ENABLE_FRONT_MATTER,
-    ENABLE_COLORFUL_QUOTE, ENABLE_LINK_FOLDER, ENABLE_SEARCH_REPLACE, ENABLE_INLINE_MARKER, ENABLE_FOCUS_MODE,
+    ENABLE_COLORFUL_QUOTE,
+    ENABLE_LINK_FOLDER,
+    ENABLE_SEARCH_REPLACE,
+    ENABLE_INLINE_MARKER,
+    ENABLE_FOCUS_MODE,
+    ENABLE_INDENT_BORDER,
 } from "./common";
 
 export namespace settings {
@@ -138,6 +143,15 @@ export namespace settings {
             type: SettingItemType.Bool,
             label: 'Hide side panels by one button',
             description: "requires restart",
+        }
+
+        PLUGIN_SETTINGS[ENABLE_INDENT_BORDER] = {
+            value: true,
+            public: true,
+            section: SECTION,
+            type: SettingItemType.Bool,
+            label: 'Add a lightgray border for indented list items',
+            description: "It NEEDS joplin-plugin-rich-markdown plugin installed. It requires restart",
         }
 
         await joplin.settings.registerSettings(PLUGIN_SETTINGS);

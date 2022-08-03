@@ -1,0 +1,11 @@
+/* from Obsidian */
+
+.cm-tab::before, .cm-null.cm-overlay.cm-rm-list-token::before {
+    content: "\200B";
+    width: 1px;
+    border-right: 1px solid lightgray;
+    color: transparent;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+}

@@ -6,7 +6,7 @@ import {
 	ENABLE_COLORFUL_QUOTE,
 	ENABLE_FOCUS_MODE,
 	ENABLE_FRONT_MATTER,
-	ENABLE_IMAGE_ENHANCEMENT,
+	ENABLE_IMAGE_ENHANCEMENT, ENABLE_INDENT_BORDER,
 	ENABLE_INLINE_MARKER,
 	ENABLE_LINK_FOLDER,
 	ENABLE_LOCAL_PDF_PREVIEW,
@@ -34,6 +34,7 @@ joplin.plugins.register({
 		const enableSearchReplace = await joplin.settings.value(ENABLE_SEARCH_REPLACE);
 		const enableInlineMarker = await joplin.settings.value(ENABLE_INLINE_MARKER);
 		const enableFocusMode = await joplin.settings.value(ENABLE_FOCUS_MODE);
+		const enableIndentBorder = await joplin.settings.value(ENABLE_INDENT_BORDER);
 
 		if (enableImageEnhancement) {
 			await joplin.contentScripts.register(
@@ -154,6 +155,14 @@ joplin.plugins.register({
 				ContentScriptType.CodeMirrorPlugin,
 				'enhancement_inline_marker',
 				'./driver/codemirror/inlineMarker/index.js'
+			);
+		}
+
+		if (enableIndentBorder) {
+			await joplin.contentScripts.register(
+				ContentScriptType.CodeMirrorPlugin,
+				'enhancement_indent_broder',
+				'./driver/codemirror/indentBorder/index.js'
 			);
 		}
 

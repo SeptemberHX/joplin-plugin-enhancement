@@ -71,6 +71,12 @@ It supports both `!!!` style and `:::` style admonitions.
 
 ![EnhancedQuote](./screenshot/enhancedQuote.png)
 
+### Border for indent list in markdown editor
+
+> It needs the joplin-rich-markdown plugin installed and the feature 'indent list' enabled
+
+![IndentBorder](./screenshot/indentBorder.png)
+
 ### Render Front Matter to Nothing
 
 It just renders the front matter to nothing. It is helpful when you try to keep the front matter part and avoid the unwanted rendered content.

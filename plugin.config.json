@@ -20,6 +20,7 @@
 		"driver/codemirror/linkFolder/index.ts",
 		"driver/codemirror/searchReplace/index.ts",
 		"driver/codemirror/inlineMarker/index.ts",
-		"driver/codemirror/focusMode/index.ts"
+		"driver/codemirror/focusMode/index.ts",
+		"driver/codemirror/indentBorder/index.ts"
 	]
 }

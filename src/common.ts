@@ -11,3 +11,4 @@ export const ENABLE_LINK_FOLDER = 'enhancementEnableLinkFolder';
 export const ENABLE_SEARCH_REPLACE = 'enhancementEnableSearchReplace';
 export const ENABLE_INLINE_MARKER = 'enhancementEnableInlineMarker';
 export const ENABLE_FOCUS_MODE = 'enhancementEnableFocusMode';
+export const ENABLE_INDENT_BORDER = 'enhancementEnableIndentBorder';
