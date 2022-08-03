@@ -1,5 +1,5 @@
 // code from https://github.com/parksb/markdown-it-front-matter
-//   I don't know how to use the markdown-it-front-matter package without a provided render function cb()
+//   I don't know how to use the markdown-it-front-matter package without a provided renderer function cb()
 //   so I just copy the code.
 //   Please let me know if you figure out how to import the function from the package :)
 

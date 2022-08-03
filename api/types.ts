@@ -412,7 +412,7 @@ export interface SettingItem {
 
 	/**
 	 * To create a setting with multiple options, set this property to `true`.
-	 * That setting will render as a dropdown list in the configuration screen.
+	 * That setting will renderer as a dropdown list in the configuration screen.
 	 */
 	isEnum?: boolean;
 

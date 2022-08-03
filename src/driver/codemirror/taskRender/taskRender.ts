@@ -26,7 +26,7 @@ const taskRE = getTaskRE() // Matches `- [ ]` and `- [x]`
 export function markdownRenderTasks(cm: CodeMirror.Editor) {
     let match
 
-    // We'll only render the viewport
+    // We'll only renderer the viewport
     const viewport = cm.getViewport()
     for (let i = viewport.from; i <= viewport.to; i++) {
         if (cm.getModeAt({ line: i, ch: 0 }).name !== 'markdown') continue
@@ -48,7 +48,7 @@ export function markdownRenderTasks(cm: CodeMirror.Editor) {
             continue
         }
 
-        // Now we can render it finally.
+        // Now we can renderer it finally.
         const checked = (match[3] === 'x')
         const listSign = match[2] // Save the sign +, -, or * for later
 
@@ -72,7 +72,7 @@ export function markdownRenderTasks(cm: CodeMirror.Editor) {
         )
 
         // Clear the textmarker once it's hidden b/c we'd rather
-        // re-render than having a wrong state associated with the marker
+        // re-renderer than having a wrong state associated with the marker
         textMarker.on('hide', () => { textMarker.clear() })
 
         cbox.onclick = (e) => {

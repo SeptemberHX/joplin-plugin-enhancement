@@ -1,5 +1,6 @@
 import {markdownRenderTasks} from "./taskRender";
 import {debounce} from "ts-debounce";
+import {markdownRenderHTags} from "./render-h-tags";
 
 module.exports = {
     default: function (_context) {
@@ -31,4 +32,5 @@ module.exports = {
 
 function renderElements (cm: CodeMirror.Editor): void {
     markdownRenderTasks(cm);
+    markdownRenderHTags(cm);
 }

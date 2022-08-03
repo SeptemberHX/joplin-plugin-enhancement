@@ -267,7 +267,7 @@ export function getInlineMathRE (global: boolean = false): RegExp {
 /**
  * Returns a regular expression that matches inline Maths.
  *
- * Used to render inline math.
+ * Used to renderer inline math.
  *
  * Matches all inlines according to the Pandoc documentation
  * on its tex_math_dollars-extension.
