@@ -139,3 +139,4 @@ The file that may cause problem is "webpack.config.js" because it's going to be 
 * [markdown-it](https://github.com/markdown-it/markdown-it/blob/master/lib/rules_inline/image.js)
 * [joplin/plugin-bibtex.git](https://github.com/joplin/plugin-bibtex.git)
 * [CalebJohn/joplin-rich-markdown](https://github.com/CalebJohn/joplin-rich-markdown)
+* [Zettlr/Zettlr](https://github.com/Zettlr/Zettlr)
