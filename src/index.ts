@@ -15,6 +15,7 @@ import {
 	ENABLE_QUICK_COMMANDS,
 	ENABLE_SEARCH_REPLACE,
 	ENABLE_TABLE_FORMATTER,
+    ENABLE_TASK_RENDER,
 } from "./common";
 
 joplin.plugins.register({
@@ -35,6 +36,7 @@ joplin.plugins.register({
 		const enableInlineMarker = await joplin.settings.value(ENABLE_INLINE_MARKER);
 		const enableFocusMode = await joplin.settings.value(ENABLE_FOCUS_MODE);
 		const enableIndentBorder = await joplin.settings.value(ENABLE_INDENT_BORDER);
+		const enableTaskRender = await joplin.settings.value(ENABLE_TASK_RENDER);
 
 		if (enableImageEnhancement) {
 			await joplin.contentScripts.register(
@@ -163,6 +165,14 @@ joplin.plugins.register({
 				ContentScriptType.CodeMirrorPlugin,
 				'enhancement_indent_broder',
 				'./driver/codemirror/indentBorder/index.js'
+			);
+		}
+
+		if (enableTaskRender) {
+			await joplin.contentScripts.register(
+				ContentScriptType.CodeMirrorPlugin,
+				'enhancement_task_render',
+				'./driver/codemirror/taskRender/index.js'
 			);
 		}
 
