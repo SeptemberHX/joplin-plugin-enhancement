@@ -86,6 +86,10 @@ It supports both `!!!` style and `:::` style admonitions.
 
 ![IndentBorder](./screenshot/indentBorder.png)
 
+> Enable 'Add additional CSS classes for enhanced customization' in joplin-rich-markdown plugin to get rendered quote
+
+![QuoteRender](./screenshot/quoteRender.png)
+
 ### Clickable task checkbox in markdown editor
 
 > Codes mainly comes from [Zettlr](https://github.com/Zettlr/Zettlr)

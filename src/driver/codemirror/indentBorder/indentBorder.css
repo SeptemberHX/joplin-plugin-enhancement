@@ -9,3 +9,16 @@
     top: 0;
     bottom: 0;
 }
+
+/* Add a vertical bar to the left side of quote blocks so they match the viewer */
+pre.cm-rm-blockquote.CodeMirror-line {
+    border-left: 4px solid var(--joplin-code-border-color);
+    margin-left: -4px;
+    opacity: 0.7;
+    background-color: var(--joplin-background-color3);
+
+}
+
+pre.cm-rm-blockquote span.cm-quote + span.cm-quote {
+    opacity: 1;
+}
