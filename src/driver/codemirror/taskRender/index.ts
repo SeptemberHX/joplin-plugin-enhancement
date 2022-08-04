@@ -15,20 +15,19 @@ module.exports = {
                         }
 
                         taskHandle = requestIdleCallback(function () {
-                            renderElements(cm)
+                            renderElements(cm, true)
                             taskHandle = undefined // Next task can be scheduled now
                         }, { timeout: 1000 }) // Don't wait more than 1 sec before executing this
                     }
 
+                    cm.on('change', async function (cm, changeObjs) {
+                        if (changeObjs.origin === 'setValue') {
+                            renderElements(cm, false);
+                        }
+                    });
                     cm.on('cursorActivity', callback)
                     cm.on('viewportChange', callback) // renderElements)
                     cm.on('optionChange', callback)
-
-                    cm.on('change', async function (cm, changeObjs) {
-                        if (changeObjs.origin === 'setValue') {
-                            renderElements(cm);
-                        }
-                    });
                 });
             },
             codeMirrorOptions: {'enhancementTaskRender': true},
@@ -43,7 +42,7 @@ module.exports = {
     },
 }
 
-function renderElements (cm: CodeMirror.Editor): void {
-    markdownRenderTasks(cm);
-    markdownRenderHTags(cm);
+function renderElements (cm: CodeMirror.Editor, viewPort: boolean): void {
+    markdownRenderTasks(cm, viewPort);
+    markdownRenderHTags(cm, viewPort);
 }

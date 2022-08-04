@@ -19,12 +19,19 @@ import canRenderElement from '../../../utils/can-render-element'
 
 const headRE = getHeadRE()
 
-export function markdownRenderHTags (cm: CodeMirror.Editor): void {
+export function markdownRenderHTags (cm: CodeMirror.Editor, viewPort: boolean): void {
     let match
 
-    // We'll only renderer the viewport
-    const viewport = cm.getViewport()
-    for (let i = viewport.from; i < viewport.to; i++) {
+    let fromLine = 0;
+    let toLine = cm.lineCount();
+
+    if (viewPort) {
+        // We'll only renderer the viewport
+        const viewport = cm.getViewport()
+        fromLine = viewport.from;
+        toLine = viewport.to;
+    }
+    for (let i = fromLine; i < toLine; i++) {
         if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
         // Always reset lastIndex property, because test()-ing on regular
         // expressions advances it.
@@ -41,7 +48,7 @@ export function markdownRenderHTags (cm: CodeMirror.Editor): void {
         const curFrom = { line: i, ch: 0 }
         const curTo = { line: i, ch: headingLevel }
 
-        if (!canRenderElement(cm, curFrom, curTo)) {
+        if (!canRenderElement(cm, curFrom, curTo, !viewPort)) {
             continue
         }
 

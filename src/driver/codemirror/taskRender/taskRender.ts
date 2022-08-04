@@ -23,12 +23,19 @@ const taskRE = getTaskRE() // Matches `- [ ]` and `- [x]`
  *
  * @param   {CodeMirror.Editor}  cm  The CodeMirror instance
  */
-export function markdownRenderTasks(cm: CodeMirror.Editor) {
+export function markdownRenderTasks(cm: CodeMirror.Editor, viewPort: boolean) {
     let match
 
-    // We'll only renderer the viewport
-    const viewport = cm.getViewport()
-    for (let i = viewport.from; i <= viewport.to; i++) {
+    let fromLine = 0;
+    let toLine = cm.lineCount();
+
+    if (viewPort) {
+        // We'll only renderer the viewport
+        const viewport = cm.getViewport()
+        fromLine = viewport.from;
+        toLine = viewport.to;
+    }
+    for (let i = fromLine; i <= toLine; i++) {
         if (cm.getModeAt({ line: i, ch: 0 }).name !== 'markdown') continue
         // Always reset lastIndex property, because test()-ing on regular
         // expressions advances it.
@@ -44,7 +51,7 @@ export function markdownRenderTasks(cm: CodeMirror.Editor) {
         const curFrom = { line: i, ch: 0 + leadingSpaces }
         const curTo = { line: i, ch: 5 + leadingSpaces }
 
-        if (!canRenderElement(cm, curFrom, curTo)) {
+        if (!canRenderElement(cm, curFrom, curTo, !viewPort)) {
             continue
         }
 

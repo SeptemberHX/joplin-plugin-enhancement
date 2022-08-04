@@ -1,7 +1,7 @@
 /* from zettlr */
 input[type="checkbox"] {
     vertical-align: middle;
-    margin: 4px 0px 4px 0px;
+    margin: 4px 0.6em 4px 0px;
     width: 1.4em;
     height: 1.4em;
     appearance: none;
@@ -61,6 +61,7 @@ div.application-menu div.menu-item {
 
 div.application-menu div.menu-item:not(.separator):not(.disabled):hover {
     background-color: rgb(200, 200, 200);
+    border-radius: 4px;
 }
 
 div.application-menu div.menu-item div.status {

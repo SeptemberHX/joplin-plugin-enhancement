@@ -23,13 +23,16 @@ import { Editor, Position } from 'codemirror'
  * @param   {Position}  from  The beginning position
  * @param   {Position}  to    The ending position
  *
+ * @param   {Boolean}   ignoreCursor    Whether we need to check the cursor position
  * @return  {boolean}         Returns true if you can renderer an element there
  */
-export default function canRenderElement (cm: Editor, from: Position, to: Position): boolean {
+export default function canRenderElement (cm: Editor, from: Position, to: Position, ignoreCursor: boolean = false): boolean {
     // Check if the cursor is within the range
-    const cursor = cm.getCursor('head')
-    if (cursor.line === from.line && cursor.ch >= from.ch && cursor.ch <= to.ch) {
-        return false
+    if (!ignoreCursor) {
+        const cursor = cm.getCursor('head')
+        if (cursor.line === from.line && cursor.ch >= from.ch && cursor.ch <= to.ch) {
+            return false
+        }
     }
 
     // We can only have one marker at any given position at any given time
