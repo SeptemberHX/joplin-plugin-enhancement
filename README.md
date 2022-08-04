@@ -96,6 +96,15 @@ It supports both `!!!` style and `:::` style admonitions.
 
 ![TaskRender](./screenshot/taskRender.png)
 
+### Header tag render in markdown editor
+
+> It shares the same configuration as with the clickable task checkbox
+
+> Code mainly comes from **Zettlr**
+
+![Imgur](https://i.imgur.com/2HCGuIA.gif)
+
+
 ### Toggle Sidebar and Note List panel together
 
 A button on the note toolbar to toggle the sidebar and note list panel together.
