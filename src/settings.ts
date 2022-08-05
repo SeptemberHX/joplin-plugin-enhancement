@@ -14,7 +14,7 @@ import {
     ENABLE_SEARCH_REPLACE,
     ENABLE_INLINE_MARKER,
     ENABLE_FOCUS_MODE,
-    ENABLE_INDENT_BORDER, ENABLE_TASK_RENDER,
+    ENABLE_INDENT_BORDER, ENABLE_TASK_RENDER, ENABLE_MATH_RENDER,
 } from "./common";
 
 export namespace settings {
@@ -161,6 +161,15 @@ export namespace settings {
             type: SettingItemType.Bool,
             label: 'Render markdown task to clickable checkbox in markdown editor',
             description: "From https://github.com/Zettlr/Zettlr. It requires restart",
+        }
+
+        PLUGIN_SETTINGS[ENABLE_MATH_RENDER] = {
+            value: false,
+            public: true,
+            section: SECTION,
+            type: SettingItemType.Bool,
+            label: 'Render markdown inline/block latex to math in markdown editor',
+            description: "It significantly hurts your joplin's performance, especially with lots of math block. It requires restart",
         }
 
         await joplin.settings.registerSettings(PLUGIN_SETTINGS);

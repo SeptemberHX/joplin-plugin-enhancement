@@ -13,3 +13,4 @@ export const ENABLE_INLINE_MARKER = 'enhancementEnableInlineMarker';
 export const ENABLE_FOCUS_MODE = 'enhancementEnableFocusMode';
 export const ENABLE_INDENT_BORDER = 'enhancementEnableIndentBorder';
 export const ENABLE_TASK_RENDER = 'enhancementEnableTaskRender';
+export const ENABLE_MATH_RENDER = 'enhancementEnableMathRender';

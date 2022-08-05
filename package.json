@@ -32,6 +32,7 @@
   "dependencies": {
     "dayjs": "^1.11.2",
     "html-entities": "^2.3.3",
+    "katex": "^0.16.0",
     "mime-types": "^2.1.35",
     "pseudocode": "^2.2.0",
     "ts-debounce": "^4.0.0"

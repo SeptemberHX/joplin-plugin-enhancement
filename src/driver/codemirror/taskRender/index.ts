@@ -25,6 +25,7 @@ module.exports = {
                             renderElements(cm, false);
                         }
                     });
+
                     cm.on('cursorActivity', callback)
                     cm.on('viewportChange', callback) // renderElements)
                     cm.on('optionChange', callback)

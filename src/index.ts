@@ -9,13 +9,13 @@ import {
 	ENABLE_IMAGE_ENHANCEMENT, ENABLE_INDENT_BORDER,
 	ENABLE_INLINE_MARKER,
 	ENABLE_LINK_FOLDER,
-	ENABLE_LOCAL_PDF_PREVIEW,
+	ENABLE_LOCAL_PDF_PREVIEW, ENABLE_MATH_RENDER,
 	ENABLE_MERMAID_FOLDER,
 	ENABLE_PSEUDOCODE,
 	ENABLE_QUICK_COMMANDS,
 	ENABLE_SEARCH_REPLACE,
 	ENABLE_TABLE_FORMATTER,
-    ENABLE_TASK_RENDER,
+	ENABLE_TASK_RENDER,
 } from "./common";
 
 joplin.plugins.register({
@@ -37,6 +37,7 @@ joplin.plugins.register({
 		const enableFocusMode = await joplin.settings.value(ENABLE_FOCUS_MODE);
 		const enableIndentBorder = await joplin.settings.value(ENABLE_INDENT_BORDER);
 		const enableTaskRender = await joplin.settings.value(ENABLE_TASK_RENDER);
+		const enableMathRender = await joplin.settings.value(ENABLE_MATH_RENDER);
 
 		if (enableImageEnhancement) {
 			await joplin.contentScripts.register(
@@ -173,6 +174,14 @@ joplin.plugins.register({
 				ContentScriptType.CodeMirrorPlugin,
 				'enhancement_task_render',
 				'./driver/codemirror/taskRender/index.js'
+			);
+		}
+
+		if (enableMathRender) {
+			await joplin.contentScripts.register(
+				ContentScriptType.CodeMirrorPlugin,
+				'enhancement_math_render',
+				'./driver/codemirror/mathRender/index.js'
 			);
 		}
 

@@ -22,6 +22,7 @@
 		"driver/codemirror/inlineMarker/index.ts",
 		"driver/codemirror/focusMode/index.ts",
 		"driver/codemirror/indentBorder/index.ts",
-		"driver/codemirror/taskRender/index.ts"
+		"driver/codemirror/taskRender/index.ts",
+		"driver/codemirror/mathRender/index.ts"
 	]
 }
