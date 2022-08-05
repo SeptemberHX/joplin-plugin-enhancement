@@ -77,7 +77,7 @@ It supports both `!!!` style and `:::` style admonitions.
 
 > Disabled by default
 
-![mathRender](https://i.imgur.com/rVNgAWs.gif)
+![Imgur](https://i.imgur.com/rVNgAWs.gif)
 
 ### Search & Replace
 
