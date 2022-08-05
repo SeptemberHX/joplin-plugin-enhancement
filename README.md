@@ -73,7 +73,7 @@ It supports both `!!!` style and `:::` style admonitions.
 
 ### Inline/Block math renderer in markdown editor
 
-> It significantly hurts your joplin's performance, especially with lots of math block.
+> It significantly hurts your joplin's performance for now, especially with lots of math block. Please refer to https://github.com/laurent22/joplin/issues/6719
 
 > Disabled by default
 
