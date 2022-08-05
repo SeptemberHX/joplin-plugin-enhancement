@@ -8,7 +8,7 @@ module.exports = {
             plugin: function (CodeMirror) {
                 CodeMirror.defineOption("enhancementMathRender", [], async function(cm, val, old) {
                     // Block Katex Math Render
-                    new CMBlockMarkerHelper(cm, null, /^\s*\$\$/, /^\s*\$\$/, (beginMatch, endMatch, content) => {
+                    new CMBlockMarkerHelper(cm, null, /^\s*\$\$\s*$/, /^\s*\$\$\s*$/, (beginMatch, endMatch, content) => {
                             let spanElement = document.createElement('span');
                             katex.render(content, spanElement, { throwOnError: false, displayMode: true, output: 'html' })
                             return spanElement;

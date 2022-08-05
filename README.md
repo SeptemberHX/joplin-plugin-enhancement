@@ -71,6 +71,14 @@ It supports both `!!!` style and `:::` style admonitions.
 
 ![EnhancedQuote](./screenshot/enhancedQuote.png)
 
+### Inline/Block math renderer in markdown editor
+
+> It significantly hurts your joplin's performance, especially with lots of math block.
+
+> Disabled by default
+
+![mathRender](https://i.imgur.com/rVNgAWs.gif)
+
 ### Search & Replace
 
 > Code mainly comes from https://github.com/zhuhs/codemirror-search-replace
