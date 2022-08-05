@@ -70,50 +70,6 @@ module.exports = {
                                 sizeEl.textContent = match[3].substr(1, match[3].length - 2);
                                 markEl.appendChild(sizeEl);
                             }
-
-                            // if (match[2]) {
-                            //     const imageEl = document.createElement('img');
-                            //     console.log(match[2]);
-                            //     imageEl.src = await _context.postMessage(match[2]);
-                            //     imageEl.style.maxWidth = '100%';
-                            //     imageEl.style.margin = 'auto';
-                            //     imageEl.style.display = 'block';
-                            //     markEl.appendChild(imageEl);
-                            //
-                            //     if (match[3]) {
-                            //         const sizeStr = match[3].substr(1, match[3].length - 2);
-                            //         let width, height;
-                            //         let widthReg = /width=(\d+)/;
-                            //         let widthResult = sizeStr.match(widthReg);
-                            //         if (widthResult && widthResult.length >= 2) {
-                            //             width = widthResult[1];
-                            //             const nextIndex = widthResult.from + widthResult.length + 1;
-                            //             if (nextIndex < sizeStr.length && sizeStr[nextIndex] == 0x25/* % */) {
-                            //                 width += '%';
-                            //             } else {
-                            //                 width += 'px';
-                            //             }
-                            //         }
-                            //         if (width) {
-                            //             imageEl.style.width = width;
-                            //         }
-                            //
-                            //         let heightReg = /height=(\d+)/;
-                            //         let heightResult = sizeStr.match(heightReg);
-                            //         if (heightResult && heightResult.length >= 2) {
-                            //             height = heightResult[1];
-                            //             const nextIndex = heightResult.from + heightResult.length + 1;
-                            //             if (nextIndex < sizeStr.length && sizeStr[nextIndex] == 0x25/* % */) {
-                            //                 height += '%';
-                            //             } else {
-                            //                 height += 'px';
-                            //             }
-                            //         }
-                            //         if (height) {
-                            //             imageEl.style.height = height;
-                            //         }
-                            //     }
-                            // }
                         } else if (regIndex === 2) {
                             markEl.classList.add(ENHANCED_FOOTNOTE_MARKER);
                             const textEl = document.createElement('span');

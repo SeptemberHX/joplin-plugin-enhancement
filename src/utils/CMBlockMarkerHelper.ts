@@ -1,6 +1,7 @@
 import {debounce} from "ts-debounce";
 import CodeMirror, {TextMarker} from "codemirror";
 import clickAndClear from "./click-and-clear";
+import canRenderElement from "./can-render-element";
 
 export class CMBlockMarkerHelper {
 
@@ -128,31 +129,9 @@ export class CMBlockMarkerHelper {
             let from = {line: blockRange.from, ch: 0};
             let to = {line: blockRange.to, ch: this.editor.getLine(blockRange.to).length};
 
-            // check whether we have created a marker for it before
-            let existingMarker;
-            // @ts-ignore
-            this.editor.findMarksAt(from, to).find((marker) => {
-                if (marker.className === this.MARKER_CLASS_NAME) {
-                    existingMarker = marker;
-                }
-            });
-
-            // if processed, then we do not need to process it again.
-            if (existingMarker) {
-                // however, when undoing the marker deleting, we need to re-create the rendered line widget
-                //    otherwise, the line widget is lost.
-                // const lineWidget = this.marker2LineWidget[existingMarker];
-                // if (lineWidget.node && lineWidget.node.parentElement && lineWidget.node.parentElement.getBoundingClientRect().height === 0) {
-                //     console.log('===> LineWidget is invisible');
-                //     existingMarker.clear();
-                // } else {
-                //     console.log('===> All fine');
-                //     // both the marker and the line widget are placed. we can go on for the next matched area.
-                //     continue;
-                // }
+            if (!canRenderElement(this.editor, from, to)) {
                 continue;
             }
-            console.log('===> Check finished');
 
             // get the content in the block without the begin/end tokens
             const blockContentLines = [];
@@ -160,32 +139,27 @@ export class CMBlockMarkerHelper {
                 blockContentLines.push(this.editor.getLine(i));
             }
 
-            // not fold when the cursor is in the block
-            if (cursor.line < from.line || cursor.line > to.line
-                || (cursor.line === from.line && cursor.ch < from.ch)
-                || (cursor.line === to.line && cursor.ch > to.ch)) {
-                // replace the matched range with marker element
-                const markerEl = this.spanRenderer();
-                markerEl.classList.add(this.MARKER_CLASS_NAME);
-                const textMarker = doc.markText(
-                    from,
-                    to,
-                    {
-                        replacedWith: markerEl,
-                        handleMouseEvents: true,
-                        className: this.MARKER_CLASS_NAME, // class name is not renderer in DOM
-                        inclusiveLeft: false,
-                        inclusiveRight: false
-                    },
-                );
+            // replace the matched range with marker element
+            const markerEl = this.spanRenderer();
+            markerEl.classList.add(this.MARKER_CLASS_NAME);
+            const textMarker = doc.markText(
+                from,
+                to,
+                {
+                    replacedWith: markerEl,
+                    handleMouseEvents: true,
+                    className: this.MARKER_CLASS_NAME, // class name is not renderer in DOM
+                    inclusiveLeft: false,
+                    inclusiveRight: false
+                },
+            );
 
-                // build the line widget just after the marker with the rendered element
-                const wrapper = document.createElement('div');
-                const element = this.renderer(blockRange.beginMatch, blockRange.endMatch, blockContentLines.join('\n'));
-                wrapper.appendChild(element);
-                const lineWidget = this.createLineWidgetForMarker(doc, to.line, textMarker, wrapper);
-                this.setStyleAndLogical(doc, from, to, textMarker, markerEl, wrapper, lineWidget);
-            }
+            // build the line widget just after the marker with the rendered element
+            const wrapper = document.createElement('div');
+            const element = this.renderer(blockRange.beginMatch, blockRange.endMatch, blockContentLines.join('\n'));
+            wrapper.appendChild(element);
+            const lineWidget = this.createLineWidgetForMarker(doc, to.line, textMarker, wrapper);
+            this.setStyleAndLogical(doc, from, to, textMarker, markerEl, wrapper, lineWidget);
         }
     }
 
