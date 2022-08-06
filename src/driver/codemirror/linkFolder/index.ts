@@ -47,7 +47,7 @@ module.exports = {
                                 markEl.appendChild(iconEl);
                             }
 
-                            const textEl = document.createElement('span');
+                            const textEl = document.createElement('a');
                             textEl.classList.add(ENHANCED_LINK_MARKER_TEXT);
                             markEl.appendChild(textEl);
 
@@ -102,6 +102,14 @@ module.exports = {
                         //     }
                         // }
                         return true;
+                    }, async function (match, regIndex, e) {
+                        if (regIndex === 0) {
+                            // open url
+                            await _context.postMessage({
+                                type: 'openUrl',
+                                content: match[2]
+                            });
+                        }
                     });
                 });
             },

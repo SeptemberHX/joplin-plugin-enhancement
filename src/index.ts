@@ -135,11 +135,8 @@ joplin.plugins.register({
 			await joplin.contentScripts.onMessage(
 				'enhancement_link_folder',
 				async (msg) => {
-					console.log(msg);
-					if (msg.startsWith(':/')) {
-						return await joplin.data.resourcePath(msg.substr(2));
-					} else {
-						return msg;
+					if (msg.type === 'openUrl' && msg.content && msg.content !== '') {
+						return await joplin.commands.execute('openItem', msg.content);
 					}
 				}
 			);

@@ -12,13 +12,15 @@ export default class CMInlineMarkerHelper {
     lastCursor;
     renderer: (match, regIndex: number, from, to, innerDomEleCopy, lastMatchFrom, lastMatchTo) => any;
     lineFilter: (line: string, lineToken: []) => boolean;
+    clicked: (match, regIndex: number, e: MouseEvent) => void;
     regexList;
     MARKER_CLASS_NAMES: string[];
 
-    constructor(private readonly context, private readonly editor, regexList, renderer, MARKER_CLASS_NAMES, lineFilter?) {
+    constructor(private readonly context, private readonly editor, regexList, renderer, MARKER_CLASS_NAMES, lineFilter?, clicked?) {
         this.regexList = regexList;
         this.renderer = renderer;
         this.lineFilter = lineFilter;
+        this.clicked = clicked;
         this.MARKER_CLASS_NAMES = MARKER_CLASS_NAMES;
         setTimeout(this.init.bind(this), 100);
     }
@@ -143,7 +145,6 @@ export default class CMInlineMarkerHelper {
                     to,
                     {
                         replacedWith: element,
-                        handleMouseEvents: true,
                         className: this.MARKER_CLASS_NAMES[regIndex], // class name is not renderer in DOM
                         clearOnEnter: true,
                         inclusiveLeft: false,
@@ -152,7 +153,14 @@ export default class CMInlineMarkerHelper {
                 );
 
                 element.onclick = (e) => {
-                    clickAndClear(textMarker, this.editor)(e);
+                    if (e.ctrlKey || e.metaKey) {
+                        e.preventDefault();
+                        if (this.clicked) {
+                            this.clicked(match, regIndex, e);
+                        }
+                    } else {
+                        clickAndClear(textMarker, this.editor)(e);
+                    }
                 };
 
                 return element.cloneNode(true);
