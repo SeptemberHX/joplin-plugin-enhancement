@@ -1,5 +1,9 @@
 import {CMBlockMarkerHelper} from "../../../utils/CMBlockMarkerHelper";
 import mermaid from 'mermaid'
+import {LineHandle} from "codemirror";
+
+const ENHANCEMENT_MERMAID_SPAN_MARKER_CLASS = 'enhancement-mermaid-block-marker';
+const ENHANCEMENT_MERMAID_SPAN_MARKER_LINE_CLASS = 'enhancement-mermaid-block-marker-line';
 
 // Initialise the mermaid API. Note the "as any" cast, since the mermaid types
 // are wrong.
@@ -28,7 +32,13 @@ module.exports = {
                         span.textContent = '===> Folded Mermaid Code Block <===';
                         span.style.cssText = 'color: lightgray; font-size: smaller; font-style: italic;';
                         return span;
-                    },'enhancement-mermaid-block-marker', true, true);
+                    },ENHANCEMENT_MERMAID_SPAN_MARKER_CLASS, true);
+
+                    cm.on('renderLine', (editor, line: LineHandle, element: Element) => {
+                        if (element.getElementsByClassName(ENHANCEMENT_MERMAID_SPAN_MARKER_CLASS).length > 0) {
+                            element.classList.add(ENHANCEMENT_MERMAID_SPAN_MARKER_LINE_CLASS);
+                        }
+                    })
                 });
             },
             codeMirrorOptions: {

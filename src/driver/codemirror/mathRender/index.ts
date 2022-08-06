@@ -1,6 +1,10 @@
 import {CMBlockMarkerHelper} from "../../../utils/CMBlockMarkerHelper";
 import CMInlineMarkerHelper from "../../../utils/CMInlineMarkerHelper";
 import katex from 'katex'
+import {LineHandle} from "codemirror";
+
+const ENHANCEMENT_MATH_BLOCK_SPAN_MARKER_CLASS = 'enhancement-math-block-marker';
+const ENHANCEMENT_MATH_BLOCK_SPAN_MARKER_LINE_CLASS = 'enhancement-math-block-marker-line';
 
 module.exports = {
     default: function(_context) {
@@ -17,7 +21,13 @@ module.exports = {
                         span.textContent = '===> Folded Math Block <===';
                         span.style.cssText = 'color: lightgray; font-size: smaller; font-style: italic;';
                         return span;
-                    },'enhancement-math-block-marker', true);
+                    },ENHANCEMENT_MATH_BLOCK_SPAN_MARKER_CLASS, true);
+
+                    cm.on('renderLine', (editor, line: LineHandle, element: Element) => {
+                        if (element.getElementsByClassName(ENHANCEMENT_MATH_BLOCK_SPAN_MARKER_CLASS).length > 0) {
+                            element.classList.add(ENHANCEMENT_MATH_BLOCK_SPAN_MARKER_LINE_CLASS);
+                        }
+                    })
 
                     // inline Katex Math Render
                     new CMInlineMarkerHelper(_context, cm, [/(?<!\$)\$([^\$]+)\$/g], (match, regIndex: number, from, to, innerDomEleCopy, lastMatchFrom, lastMatchTo) => {

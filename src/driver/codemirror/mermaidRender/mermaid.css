@@ -6,3 +6,7 @@
 .CodeMirror-sizer .mermaid-chart svg {
     max-height: 300px;
 }
+
+.enhancement-mermaid-block-marker-line {
+    display: none;
+}

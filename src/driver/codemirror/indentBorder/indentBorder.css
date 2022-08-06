@@ -21,3 +21,7 @@ pre.cm-rm-blockquote.CodeMirror-line {
 pre.cm-rm-blockquote span.cm-quote + span.cm-quote {
     opacity: 1;
 }
+
+pre.cm-jn-code-block.CodeMirror-line {
+    padding-left: 0.4em;
+}
