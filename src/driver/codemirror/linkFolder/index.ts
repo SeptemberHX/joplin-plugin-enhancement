@@ -20,7 +20,7 @@ const ENHANCED_MARKER_LIST = [
 ];
 
 const regexList = [
-    /(?<!\!)\[([^\[]*?)\]\(.*?\)/g,                 // link
+    /(?<!\!)\[([^\[]*?)\]\((.*?)\)/g,                 // link
     /\!\[([^\[]*?)\]\((.*?)\)(\{.*?\})?/g,            // image
     /(?<!(^\s*))\[\^(.*?)\]/g,                      // footnote
 ];
@@ -34,9 +34,18 @@ module.exports = {
                         const markEl = document.createElement('span');
                         if (regIndex === 0) {  // link
                             markEl.classList.add(ENHANCED_LINK_MARKER);
-                            const iconEl = document.createElement('i');
-                            iconEl.classList.add(ENHANCED_LINK_MARKER_ICON, 'fas', 'fa-link');
-                            markEl.appendChild(iconEl);
+
+                            if (match[2].startsWith(':/')) {
+                                const joplinIcon = document.createElement('span');
+                                joplinIcon.classList.add(ENHANCED_LINK_MARKER_ICON, 'enhancement-joplin-icon');
+                                markEl.appendChild(joplinIcon);
+                            } else if (match[2].startsWith('#')) {
+                                // do nothing for link to current note
+                            } else {
+                                const iconEl = document.createElement('i');
+                                iconEl.classList.add(ENHANCED_LINK_MARKER_ICON, 'fas', 'fa-link');
+                                markEl.appendChild(iconEl);
+                            }
 
                             const textEl = document.createElement('span');
                             textEl.classList.add(ENHANCED_LINK_MARKER_TEXT);
