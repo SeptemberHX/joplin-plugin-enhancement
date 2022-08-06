@@ -9,8 +9,7 @@ import {
 	ENABLE_IMAGE_ENHANCEMENT, ENABLE_INDENT_BORDER,
 	ENABLE_INLINE_MARKER,
 	ENABLE_LINK_FOLDER,
-	ENABLE_LOCAL_PDF_PREVIEW, ENABLE_MATH_RENDER,
-	ENABLE_MERMAID_FOLDER,
+	ENABLE_LOCAL_PDF_PREVIEW, ENABLE_MATH_RENDER, ENABLE_MERMAID_RENDER,
 	ENABLE_PSEUDOCODE,
 	ENABLE_QUICK_COMMANDS,
 	ENABLE_SEARCH_REPLACE,
@@ -23,7 +22,6 @@ joplin.plugins.register({
 
 		await settings.register();
 		const enableTableFormatter = await joplin.settings.value(ENABLE_TABLE_FORMATTER);
-		const enableMermaidFolder = await joplin.settings.value(ENABLE_MERMAID_FOLDER);
 		const enableLocalPDFPreview = await joplin.settings.value(ENABLE_LOCAL_PDF_PREVIEW);
 		const enableImageEnhancement = await joplin.settings.value(ENABLE_IMAGE_ENHANCEMENT);
 		const enableQuickCommands = await joplin.settings.value(ENABLE_QUICK_COMMANDS);
@@ -38,6 +36,7 @@ joplin.plugins.register({
 		const enableIndentBorder = await joplin.settings.value(ENABLE_INDENT_BORDER);
 		const enableTaskRender = await joplin.settings.value(ENABLE_TASK_RENDER);
 		const enableMathRender = await joplin.settings.value(ENABLE_MATH_RENDER);
+		const enableMermaidRender = await joplin.settings.value(ENABLE_MERMAID_RENDER);
 
 		if (enableImageEnhancement) {
 			await joplin.contentScripts.register(
@@ -59,15 +58,6 @@ joplin.plugins.register({
 				'enhancement_preview_renderer',
 				'./driver/markdownItRenderer/filePreview/index.js'
 			);
-		}
-
-		if (enableMermaidFolder) {
-			await joplin.contentScripts.register(
-				ContentScriptType.CodeMirrorPlugin,
-				'enhancement_mermaid_folder',
-				'./driver/codemirror/mermaidFolder/index.js'
-			);
-
 		}
 
 		if (enableQuickCommands) {
@@ -179,6 +169,14 @@ joplin.plugins.register({
 				ContentScriptType.CodeMirrorPlugin,
 				'enhancement_math_render',
 				'./driver/codemirror/mathRender/index.js'
+			);
+		}
+
+		if (enableMermaidRender) {
+			await joplin.contentScripts.register(
+				ContentScriptType.CodeMirrorPlugin,
+				'enhancement_mermaid_render',
+				'./driver/codemirror/mermaidRender/index.js'
 			);
 		}
 

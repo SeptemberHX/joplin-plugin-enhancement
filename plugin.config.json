@@ -1,9 +1,6 @@
 {
 	"extraScripts": [
 		"driver/codemirror/tableFormatter/index.ts",
-
-		"driver/codemirror/mermaidFolder/index.ts",
-
 		"driver/codemirror/quickCommands/index.ts",
 
 		"driver/markdownItRenderer/filePreview/index.ts",
@@ -23,6 +20,7 @@
 		"driver/codemirror/focusMode/index.ts",
 		"driver/codemirror/indentBorder/index.ts",
 		"driver/codemirror/taskRender/index.ts",
-		"driver/codemirror/mathRender/index.ts"
+		"driver/codemirror/mathRender/index.ts",
+		"driver/codemirror/mermaidRender/index.ts"
 	]
 }

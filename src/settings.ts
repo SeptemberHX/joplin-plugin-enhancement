@@ -3,7 +3,6 @@ import { SettingItemType } from "api/types";
 import {
     ENABLE_IMAGE_ENHANCEMENT,
     ENABLE_LOCAL_PDF_PREVIEW,
-    ENABLE_MERMAID_FOLDER,
     ENABLE_QUICK_COMMANDS,
     ENABLE_TABLE_FORMATTER,
     ENABLE_PSEUDOCODE,
@@ -14,7 +13,7 @@ import {
     ENABLE_SEARCH_REPLACE,
     ENABLE_INLINE_MARKER,
     ENABLE_FOCUS_MODE,
-    ENABLE_INDENT_BORDER, ENABLE_TASK_RENDER, ENABLE_MATH_RENDER,
+    ENABLE_INDENT_BORDER, ENABLE_TASK_RENDER, ENABLE_MATH_RENDER, ENABLE_MERMAID_RENDER,
 } from "./common";
 
 export namespace settings {
@@ -44,15 +43,6 @@ export namespace settings {
             type: SettingItemType.Bool,
             label: 'Enable pseudocode in fenced code block',
             description: "Render pseudocode in fenced code block by pseudocode.js + Katex. (requires restart)",
-        }
-
-        PLUGIN_SETTINGS[ENABLE_MERMAID_FOLDER] = {
-            value: false,
-            public: true,
-            section: SECTION,
-            type: SettingItemType.Bool,
-            label: 'Enable "Auto fold mermaid block in editor"',
-            description: "Fold mermaid block in editor for better view. (requires restart)",
         }
 
         PLUGIN_SETTINGS[ENABLE_LOCAL_PDF_PREVIEW] = {
@@ -170,6 +160,15 @@ export namespace settings {
             type: SettingItemType.Bool,
             label: 'Render markdown inline/block latex to math in markdown editor',
             description: "It significantly hurts your joplin's performance, especially with lots of math block. It requires restart",
+        }
+
+        PLUGIN_SETTINGS[ENABLE_MERMAID_RENDER] = {
+            value: true,
+            public: true,
+            section: SECTION,
+            type: SettingItemType.Bool,
+            label: 'Render mermaid code block to svg in markdown editor',
+            description: "It requires restart",
         }
 
         await joplin.settings.registerSettings(PLUGIN_SETTINGS);

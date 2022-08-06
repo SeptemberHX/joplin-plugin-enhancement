@@ -1,0 +1,8 @@
+.CodeMirror-sizer .mermaid-chart div,
+.CodeMirror-sizer .mermaid-chart span {
+    font-family: "trebuchet ms",verdana,arial,sans-serif !important;
+}
+
+.CodeMirror-sizer .mermaid-chart svg {
+    max-height: 300px;
+}

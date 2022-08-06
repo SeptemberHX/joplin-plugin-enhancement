@@ -62,6 +62,7 @@ module.exports = {
                             regularLinkCaption = regularLinkCaption.replace(/==([^=]+?)==/g, '<mark>$1</mark>')
                             regularLinkCaption = regularLinkCaption.replace(/\+\+([^\+]+?)\+\+/g, '<ins>$1</ins>')
                             textEl.innerHTML = regularLinkCaption;
+                            textEl.title = match[2];
                         } else if (regIndex === 1) {
                             markEl.classList.add(ENHANCED_IMAGE_MARKER);
                             const iconEl = document.createElement('i');

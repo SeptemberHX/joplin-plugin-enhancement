@@ -24,7 +24,7 @@ export class CMBlockMarkerHelper {
                 private readonly blockRegexp: RegExp,
                 private readonly blockStartTokenRegexp: RegExp,
                 private readonly blockEndTokenRegex: RegExp,
-                private readonly renderer: (beginMatch, endMatch, content) => HTMLElement,
+                private readonly renderer: (beginMatch, endMatch, content, fromLine, toLine) => HTMLElement,
                 private readonly spanRenderer: () => HTMLElement,
                 private readonly MARKER_CLASS_NAME: string,
                 private readonly clearOnClick: boolean,
@@ -152,7 +152,6 @@ export class CMBlockMarkerHelper {
                 // }
                 continue;
             }
-            console.log('===> Check finished');
 
             // get the content in the block without the begin/end tokens
             const blockContentLines = [];
@@ -181,7 +180,7 @@ export class CMBlockMarkerHelper {
 
                 // build the line widget just after the marker with the rendered element
                 const wrapper = document.createElement('div');
-                const element = this.renderer(blockRange.beginMatch, blockRange.endMatch, blockContentLines.join('\n'));
+                const element = this.renderer(blockRange.beginMatch, blockRange.endMatch, blockContentLines.join('\n'), from.line, to.line);
                 wrapper.appendChild(element);
                 const lineWidget = this.createLineWidgetForMarker(doc, to.line, textMarker, wrapper);
                 this.setStyleAndLogical(doc, from, to, textMarker, markerEl, wrapper, lineWidget);
