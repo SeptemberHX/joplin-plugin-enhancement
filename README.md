@@ -77,7 +77,12 @@ It supports both `!!!` style and `:::` style admonitions.
 
 > Disabled by default
 
+![Image](./screenshot/mathRender.png)
 ![Imgur](https://i.imgur.com/rVNgAWs.gif)
+
+### Mermaid renderer in markdown editor
+
+![image](./screenshot/mermaidRender.png)
 
 ### Search & Replace
 
@@ -151,8 +156,7 @@ Type `/command` in the editor for quick input of table, mermaid, etc.
 
 ### Auto folder in the editor
 
-* mermaid block (separate setting)
-* link (separate setting): `cmd/ctrl` + left click to open url directly
+* link: `cmd/ctrl` + left click to open url directly
 * image (same setting with link)
 * footnote styling (same setting with link)
 
