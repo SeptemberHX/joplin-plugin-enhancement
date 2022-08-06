@@ -16,3 +16,7 @@
     font-family: KaTeX_Math !important;
     font-style: italic !important;
 }
+
+span.katex-display {
+    margin: 4px;
+}
