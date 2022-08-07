@@ -27,5 +27,9 @@ pre.cm-jn-code-block.CodeMirror-line {
 }
 
 .CodeMirror-selected {
-    max-width: 100%;
+    background-color: transparent !important;
+}
+
+.CodeMirror-selectedtext {
+    background-color: var(--g-selectedTextBackgroundColor) !important;
 }

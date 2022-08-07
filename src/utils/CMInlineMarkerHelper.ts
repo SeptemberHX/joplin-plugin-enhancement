@@ -26,6 +26,7 @@ export default class CMInlineMarkerHelper {
     }
 
     private init() {
+        this.process();
         const foldDebounce = debounce(() => {
             // todo: decide whether to set afterSetValue to false for better response when switching notes
             this.process(true);
