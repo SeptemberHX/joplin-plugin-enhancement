@@ -260,8 +260,13 @@ export class CMBlockMarkerHelper {
         }
         editButton.onclick = (e) => {
             this.clearLineWidgetForMarker(textMarker, wrapperLineWidget);
+            const from = textMarker.find().from;
+            const to = textMarker.find().to;
             textMarker.clear();
-            doc.setCursor({line: from.line + 1, ch: 0});
+            doc.setSelection(
+                {line: from.line + 1, ch: 0},
+                {line: to.line - 1, ch: this.editor.getLine(to.line - 1).length}
+            );
         }
         renderedWrapper.appendChild(editButton);
         renderedWrapper.onmouseover = (e) => {
