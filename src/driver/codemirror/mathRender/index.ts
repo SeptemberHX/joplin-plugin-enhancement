@@ -30,7 +30,7 @@ module.exports = {
                     })
 
                     // inline Katex Math Render
-                    new CMInlineMarkerHelper(_context, cm, [/(?<!\$)\$([^\$]+)\$/g], (match, regIndex: number, from, to, innerDomEleCopy, lastMatchFrom, lastMatchTo) => {
+                    new CMInlineMarkerHelper(_context, cm, [/(?<!\$)\$([^\$]+)\$/g], (match, regIndex: number, from, to) => {
                         const markEl = document.createElement('span');
                         katex.render(match[1], markEl, { throwOnError: false, displayMode: false, output: 'html' })
                         return markEl;

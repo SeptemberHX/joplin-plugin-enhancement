@@ -30,7 +30,7 @@ module.exports = {
         return {
             plugin: function (CodeMirror) {
                 CodeMirror.defineOption("enhancementLinkFolder", [], async function (cm, val, old) {
-                    const mathMarkerHelper = new CMInlineMarkerHelper(_context, cm, regexList, async function (match, regIndex: number, from, to, innerDomEleCopy, lastMatchFrom, lastMatchTo) {
+                    new CMInlineMarkerHelper(_context, cm, regexList, function (match, regIndex: number, from, to) {
                         const markEl = document.createElement('span');
                         if (regIndex === 0) {  // link
                             markEl.classList.add(ENHANCED_LINK_MARKER);

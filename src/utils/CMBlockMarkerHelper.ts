@@ -36,9 +36,8 @@ export class CMBlockMarkerHelper {
      * @private
      */
     private init() {
-        this.process();
         const debounceProcess = debounce(function () {
-            this.process();
+            this.process(true);
             this.unfoldAtCursor();
         }.bind(this), 100);
 
@@ -72,10 +71,11 @@ export class CMBlockMarkerHelper {
 
         if (afterSetValue) {
             fromLine = 0;
-            toLine = Math.min(60, this.editor.lineCount());  // improve user experience for the first 60 lines
+            toLine = this.editor.lineCount();
         }
 
-        for (let i = fromLine; i < toLine; i++) {
+        // start from 0 to avoid strange rendering results
+        for (let i = 0; i < toLine; i++) {
             const line = this.editor.getLine(i);
 
             // if we find the start token, then we will try to find the end token
@@ -89,12 +89,14 @@ export class CMBlockMarkerHelper {
             // only find the end token when we met start token before
             //   if found, we save the block line area to blockRangeList
             if (meetBeginToken && this.blockEndTokenRegex.test(line)) {
-                blockRangeList.push({
-                    from: prevBeginTokenLineNumber,
-                    to: i,
-                    beginMatch: beginMatch,
-                    endMatch: line.match(this.blockEndTokenRegex)
-                });
+                if (i >= fromLine) {
+                    blockRangeList.push({
+                        from: prevBeginTokenLineNumber,
+                        to: i,
+                        beginMatch: beginMatch,
+                        endMatch: line.match(this.blockEndTokenRegex)
+                    });
+                }
                 meetBeginToken = false;
                 prevBeginTokenLineNumber = -1;
             }
