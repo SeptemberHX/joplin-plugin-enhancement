@@ -40,10 +40,19 @@ export class CMBlockMarkerHelper {
      */
     private init() {
         this.process();
-        const debounceProcess = debounce(this.process.bind(this), 100);
+        const debounceProcess = debounce(function () {
+            this.process();
+            this.unfoldAtCursor();
+        }.bind(this), 100);
         this.editor.on('cursorActivity', debounceProcess);
+
         this.editor.on('viewportChange', debounceProcess);
-        // this.editor.on('cursorActivity', this.unfoldAtCursor.bind(this));
+        this.editor.on('change', async function (cm, changeObjs) {
+            console.log(changeObjs.origin);
+            if (changeObjs.origin === 'setValue' || changeObjs.origin === 'undo' || changeObjs.origin === 'redo') {
+                await debounceProcess();
+            }
+        }.bind(this));
     }
 
     /**
@@ -126,30 +135,33 @@ export class CMBlockMarkerHelper {
             const cursor = this.editor.getCursor();
             const doc = this.editor.getDoc();
             let from = {line: blockRange.from, ch: 0};
-            let to = {line: blockRange.to, ch: this.editor.getLine(blockRange.to).length};
+            let to = {line: blockRange.to, ch: this.editor.getLine(blockRange.to).length + 10000};
 
             // check whether we have created a marker for it before
             let existingMarker;
             // @ts-ignore
             this.editor.findMarksAt(from, to).find((marker) => {
                 if (marker.className === this.MARKER_CLASS_NAME) {
-                    existingMarker = marker;
+                    // check whether there exists rendered line widget
+                    const line = this.editor.lineInfo(to.line);
+                    if (line.widgets) {
+                        for (const wid of line.widgets) {
+                            if (wid.className === this.MARKER_CLASS_NAME + '-line-widget') {
+                                existingMarker = marker;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!existingMarker) {
+                        this.clearMarkerLineWidget(marker);
+                    }
                 }
             });
 
             // if processed, then we do not need to process it again.
             if (existingMarker) {
-                // however, when undoing the marker deleting, we need to re-create the rendered line widget
-                //    otherwise, the line widget is lost.
-                // const lineWidget = this.marker2LineWidget[existingMarker];
-                // if (lineWidget.node && lineWidget.node.parentElement && lineWidget.node.parentElement.getBoundingClientRect().height === 0) {
-                //     console.log('===> LineWidget is invisible');
-                //     existingMarker.clear();
-                // } else {
-                //     console.log('===> All fine');
-                //     // both the marker and the line widget are placed. we can go on for the next matched area.
-                //     continue;
-                // }
+                console.log(`line ${from.line}-${to.line} is not processed because of existing marker`);
                 continue;
             }
 
@@ -162,7 +174,7 @@ export class CMBlockMarkerHelper {
             // not fold when the cursor is in the block
             if (cursor.line < from.line || cursor.line > to.line
                 || (cursor.line === from.line && cursor.ch < from.ch)
-                || (cursor.line === to.line && cursor.ch > to.ch)) {
+                || (cursor.line === to.line && cursor.ch >= to.ch)) {
                 // replace the matched range with marker element
                 const markerEl = this.spanRenderer();
                 markerEl.classList.add(this.MARKER_CLASS_NAME);
@@ -184,6 +196,9 @@ export class CMBlockMarkerHelper {
                 wrapper.appendChild(element);
                 const lineWidget = this.createLineWidgetForMarker(doc, to.line, textMarker, wrapper);
                 this.setStyleAndLogical(doc, from, to, textMarker, markerEl, wrapper, lineWidget);
+                console.log(`line ${from.line}-${to.line} is processed successfully`);
+            } else {
+                console.log(`line ${from.line}-${to.line} is not processed because of inside cursor`);
             }
         }
     }
@@ -192,8 +207,22 @@ export class CMBlockMarkerHelper {
         const cursor = this.editor.getCursor();
         this.editor.findMarksAt(cursor).find((marker) => {
             if (marker.className === this.MARKER_CLASS_NAME) {
+                const markerPos = marker.find();
+                if (markerPos && 'to' in markerPos) {
+                    // check whether there exists rendered line widget
+                    const line = this.editor.lineInfo(markerPos.to.line);
+                    if (line.widgets) {
+                        for (const wid of line.widgets) {
+                            if (wid.className === this.MARKER_CLASS_NAME + '-line-widget') {
+                                wid.clear();
+                                this.clearMarkerLineWidget(marker);
+                            }
+                        }
+                    }
+                    console.log(`Marker at lines ${markerPos.from.line}-${markerPos.to.line} is cleared`);
+                }
+
                 marker.clear();
-                this.clearMarkerLineWidget(marker);
             }
         });
     }
@@ -206,7 +235,7 @@ export class CMBlockMarkerHelper {
     }
 
     private createLineWidgetForMarker(doc, line, marker, element) {
-        this.marker2LineWidget[marker] = doc.addLineWidget(line, element);
+        this.marker2LineWidget[marker] = doc.addLineWidget(line, element, { className: this.MARKER_CLASS_NAME + '-line-widget' });
         return this.marker2LineWidget[marker];
     }
 
