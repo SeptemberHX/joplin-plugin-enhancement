@@ -1,6 +1,7 @@
 import {debounce} from "ts-debounce";
 import CodeMirror, {TextMarker} from "codemirror";
 import clickAndClear from "./click-and-clear";
+import {isRangeSelected} from "./cm-utils";
 
 export class CMBlockMarkerHelper {
 
@@ -147,6 +148,8 @@ export class CMBlockMarkerHelper {
             let from = {line: blockRange.from, ch: 0};
             let to = {line: blockRange.to, ch: this.editor.getLine(blockRange.to).length + 10000};
 
+            let selected = isRangeSelected(from, to, this.editor);
+
             // check whether we have created a marker for it before
             let existingMarker;
             // @ts-ignore
@@ -172,6 +175,14 @@ export class CMBlockMarkerHelper {
             // if processed, then we do not need to process it again.
             if (existingMarker) {
                 // console.log(`line ${from.line}-${to.line} is not processed because of existing marker`);
+                if (selected) {
+                    this.clearMarkerLineWidget(existingMarker);
+                    existingMarker.clear();
+                }
+                continue;
+            }
+
+            if (selected) {
                 continue;
             }
 

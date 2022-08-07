@@ -2,6 +2,7 @@
 
 import { debounce } from "ts-debounce";
 import clickAndClear from "./click-and-clear";
+import {isRangeSelected} from "./cm-utils";
 
 interface MarkerMatch {
     regIndex: number;
@@ -9,7 +10,6 @@ interface MarkerMatch {
 }
 
 export default class CMInlineMarkerHelper {
-    lastCursor;
     renderer: (match, regIndex: number, from, to) => any;
     lineFilter: (line: string, lineToken: []) => boolean;
     clicked: (match, regIndex: number, e: MouseEvent) => void;
@@ -103,31 +103,35 @@ export default class CMInlineMarkerHelper {
             const from = {line: lineNo, ch: match.index};
             const to = {line: lineNo, ch: match.index + match[0].length};
 
-            // not fold when the cursor is in the block
-            if (!(cursor.line === lineNo && cursor.ch >= from.ch - 1 && cursor.ch <= to.ch)) {
-                const element = this.renderer(match, regIndex, from, to);
-                const textMarker = doc.markText(
-                    from,
-                    to,
-                    {
-                        replacedWith: element,
-                        className: this.MARKER_CLASS_NAMES[regIndex], // class name is not renderer in DOM
-                        clearOnEnter: true,
-                        inclusiveLeft: false,
-                        inclusiveRight: false
-                    },
-                );
+            let selected = isRangeSelected(from, to, this.editor);
 
-                element.onclick = (e) => {
-                    if (e.ctrlKey || e.metaKey) {
-                        e.preventDefault();
-                        if (this.clicked) {
-                            this.clicked(match, regIndex, e);
+            if (!selected) {
+                // not fold when the cursor is in the block
+                if (!(cursor.line === lineNo && cursor.ch >= from.ch - 1 && cursor.ch <= to.ch)) {
+                    const element = this.renderer(match, regIndex, from, to);
+                    const textMarker = doc.markText(
+                        from,
+                        to,
+                        {
+                            replacedWith: element,
+                            className: this.MARKER_CLASS_NAMES[regIndex], // class name is not renderer in DOM
+                            clearOnEnter: true,
+                            inclusiveLeft: false,
+                            inclusiveRight: false
+                        },
+                    );
+
+                    element.onclick = (e) => {
+                        if (e.ctrlKey || e.metaKey) {
+                            e.preventDefault();
+                            if (this.clicked) {
+                                this.clicked(match, regIndex, e);
+                            }
+                        } else {
+                            clickAndClear(textMarker, this.editor)(e);
                         }
-                    } else {
-                        clickAndClear(textMarker, this.editor)(e);
-                    }
-                };
+                    };
+                }
             }
         }
     }
