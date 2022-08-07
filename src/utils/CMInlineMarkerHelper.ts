@@ -108,7 +108,7 @@ export default class CMInlineMarkerHelper {
 
             if (!selected) {
                 // not fold when the cursor is in the block
-                if (!(cursor.line === lineNo && cursor.ch >= from.ch - 1 && cursor.ch <= to.ch)) {
+                if (!(cursor.line === lineNo && cursor.ch >= from.ch && cursor.ch <= to.ch)) {
                     const element = this.renderer(match, regIndex, from, to);
                     const textMarker = doc.markText(
                         from,
