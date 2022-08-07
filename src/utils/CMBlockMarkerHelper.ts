@@ -41,22 +41,24 @@ export class CMBlockMarkerHelper {
             this.process();
             this.unfoldAtCursor();
         }.bind(this), 100);
-        this.editor.on('cursorActivity', debounceProcess);
 
-        this.editor.on('viewportChange', debounceProcess);
         this.editor.on('change', async function (cm, changeObjs) {
-            // console.log(changeObjs.origin);
-            if (changeObjs.origin === 'setValue' || changeObjs.origin === 'undo' || changeObjs.origin === 'redo') {
+            if (changeObjs.origin === 'setValue') {
+                this.process(true);
+                this.unfoldAtCursor();
+            } else if (changeObjs.origin === 'undo' || changeObjs.origin === 'redo') {
                 await debounceProcess();
             }
         }.bind(this));
+        this.editor.on('cursorActivity', debounceProcess);
+        this.editor.on('viewportChange', debounceProcess);
     }
 
     /**
      * Process current view port to render the target block in the editor with the given marker class name
      * @private
      */
-    private process() {
+    private process(afterSetValue: boolean = false) {
         // First, find all math elements
         // We'll only render the viewport
         const viewport = this.editor.getViewport()
@@ -64,7 +66,16 @@ export class CMBlockMarkerHelper {
         let meetBeginToken = false;
         let prevBeginTokenLineNumber = -1;
         let beginMatch = null;
-        for (let i = viewport.from; i < viewport.to; i++) {
+
+        let fromLine = viewport.from;
+        let toLine = viewport.to;
+
+        if (afterSetValue) {
+            fromLine = 0;
+            toLine = Math.min(60, this.editor.lineCount());  // improve user experience for the first 60 lines
+        }
+
+        for (let i = fromLine; i < toLine; i++) {
             const line = this.editor.getLine(i);
 
             // if we find the start token, then we will try to find the end token

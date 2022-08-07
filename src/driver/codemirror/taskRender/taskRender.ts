@@ -27,7 +27,7 @@ export function markdownRenderTasks(cm: CodeMirror.Editor, viewPort: boolean) {
     let match
 
     let fromLine = 0;
-    let toLine = cm.lineCount();
+    let toLine = Math.min(60, cm.lineCount());
 
     if (viewPort) {
         // We'll only renderer the viewport
