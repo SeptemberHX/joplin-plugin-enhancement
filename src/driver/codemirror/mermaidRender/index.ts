@@ -7,7 +7,7 @@ const ENHANCEMENT_MERMAID_SPAN_MARKER_LINE_CLASS = 'enhancement-mermaid-block-ma
 
 // Initialise the mermaid API. Note the "as any" cast, since the mermaid types
 // are wrong.
-mermaid.initialize({ startOnLoad: false, theme: 'dark' as any })
+mermaid.initialize({ startOnLoad: false })
 
 module.exports = {
     default: function(_context) {

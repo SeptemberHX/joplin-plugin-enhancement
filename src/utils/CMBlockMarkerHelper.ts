@@ -4,8 +4,6 @@ import clickAndClear from "./click-and-clear";
 
 export class CMBlockMarkerHelper {
 
-    marker2LineWidget;
-
     /**
      * Constructor
      * @param editor Codemirror editor
@@ -30,7 +28,6 @@ export class CMBlockMarkerHelper {
                 private readonly clearOnClick: boolean,
                 private readonly codeBlock?: boolean
     ) {
-        this.marker2LineWidget = {};
         this.init();
     }
 
@@ -48,7 +45,7 @@ export class CMBlockMarkerHelper {
 
         this.editor.on('viewportChange', debounceProcess);
         this.editor.on('change', async function (cm, changeObjs) {
-            console.log(changeObjs.origin);
+            // console.log(changeObjs.origin);
             if (changeObjs.origin === 'setValue' || changeObjs.origin === 'undo' || changeObjs.origin === 'redo') {
                 await debounceProcess();
             }
@@ -161,7 +158,7 @@ export class CMBlockMarkerHelper {
 
             // if processed, then we do not need to process it again.
             if (existingMarker) {
-                console.log(`line ${from.line}-${to.line} is not processed because of existing marker`);
+                // console.log(`line ${from.line}-${to.line} is not processed because of existing marker`);
                 continue;
             }
 
@@ -196,9 +193,9 @@ export class CMBlockMarkerHelper {
                 wrapper.appendChild(element);
                 const lineWidget = this.createLineWidgetForMarker(doc, to.line, textMarker, wrapper);
                 this.setStyleAndLogical(doc, from, to, textMarker, markerEl, wrapper, lineWidget);
-                console.log(`line ${from.line}-${to.line} is processed successfully`);
+                // console.log(`line ${from.line}-${to.line} is processed successfully`);
             } else {
-                console.log(`line ${from.line}-${to.line} is not processed because of inside cursor`);
+                // console.log(`line ${from.line}-${to.line} is not processed because of inside cursor`);
             }
         }
     }
@@ -219,7 +216,7 @@ export class CMBlockMarkerHelper {
                             }
                         }
                     }
-                    console.log(`Marker at lines ${markerPos.from.line}-${markerPos.to.line} is cleared`);
+                    // console.log(`Marker at lines ${markerPos.from.line}-${markerPos.to.line} is cleared`);
                 }
 
                 marker.clear();
@@ -228,29 +225,33 @@ export class CMBlockMarkerHelper {
     }
 
     private clearMarkerLineWidget(marker) {
-        if (marker in this.marker2LineWidget) {
-            this.marker2LineWidget[marker].clear();
-            delete this.marker2LineWidget[marker];
+        // check whether there exists rendered line widget
+        const line = this.editor.lineInfo(marker.find().to.line);
+        if (line.widgets) {
+            for (const wid of line.widgets) {
+                if (wid.className === this.MARKER_CLASS_NAME + '-line-widget') {
+                    wid.clear();
+                    this.clearMarkerLineWidget(marker);
+                }
+            }
         }
     }
 
     private createLineWidgetForMarker(doc, line, marker, element) {
-        this.marker2LineWidget[marker] = doc.addLineWidget(line, element, { className: this.MARKER_CLASS_NAME + '-line-widget' });
-        return this.marker2LineWidget[marker];
+        return doc.addLineWidget(line, element, { className: this.MARKER_CLASS_NAME + '-line-widget' });
     }
 
     private clearLineWidgetForMarker(marker, lineWidget) {
         lineWidget.clear();
-        delete this.marker2LineWidget[marker];
     }
 
     private setStyleAndLogical(doc, from, to, textMarker, makerEl, renderedWrapper, wrapperLineWidget) {
-        renderedWrapper.style.cssText = 'border: 2px solid transparent; padding: 2px; width: 100%; border-radius: 4px; background-color: var(--joplin-background-color) !important';
+        renderedWrapper.style.cssText = 'border: 2px solid transparent; padding: 2px; width: 100%; border-radius: 4px; background-color: var(--joplin-background-color) !important; transition: border-color 500ms;';
         const editButton = document.createElement('div');
         editButton.innerHTML = `<svg viewBox="0 0 100 100" class="code-glyph" width="16" height="16"><path fill="currentColor" stroke="currentColor" d="M56.6,13.3c-1.6,0-2.9,1.2-3.2,2.7L40.1,82.7c-0.3,1.2,0.1,2.4,1,3.2c0.9,0.8,2.2,1.1,3.3,0.7c1.1-0.4,2-1.4,2.2-2.6 l13.3-66.7c0.2-1,0-2-0.7-2.8S57.6,13.3,56.6,13.3z M24.2,26.6c-1.1,0-2.1,0.5-2.8,1.4l-14.1,20c-0.8,1.2-0.8,2.7,0,3.9l14.1,20 c1.1,1.5,3.1,1.9,4.6,0.8c1.5-1.1,1.9-3.1,0.8-4.6L14.1,50l12.8-18.1c0.7-1,0.8-2.4,0.3-3.5C26.6,27.3,25.4,26.6,24.2,26.6 L24.2,26.6z M76.5,26.6c-1.2,0-2.4,0.8-2.9,1.9c-0.5,1.1-0.4,2.4,0.3,3.4L86.7,50L73.9,68.1c-0.7,1-0.8,2.2-0.3,3.3 s1.5,1.8,2.7,1.9c1.2,0.1,2.3-0.4,3-1.4l14.1-20c0.8-1.2,0.8-2.7,0-3.9l-14.1-20C78.7,27.1,77.7,26.6,76.5,26.6L76.5,26.6z"></path></svg>`;
         editButton.style.cssText = 'position: absolute; top: 8px; right: 10px; width: 24px; height: 24px;' +
-            'background-color: #19a2f0 !important; color: #f2f2f2; border-radius: 5px; display: flex; align-items: center; justify-content: center;';
-        editButton.style.visibility = 'hidden';
+            'background-color: #19a2f0 !important; color: #f2f2f2; border-radius: 5px; display: flex; align-items: center; justify-content: center; transition: opacity 500ms;';
+        editButton.style.opacity = '0';
         if (this.clearOnClick) {
             makerEl.onclick = (e) => {
                 this.clearLineWidgetForMarker(textMarker, wrapperLineWidget);
@@ -264,11 +265,11 @@ export class CMBlockMarkerHelper {
         }
         renderedWrapper.appendChild(editButton);
         renderedWrapper.onmouseover = (e) => {
-            editButton.style.visibility = 'visible';
-            renderedWrapper.style.border = '2px solid #19a2f0';
+            editButton.style.opacity = '1';
+            renderedWrapper.style.border = '2px solid #d8d8d8';
         };
         renderedWrapper.onmouseleave = (e) => {
-            editButton.style.visibility = 'hidden';
+            editButton.style.opacity = '0';
             renderedWrapper.style.border = '2px solid transparent';
         };
     }
