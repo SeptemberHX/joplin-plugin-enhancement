@@ -1,9 +1,11 @@
 import {debounce} from "ts-debounce";
 import CodeMirror, {TextMarker} from "codemirror";
 import clickAndClear from "./click-and-clear";
-import {isRangeSelected} from "./cm-utils";
+import {findLineWidgetAtLine, isCursorOutRange, isRangeSelected} from "./cm-utils";
 
 export class CMBlockMarkerHelperV2 {
+
+    lineWidgetClassName: string;
 
     /**
      * Constructor
@@ -26,6 +28,7 @@ export class CMBlockMarkerHelperV2 {
                 private readonly MARKER_CLASS_NAME: string,
                 private readonly clearOnClick: boolean,
     ) {
+        this.lineWidgetClassName = this.MARKER_CLASS_NAME + '-line-widget';
         this.init();
     }
 
@@ -128,39 +131,49 @@ export class CMBlockMarkerHelperV2 {
     }
 
     private _markRanges(blockRangeList) {
+        const cursor = this.editor.getCursor();
+        const doc = this.editor.getDoc();
+
         for (const blockRange of blockRangeList) {
-            const cursor = this.editor.getCursor();
-            const doc = this.editor.getDoc();
             let from = {line: blockRange.from, ch: 0};
             let to = {line: blockRange.to, ch: this.editor.getLine(blockRange.to).length};
 
-            const isCursorOutRange = cursor.line < from.line || cursor.line > to.line
-                || (cursor.line === from.line && cursor.ch < from.ch)
-                || (cursor.line === to.line && cursor.ch >= to.ch);
-
+            const cursorOutRange = isCursorOutRange(cursor, from, to);
             let selected = isRangeSelected(from, to, this.editor);
 
             // check whether we have created a marker for it before
             let existingMarker;
             let existingLineWidget;
-            // @ts-ignore
-            this.editor.findMarksAt(from, to).find((marker) => {
+            this.editor.findMarks(from, to).find((marker) => {
                 if (marker.className === this.MARKER_CLASS_NAME) {
                     // check whether there exists rendered line widget
-                    existingLineWidget = this.findLineWidgetAtLine(to.line);
+                    existingLineWidget = findLineWidgetAtLine(this.editor, to.line, this.lineWidgetClassName);
                     if (existingLineWidget) {
                         existingMarker = marker;
                     }
 
-                    // always clear the existing marker without rendered line widget
-                    if (!existingMarker) {
+                    // @ts-ignore
+                    if (marker.find().from.line !== from.line || marker.find().to.line !== to.line) {
+                        marker.clear();
+                        if (existingLineWidget) {
+                            existingLineWidget.clear();
+                        }
+                    } else if (!existingMarker) {  // always clear the existing marker without rendered line widget
                         marker.clear();
                     }
                 }
             });
 
+            // whatever it is, we do not allow a line widget in a marked range
+            for (let i = from.line; i < to.line; i++) {
+                const lineWidget = findLineWidgetAtLine(this.editor, i, this.lineWidgetClassName);
+                if (lineWidget) {
+                    lineWidget.clear();
+                }
+            }
+
             // clear all markers and rendered line widgets when selected
-            if (selected && isCursorOutRange) {
+            if (selected && cursorOutRange) {
                 if (existingMarker) {
                     existingMarker.clear();
                     existingLineWidget.clear();
@@ -177,11 +190,11 @@ export class CMBlockMarkerHelperV2 {
             // otherwise there are two different situations:
             //   1) when cursor outside: set marker and render line widget
             //   2) when cursor inside: **clear** marker if has and only render line widget without marker
-            if (isCursorOutRange) {
+            if (cursorOutRange) {
                 if (existingMarker) {  // cursor outside, and there already have a marker and a line widget
                     continue;
                 } else {
-                    let existingLineWidget = this.findLineWidgetAtLine(to.line);
+                    let existingLineWidget = findLineWidgetAtLine(this.editor, to.line, this.lineWidgetClassName);
                     if (existingLineWidget) {
                         existingLineWidget.clear();
                     }
@@ -213,7 +226,7 @@ export class CMBlockMarkerHelperV2 {
                     existingMarker.clear();
                 }
 
-                let existingLineWidget = this.findLineWidgetAtLine(to.line);
+                let existingLineWidget = findLineWidgetAtLine(this.editor, to.line, this.lineWidgetClassName);
                 if (existingLineWidget) {
                     existingLineWidget.node.innerHTML = '';
                     const element = this.renderer(blockRange.beginMatch, blockRange.endMatch, blockContentLines.join('\n'), from.line, to.line);
@@ -239,7 +252,7 @@ export class CMBlockMarkerHelperV2 {
     }
 
     private createLineWidgetForMarker(doc, line, element) {
-        return doc.addLineWidget(line, element, { className: this.MARKER_CLASS_NAME + '-line-widget' });
+        return doc.addLineWidget(line, element, { className: this.lineWidgetClassName });
     }
 
     private setStyleAndLogical(doc, from, to, textMarker, makerEl, renderedWrapper, wrapperLineWidget) {
@@ -276,18 +289,5 @@ export class CMBlockMarkerHelperV2 {
             editButton.style.opacity = '0';
             renderedWrapper.style.border = '2px solid transparent';
         };
-    }
-
-    private findLineWidgetAtLine(lineNumber: number) {
-        // check whether there exists rendered line widget
-        const line = this.editor.lineInfo(lineNumber);
-        if (line.widgets) {
-            for (const wid of line.widgets) {
-                if (wid.className === this.MARKER_CLASS_NAME + '-line-widget') {
-                    return wid;
-                }
-            }
-        }
-        return null;
     }
 }
