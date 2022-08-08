@@ -24,3 +24,7 @@ span.katex-display {
 .enhancement-math-block-marker-line {
     display: none;
 }
+
+.katex-error {
+    background-color: yellow !important;
+}

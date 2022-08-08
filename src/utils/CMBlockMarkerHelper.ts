@@ -38,7 +38,7 @@ export class CMBlockMarkerHelper {
      */
     private init() {
         const debounceProcess = debounce(function () {
-            this.process(true);
+            this.process(false);
             this.unfoldAtCursor();
         }.bind(this), 100);
 
@@ -72,7 +72,7 @@ export class CMBlockMarkerHelper {
 
         if (afterSetValue) {
             fromLine = 0;
-            toLine = this.editor.lineCount();
+            toLine = Math.min(60, this.editor.lineCount());
         }
 
         // start from 0 to avoid strange rendering results
