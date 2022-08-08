@@ -29,7 +29,7 @@ export class CMBlockMarkerHelperV2 {
                 private readonly clearOnClick: boolean,
     ) {
         this.lineWidgetClassName = this.MARKER_CLASS_NAME + '-line-widget';
-        this.init();
+        // this.init();
     }
 
     /**
@@ -58,7 +58,7 @@ export class CMBlockMarkerHelperV2 {
      * Process current view port to render the target block in the editor with the given marker class name
      * @private
      */
-    private process(afterSetValue: boolean = false) {
+    public process(afterSetValue: boolean = false) {
         // First, find all math elements
         // We'll only render the viewport
         const viewport = this.editor.getViewport()
@@ -125,9 +125,7 @@ export class CMBlockMarkerHelperV2 {
         }
 
         // improve performance by updating dom only once even with multiple operations
-        this.editor.operation(() => {
-            this._markRanges(blockRangeList);
-        });
+        this._markRanges(blockRangeList);
     }
 
     private _markRanges(blockRangeList) {

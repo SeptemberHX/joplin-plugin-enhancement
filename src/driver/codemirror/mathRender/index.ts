@@ -2,6 +2,8 @@ import CMInlineMarkerHelper from "../../../utils/CMInlineMarkerHelper";
 import katex from 'katex'
 import {LineHandle} from "codemirror";
 import {CMBlockMarkerHelperV2} from "../../../utils/CMBlockMarkerHelperV2";
+import CMInlineMarkerHelperV2 from "../../../utils/CMInlineMarkerHelperV2";
+import {debounce} from "ts-debounce";
 
 const ENHANCEMENT_MATH_BLOCK_SPAN_MARKER_CLASS = 'enhancement-math-block-marker';
 const ENHANCEMENT_MATH_BLOCK_SPAN_MARKER_LINE_CLASS = 'enhancement-math-block-marker-line';
@@ -12,7 +14,7 @@ module.exports = {
             plugin: function (CodeMirror) {
                 CodeMirror.defineOption("enhancementMathRender", [], async function(cm, val, old) {
                     // Block Katex Math Render
-                    new CMBlockMarkerHelperV2(cm, null, /^\s*\$\$\s*$/, /^\s*\$\$\s*$/, (beginMatch, endMatch, content, fromLine, toLine) => {
+                    const blockMathHelper = new CMBlockMarkerHelperV2(cm, null, /^\s*\$\$\s*$/, /^\s*\$\$\s*$/, (beginMatch, endMatch, content, fromLine, toLine) => {
                             let divElement = document.createElement("div");
                             let spanElement = document.createElement('span');
                             let cCount = 0;
@@ -43,11 +45,30 @@ module.exports = {
                     })
 
                     // inline Katex Math Render
-                    new CMInlineMarkerHelper(_context, cm, [/(?<!\$)\$([^\$]+)\$/g], (match, regIndex: number, from, to) => {
+                    const inlineMathHelper = new CMInlineMarkerHelperV2(_context, cm, /(?<!\$)\$([^\$]+)\$/g, (match, from, to) => {
                         const markEl = document.createElement('span');
                         katex.render(match[1], markEl, { throwOnError: false, displayMode: false, output: 'html' })
                         return markEl;
-                    }, 'enhancement-inline-math-marker', null);
+                    }, 'enhancement-inline-math-marker');
+
+                    function process() {
+                        cm.startOperation();
+                        blockMathHelper.process(true);
+                        inlineMathHelper.process(true);
+                        cm.endOperation();
+                    }
+
+                    const debounceProcess = debounce(process, 100);
+                    cm.on('change', async function (cm, changeObjs) {
+                        if (changeObjs.origin === 'setValue') {
+                            process();
+                            // this.unfoldAtCursor();
+                        } else if (changeObjs.origin === 'undo' || changeObjs.origin === 'redo') {
+                            await debounceProcess();
+                        }
+                    });
+                    cm.on('cursorActivity', debounceProcess);
+                    cm.on('viewportChange', debounceProcess);
                 });
             },
             codeMirrorOptions: {
