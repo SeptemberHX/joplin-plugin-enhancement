@@ -71,9 +71,7 @@ module.exports = {
                             }
                         }
                         return markEl;
-                    }, ENHANCED_MARKER_LIST[0], function (line, lineTokens) {
-                        return true;
-                    }, async function (match, e) {
+                    }, ENHANCED_MARKER_LIST[0], null, async function (match, e) {
                         // open url
                         await _context.postMessage({
                             type: 'openUrl',
@@ -108,9 +106,7 @@ module.exports = {
                             }
                         }
                         return markEl;
-                    }, ENHANCED_MARKER_LIST[1], function (line, lineTokens) {
-                        return true;
-                    });
+                    }, ENHANCED_MARKER_LIST[1]);
 
                     const footnoteMarker = new CMInlineMarkerHelperV2(_context, cm, regexList[2], function (match, from, to) {
                         const markEl = document.createElement('span');
@@ -127,9 +123,7 @@ module.exports = {
                             }
                         }
                         return markEl;
-                    }, ENHANCED_MARKER_LIST[2], function (line, lineTokens) {
-                        return true;
-                    });
+                    }, ENHANCED_MARKER_LIST[2]);
 
                     function process(full: boolean) {
                         cm.startOperation();

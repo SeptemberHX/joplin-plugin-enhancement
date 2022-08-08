@@ -37,13 +37,8 @@ module.exports = {
                             markEl.style.cssText = 'color: darkgray;';
                         }
                         return markEl;
-                    }, [ENHANCED_QUOTE_MARKER, ENHANCED_QUOTE_MARKER_NAME, ENHANCED_QUOTE_MARKER_DATE],  function (line, lineTokens) {
-                        for (const [tokenIndex, token] of lineTokens.entries()) {
-                            if (token.type?.includes('quote')) {
-                                return true;
-                            }
-                        }
-                        return false;
+                    }, [ENHANCED_QUOTE_MARKER, ENHANCED_QUOTE_MARKER_NAME, ENHANCED_QUOTE_MARKER_DATE],  function (line) {
+                        return line.trim().startsWith('>')
                     });
                 });
             },

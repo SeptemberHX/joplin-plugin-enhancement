@@ -48,8 +48,8 @@ export default class CMInlineMarkerHelperV2 {
                 continue;
             }
 
-            const lineTokens = this.editor.getLineTokens(lineNo);
             if (this.lineFilter) {
+                const lineTokens = this.editor.getLineTokens(lineNo);
                 if (!this.lineFilter(line, lineTokens)) {
                     continue;
                 }

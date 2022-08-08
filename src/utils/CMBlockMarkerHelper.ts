@@ -43,10 +43,7 @@ export class CMBlockMarkerHelper {
         }.bind(this), 100);
 
         this.editor.on('change', async function (cm, changeObjs) {
-            if (changeObjs.origin === 'setValue') {
-                this.process(true);
-                this.unfoldAtCursor();
-            } else if (changeObjs.origin === 'undo' || changeObjs.origin === 'redo') {
+            if (changeObjs.origin === 'undo' || changeObjs.origin === 'redo') {
                 await debounceProcess();
             }
         }.bind(this));
@@ -72,7 +69,7 @@ export class CMBlockMarkerHelper {
 
         if (afterSetValue) {
             fromLine = 0;
-            toLine = Math.min(60, this.editor.lineCount());
+            toLine = Math.min(40, this.editor.lineCount());
         }
 
         // start from 0 to avoid strange rendering results
