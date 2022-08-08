@@ -2,6 +2,7 @@ import {CMBlockMarkerHelper} from "../../../utils/CMBlockMarkerHelper";
 import CMInlineMarkerHelper from "../../../utils/CMInlineMarkerHelper";
 import katex from 'katex'
 import {LineHandle} from "codemirror";
+import {CMBlockMarkerHelperV2} from "../../../utils/CMBlockMarkerHelperV2";
 
 const ENHANCEMENT_MATH_BLOCK_SPAN_MARKER_CLASS = 'enhancement-math-block-marker';
 const ENHANCEMENT_MATH_BLOCK_SPAN_MARKER_LINE_CLASS = 'enhancement-math-block-marker-line';
@@ -12,9 +13,19 @@ module.exports = {
             plugin: function (CodeMirror) {
                 CodeMirror.defineOption("enhancementMathRender", [], async function(cm, val, old) {
                     // Block Katex Math Render
-                    new CMBlockMarkerHelper(cm, null, /^\s*\$\$\s*$/, /^\s*\$\$\s*$/, (beginMatch, endMatch, content, fromLine, toLine) => {
+                    new CMBlockMarkerHelperV2(cm, null, /^\s*\$\$\s*$/, /^\s*\$\$\s*$/, (beginMatch, endMatch, content, fromLine, toLine) => {
                             let spanElement = document.createElement('span');
-                            katex.render(content, spanElement, { throwOnError: false, displayMode: true, output: 'html' })
+                            let cCount = 0;
+                            for (let i = content.length - 1; i >= 0; i--) {
+                                if (content[i] === '\\') {
+                                    cCount++;
+                                } else {
+                                    break;
+                                }
+                            }
+
+                            katex.render(cCount % 2 !== 0 ? content.substring(0, content.length - 1) : content,
+                                spanElement, { throwOnError: false, displayMode: true, output: 'html' })
                             return spanElement;
                     }, () => {
                         const span = document.createElement('span');
