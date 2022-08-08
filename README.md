@@ -78,6 +78,7 @@ It supports both `!!!` style and `:::` style admonitions.
 > Disabled by default
 
 ![Image](./screenshot/mathRender.png)
+![Imgur](https://i.imgur.com/UUZkqcz.gif)
 ![Imgur](https://i.imgur.com/rVNgAWs.gif)
 
 ### Mermaid renderer in markdown editor
