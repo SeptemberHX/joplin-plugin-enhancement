@@ -27,6 +27,7 @@ export class CMBlockMarkerHelperV2 {
                 private readonly spanRenderer: () => HTMLElement,
                 private readonly MARKER_CLASS_NAME: string,
                 private readonly clearOnClick: boolean,
+                private readonly renderWhenEditing: boolean
     ) {
         this.lineWidgetClassName = this.MARKER_CLASS_NAME + '-line-widget';
     }
@@ -164,6 +165,7 @@ export class CMBlockMarkerHelperV2 {
             // otherwise there are two different situations:
             //   1) when cursor outside: set marker and render line widget
             //   2) when cursor inside: **clear** marker if has and only render line widget without marker
+            //                          when renderWhenEditing is true
             if (cursorOutRange) {
                 if (existingMarker) {  // cursor outside, and there already have a marker and a line widget
                     continue;
@@ -201,28 +203,23 @@ export class CMBlockMarkerHelperV2 {
                 }
 
                 let existingLineWidget = findLineWidgetAtLine(this.editor, to.line, this.lineWidgetClassName);
-                if (existingLineWidget) {
-                    existingLineWidget.node.innerHTML = '';
-                    const element = this.renderer(blockRange.beginMatch, blockRange.endMatch, blockContentLines.join('\n'), from.line, to.line);
-                    existingLineWidget.node.appendChild(element);
-                } else {
-                    // build the line widget just after the marker with the rendered element
-                    const wrapper = document.createElement('div');
-                    const element = this.renderer(blockRange.beginMatch, blockRange.endMatch, blockContentLines.join('\n'), from.line, to.line);
-                    wrapper.appendChild(element);
-                    this.createLineWidgetForMarker(doc, to.line, wrapper);
+                if (this.renderWhenEditing) {
+                    if (existingLineWidget) {
+                        existingLineWidget.node.innerHTML = '';
+                        const element = this.renderer(blockRange.beginMatch, blockRange.endMatch, blockContentLines.join('\n'), from.line, to.line);
+                        existingLineWidget.node.appendChild(element);
+                    } else {
+                        // build the line widget just after the marker with the rendered element
+                        const wrapper = document.createElement('div');
+                        const element = this.renderer(blockRange.beginMatch, blockRange.endMatch, blockContentLines.join('\n'), from.line, to.line);
+                        wrapper.appendChild(element);
+                        this.createLineWidgetForMarker(doc, to.line, wrapper);
+                    }
+                } else if (existingLineWidget) {
+                    existingLineWidget.clear();
                 }
             }
         }
-    }
-
-    private unfoldAtCursor() {
-        const cursor = this.editor.getCursor();
-        this.editor.findMarksAt(cursor).find((marker) => {
-            if (marker.className === this.MARKER_CLASS_NAME) {
-                marker.clear();
-            }
-        });
     }
 
     private createLineWidgetForMarker(doc, line, element) {

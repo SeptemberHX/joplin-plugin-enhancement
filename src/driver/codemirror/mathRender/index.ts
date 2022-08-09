@@ -36,7 +36,7 @@ module.exports = {
                         span.textContent = '===> Folded Math Block <===';
                         span.style.cssText = 'color: lightgray; font-size: smaller; font-style: italic;';
                         return span;
-                    },ENHANCEMENT_MATH_BLOCK_SPAN_MARKER_CLASS, true);
+                    },ENHANCEMENT_MATH_BLOCK_SPAN_MARKER_CLASS, true, true);
 
                     cm.on('renderLine', (editor, line: LineHandle, element: Element) => {
                         if (element.getElementsByClassName(ENHANCEMENT_MATH_BLOCK_SPAN_MARKER_CLASS).length > 0) {
