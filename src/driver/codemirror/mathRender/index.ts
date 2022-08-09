@@ -45,7 +45,7 @@ module.exports = {
                     })
 
                     // inline Katex Math Render
-                    const inlineMathHelper = new CMInlineMarkerHelperV2(_context, cm, /(?<!\$)\$([^\$]+)\$/g, (match, from, to) => {
+                    const inlineMathHelper = new CMInlineMarkerHelperV2(cm, /(?<!\$)\$([^\$]+)\$/g, (match, from, to) => {
                         const markEl = document.createElement('span');
                         katex.render(match[1], markEl, { throwOnError: false, displayMode: false, output: 'html' })
                         return markEl;

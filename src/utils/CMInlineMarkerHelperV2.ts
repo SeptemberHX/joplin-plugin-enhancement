@@ -15,7 +15,7 @@ export default class CMInlineMarkerHelperV2 {
     regex;
     MARKER_CLASS_NAME: string;
 
-    constructor(private readonly context, private readonly editor, regex, renderer, MARKER_CLASS_NAME, lineFilter?, clicked?) {
+    constructor(private readonly editor, regex, renderer, MARKER_CLASS_NAME, lineFilter?, clicked?) {
         this.regex = regex;
         this.renderer = renderer;
         this.lineFilter = lineFilter;

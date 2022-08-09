@@ -47,6 +47,11 @@ span.enhancement-image-size-text {
     font-style: italic;
 }
 
-.enhancement-block-image-marker-span-line {
+.enhancement-block-link-marker-line-widget {
+    text-align: center;
+    max-width: 100%;
+}
+
+.enhancement-block-link-marker-span-line, .enhancement-block-image-marker-span-line {
     display: none;
 }
