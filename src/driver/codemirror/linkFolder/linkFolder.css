@@ -63,3 +63,7 @@ a.enhancement-link-marker-text {
 .enhancement-block-link-marker-line-widget audio {
     min-width: 80%;
 }
+
+.enhancement-link-user-label {
+    font-style: italic;
+}
