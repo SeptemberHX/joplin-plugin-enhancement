@@ -13,10 +13,6 @@ const ENHANCEMENT_LINK_SPAN_MARKER_LINE_CLASS = 'enhancement-link-marker-line-wi
 
 const ENHANCED_FOOTNOTE_MARKER_TEXT = 'enhancement-footnote-marker-text';
 
-const ENHANCED_IMAGE_MARKER_ICON = 'enhancement-image-marker-icon';
-const ENHANCED_IMAGE_MARKER_TEXT = 'enhancement-image-marker-text';
-const ENHANCED_IMAGE_SIZE_TEXT = 'enhancement-image-size-text';
-
 const ENHANCED_MARKER_LIST = [
     ENHANCED_LINK_MARKER,
     ENHANCED_IMAGE_MARKER,
@@ -82,54 +78,7 @@ module.exports = {
                         });
                     });
 
-                    // new CMInlineMarkerHelperV2(_context, cm, regexList[1], function (match, from, to) {
-                    //     const markEl = document.createElement('span');
-                    //
-                    //     markEl.classList.add(ENHANCED_IMAGE_MARKER);
-                    //     const iconEl = document.createElement('i');
-                    //     iconEl.classList.add(ENHANCED_IMAGE_MARKER_ICON, 'fas', 'fa-image');
-                    //     markEl.appendChild(iconEl);
-                    //
-                    //     const textEl = document.createElement('span');
-                    //     textEl.classList.add(ENHANCED_IMAGE_MARKER_TEXT);
-                    //     textEl.textContent = match[1];
-                    //     markEl.appendChild(textEl);
-                    //
-                    //     if (match[3]) {
-                    //         const sizeEl = document.createElement('span');
-                    //         sizeEl.classList.add(ENHANCED_IMAGE_SIZE_TEXT);
-                    //         sizeEl.textContent = match[3].substr(1, match[3].length - 2);
-                    //         markEl.appendChild(sizeEl);
-                    //     }
-                    //
-                    //     const typesStr = cm.getTokenTypeAt(from);
-                    //     if (typesStr) {
-                    //         for (const typeStr of typesStr.split(' ')) {
-                    //             markEl.classList.add(`cm-${typeStr}`);
-                    //         }
-                    //     }
-                    //     return markEl;
-                    // }, ENHANCED_MARKER_LIST[1]);
-
                     const imageMarker = new CMBlockMarkerHelperV2(cm, null, regexList[1], null, (beginMatch, endMatch, content, fromLine, toLine) => {
-                        // const markEl = document.createElement('span');
-                        //
-                        // markEl.classList.add(ENHANCED_IMAGE_MARKER);
-                        // const iconEl = document.createElement('i');
-                        // iconEl.classList.add(ENHANCED_IMAGE_MARKER_ICON, 'fas', 'fa-image');
-                        // markEl.appendChild(iconEl);
-                        //
-                        // const textEl = document.createElement('span');
-                        // textEl.classList.add(ENHANCED_IMAGE_MARKER_TEXT);
-                        // textEl.textContent = beginMatch[1];
-                        // markEl.appendChild(textEl);
-                        //
-                        // if (beginMatch[3]) {
-                        //     const sizeEl = document.createElement('span');
-                        //     sizeEl.classList.add(ENHANCED_IMAGE_SIZE_TEXT);
-                        //     sizeEl.textContent = beginMatch[3].substr(1, beginMatch[3].length - 2);
-                        //     markEl.appendChild(sizeEl);
-                        // }
                         const markEl = document.createElement('figure');
                         const imgEl = document.createElement('img');
 
