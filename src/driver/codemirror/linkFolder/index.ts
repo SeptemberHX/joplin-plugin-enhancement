@@ -1,5 +1,7 @@
 import CMInlineMarkerHelperV2 from "../../../utils/CMInlineMarkerHelperV2";
 import {debounce} from "ts-debounce";
+import {CMBlockMarkerHelperV2} from "../../../utils/CMBlockMarkerHelperV2";
+import {LineHandle} from "codemirror";
 
 const ENHANCED_LINK_MARKER = 'enhancement-link-marker';
 const ENHANCED_IMAGE_MARKER = 'enhancement-image-marker';
@@ -7,6 +9,7 @@ const ENHANCED_FOOTNOTE_MARKER = 'enhancement-footnote-marker';
 
 const ENHANCED_LINK_MARKER_ICON = 'enhancement-link-marker-icon';
 const ENHANCED_LINK_MARKER_TEXT = 'enhancement-link-marker-text';
+const ENHANCEMENT_LINK_SPAN_MARKER_LINE_CLASS = 'enhancement-link-marker-line-widget';
 
 const ENHANCED_FOOTNOTE_MARKER_TEXT = 'enhancement-footnote-marker-text';
 
@@ -22,7 +25,7 @@ const ENHANCED_MARKER_LIST = [
 
 const regexList = [
     /(?<!\!)\[([^\[]*?)\]\((.*?)\)/g,                 // link
-    /\!\[([^\[]*?)\]\((.*?)\)(\{.*?\})?/g,            // image
+    /^\s*\!\[([^\[]*?)\]\((.*?)\)(\{.*?\})?\s*$/,     // image
     /(?<!(^\s*))\[\^(.*?)\]/g,                      // footnote
 ];
 
@@ -79,34 +82,95 @@ module.exports = {
                         });
                     });
 
-                    const imageMarker = new CMInlineMarkerHelperV2(_context, cm, regexList[1], function (match, from, to) {
-                        const markEl = document.createElement('span');
+                    // new CMInlineMarkerHelperV2(_context, cm, regexList[1], function (match, from, to) {
+                    //     const markEl = document.createElement('span');
+                    //
+                    //     markEl.classList.add(ENHANCED_IMAGE_MARKER);
+                    //     const iconEl = document.createElement('i');
+                    //     iconEl.classList.add(ENHANCED_IMAGE_MARKER_ICON, 'fas', 'fa-image');
+                    //     markEl.appendChild(iconEl);
+                    //
+                    //     const textEl = document.createElement('span');
+                    //     textEl.classList.add(ENHANCED_IMAGE_MARKER_TEXT);
+                    //     textEl.textContent = match[1];
+                    //     markEl.appendChild(textEl);
+                    //
+                    //     if (match[3]) {
+                    //         const sizeEl = document.createElement('span');
+                    //         sizeEl.classList.add(ENHANCED_IMAGE_SIZE_TEXT);
+                    //         sizeEl.textContent = match[3].substr(1, match[3].length - 2);
+                    //         markEl.appendChild(sizeEl);
+                    //     }
+                    //
+                    //     const typesStr = cm.getTokenTypeAt(from);
+                    //     if (typesStr) {
+                    //         for (const typeStr of typesStr.split(' ')) {
+                    //             markEl.classList.add(`cm-${typeStr}`);
+                    //         }
+                    //     }
+                    //     return markEl;
+                    // }, ENHANCED_MARKER_LIST[1]);
 
-                        markEl.classList.add(ENHANCED_IMAGE_MARKER);
-                        const iconEl = document.createElement('i');
-                        iconEl.classList.add(ENHANCED_IMAGE_MARKER_ICON, 'fas', 'fa-image');
-                        markEl.appendChild(iconEl);
+                    const imageMarker = new CMBlockMarkerHelperV2(cm, null, regexList[1], null, (beginMatch, endMatch, content, fromLine, toLine) => {
+                        // const markEl = document.createElement('span');
+                        //
+                        // markEl.classList.add(ENHANCED_IMAGE_MARKER);
+                        // const iconEl = document.createElement('i');
+                        // iconEl.classList.add(ENHANCED_IMAGE_MARKER_ICON, 'fas', 'fa-image');
+                        // markEl.appendChild(iconEl);
+                        //
+                        // const textEl = document.createElement('span');
+                        // textEl.classList.add(ENHANCED_IMAGE_MARKER_TEXT);
+                        // textEl.textContent = beginMatch[1];
+                        // markEl.appendChild(textEl);
+                        //
+                        // if (beginMatch[3]) {
+                        //     const sizeEl = document.createElement('span');
+                        //     sizeEl.classList.add(ENHANCED_IMAGE_SIZE_TEXT);
+                        //     sizeEl.textContent = beginMatch[3].substr(1, beginMatch[3].length - 2);
+                        //     markEl.appendChild(sizeEl);
+                        // }
+                        const markEl = document.createElement('figure');
+                        const imgEl = document.createElement('img');
 
-                        const textEl = document.createElement('span');
-                        textEl.classList.add(ENHANCED_IMAGE_MARKER_TEXT);
-                        textEl.textContent = match[1];
-                        markEl.appendChild(textEl);
+                        let imgUrl = beginMatch[2] ? beginMatch[2] : '';
+                        if (imgUrl.startsWith(':/')) {
+                            _context.postMessage({
+                                type: 'imgPath',
+                                content: beginMatch[2]
+                            }).then((path) => {
+                                imgEl.src = path;
+                            })
+                        } else {
+                            imgEl.src = imgUrl;
+                        }
+                        markEl.appendChild(imgEl);
 
-                        if (match[3]) {
-                            const sizeEl = document.createElement('span');
-                            sizeEl.classList.add(ENHANCED_IMAGE_SIZE_TEXT);
-                            sizeEl.textContent = match[3].substr(1, match[3].length - 2);
-                            markEl.appendChild(sizeEl);
+                        if (beginMatch[1]) {
+                            const captionEl = document.createElement('figcaption');
+                            captionEl.textContent = beginMatch[1];
+                            markEl.appendChild(captionEl);
                         }
 
-                        const typesStr = cm.getTokenTypeAt(from);
-                        if (typesStr) {
-                            for (const typeStr of typesStr.split(' ')) {
-                                markEl.classList.add(`cm-${typeStr}`);
+                        if (beginMatch[3]) {
+                            const widthMatch = /\{width=(\d+)(px|%|)\}/.exec(beginMatch[3]);
+                            if (widthMatch) {
+                                imgEl.style.width = widthMatch[1] + (widthMatch[2].length === 0 ? 'px' : widthMatch[2]);
                             }
                         }
                         return markEl;
-                    }, ENHANCED_MARKER_LIST[1]);
+                    }, () => {
+                        const span = document.createElement('span');
+                        span.textContent = '===> Folded Image Block <===';
+                        span.style.cssText = 'color: lightgray; font-size: smaller; font-style: italic;';
+                        return span;
+                    }, ENHANCED_MARKER_LIST[1], true, false);
+
+                    cm.on('renderLine', (editor, line: LineHandle, element: Element) => {
+                        if (element.getElementsByClassName(ENHANCED_MARKER_LIST[1]).length > 0) {
+                            element.classList.add(ENHANCEMENT_LINK_SPAN_MARKER_LINE_CLASS);
+                        }
+                    })
 
                     const footnoteMarker = new CMInlineMarkerHelperV2(_context, cm, regexList[2], function (match, from, to) {
                         const markEl = document.createElement('span');

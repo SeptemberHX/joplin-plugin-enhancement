@@ -127,6 +127,8 @@ joplin.plugins.register({
 				async (msg) => {
 					if (msg.type === 'openUrl' && msg.content && msg.content !== '') {
 						return await joplin.commands.execute('openItem', msg.content);
+					} else if (msg.type === 'imgPath' && msg.content && msg.content !== '') {
+						return await joplin.data.resourcePath(msg.content.substr(2));
 					}
 				}
 			);

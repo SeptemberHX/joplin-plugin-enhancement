@@ -1,5 +1,5 @@
 import {debounce} from "ts-debounce";
-import CodeMirror, {TextMarker} from "codemirror";
+import CodeMirror, {LineHandle, TextMarker} from "codemirror";
 import clickAndClear from "./click-and-clear";
 import {findLineWidgetAtLine, isCursorOutRange, isRangeSelected} from "./cm-utils";
 
@@ -56,28 +56,39 @@ export class CMBlockMarkerHelperV2 {
         // start from 0 to avoid strange rendering results
         for (let i = 0; i < toLine; i++) {
             const line = this.editor.getLine(i);
+            // find block ranges
+            if (this.blockEndTokenRegex) {
+                // if we find the start token, then we will try to find the end token
+                if (!meetBeginToken && this.blockStartTokenRegexp.test(line)) {
+                    beginMatch = this.blockStartTokenRegexp.exec(line);
+                    meetBeginToken = true;
+                    prevBeginTokenLineNumber = i;
+                    continue;
+                }
 
-            // if we find the start token, then we will try to find the end token
-            if (!meetBeginToken && this.blockStartTokenRegexp.test(line)) {
-                beginMatch = line.match(this.blockStartTokenRegexp);
-                meetBeginToken = true;
-                prevBeginTokenLineNumber = i;
-                continue;
-            }
-
-            // only find the end token when we met start token before
-            //   if found, we save the block line area to blockRangeList
-            if (meetBeginToken && this.blockEndTokenRegex.test(line)) {
-                if (i >= fromLine) {
+                // only find the end token when we met start token before
+                //   if found, we save the block line area to blockRangeList
+                if (meetBeginToken && this.blockEndTokenRegex.test(line)) {
+                    if (i >= fromLine) {
+                        blockRangeList.push({
+                            from: prevBeginTokenLineNumber,
+                            to: i,
+                            beginMatch: beginMatch,
+                            endMatch: this.blockEndTokenRegex.exec(line)
+                        });
+                    }
+                    meetBeginToken = false;
+                    prevBeginTokenLineNumber = -1;
+                }
+            } else {
+                if (this.blockStartTokenRegexp.test(line)) {
                     blockRangeList.push({
-                        from: prevBeginTokenLineNumber,
+                        from: i,
                         to: i,
-                        beginMatch: beginMatch,
-                        endMatch: line.match(this.blockEndTokenRegex)
+                        beginMatch: this.blockStartTokenRegexp.exec(line),
+                        end: null
                     });
                 }
-                meetBeginToken = false;
-                prevBeginTokenLineNumber = -1;
             }
         }
 
@@ -159,8 +170,12 @@ export class CMBlockMarkerHelperV2 {
 
             // get the content in the block without the begin/end tokens
             const blockContentLines = [];
-            for (let i = from.line + 1; i <= to.line - 1; ++i) {
-                blockContentLines.push(this.editor.getLine(i));
+            if (this.blockEndTokenRegex) {
+                for (let i = from.line + 1; i <= to.line - 1; ++i) {
+                    blockContentLines.push(this.editor.getLine(i));
+                }
+            } else {  // or only one line for line block
+                blockContentLines.push(this.editor.getLine(from.line));
             }
 
             // otherwise there are two different situations:
@@ -242,7 +257,10 @@ export class CMBlockMarkerHelperV2 {
         }
         editButton.onclick = (e) => {
             if (textMarker) {
-                // this.clearLineWidgetForMarker(textMarker, wrapperLineWidget);
+                if (!this.renderWhenEditing) {
+                    wrapperLineWidget.clear();
+                }
+
                 const from = textMarker.find().from;
                 const to = textMarker.find().to;
                 textMarker.clear();
