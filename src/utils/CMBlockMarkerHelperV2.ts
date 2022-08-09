@@ -272,10 +272,15 @@ export class CMBlockMarkerHelperV2 {
                 const from = textMarker.find().from;
                 const to = textMarker.find().to;
                 textMarker.clear();
-                doc.setSelection(
-                    {line: from.line + 1, ch: 0},
-                    {line: to.line - 1, ch: this.editor.getLine(to.line - 1).length}
-                );
+
+                if (from.line !== to.line) {
+                    doc.setSelection(
+                        {line: from.line + 1, ch: 0},
+                        {line: to.line - 1, ch: this.editor.getLine(to.line - 1).length}
+                    );
+                } else {
+                    doc.setSelection(from, to);
+                }
             }
         }
         renderedWrapper.appendChild(editButton);

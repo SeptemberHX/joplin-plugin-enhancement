@@ -55,3 +55,7 @@ span.enhancement-image-size-text {
 .enhancement-block-link-marker-span-line, .enhancement-block-image-marker-span-line {
     display: none;
 }
+
+a.enhancement-link-marker-text {
+    cursor: pointer;
+}
