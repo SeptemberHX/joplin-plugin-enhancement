@@ -29,34 +29,10 @@ export class CMBlockMarkerHelperV2 {
                 private readonly clearOnClick: boolean,
     ) {
         this.lineWidgetClassName = this.MARKER_CLASS_NAME + '-line-widget';
-        // this.init();
-    }
-
-    /**
-     * Init everything at the beginning
-     * @private
-     */
-    private init() {
-        const debounceProcess = debounce(function () {
-            this.process(true);
-            this.unfoldAtCursor();
-        }.bind(this), 100);
-
-        this.editor.on('change', async function (cm, changeObjs) {
-            if (changeObjs.origin === 'setValue') {
-                this.process(true);
-                this.unfoldAtCursor();
-            } else if (changeObjs.origin === 'undo' || changeObjs.origin === 'redo') {
-                await debounceProcess();
-            }
-        }.bind(this));
-        this.editor.on('cursorActivity', debounceProcess);
-        this.editor.on('viewportChange', debounceProcess);
     }
 
     /**
      * Process current view port to render the target block in the editor with the given marker class name
-     * @private
      */
     public process(afterSetValue: boolean = false) {
         // First, find all math elements
