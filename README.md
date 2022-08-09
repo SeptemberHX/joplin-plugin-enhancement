@@ -92,7 +92,6 @@ It supports both `!!!` style and `:::` style admonitions.
 > **Current Bug**: Cannot save after replacement. User needs to manually modify the note to save the change (for example: add a space)
 > It is disabled by default
 
-![mathRender](./screenshot/mathRender.png)
 
 ![Imgur](https://i.imgur.com/klMdYwJ.gif)
 
@@ -160,6 +159,10 @@ Type `/command` in the editor for quick input of table, mermaid, etc.
 * link: `cmd/ctrl` + left click to open url directly
 * image (same setting with link)
 * footnote styling (same setting with link)
+
+> Only single line image can be previewed. https://i.imgur.com/u3alnYW.gif
+
+![Imgur](https://i.imgur.com/u3alnYW.gif)
 
 ## Build
 
