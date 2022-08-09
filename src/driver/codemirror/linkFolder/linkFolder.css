@@ -33,20 +33,20 @@ span.enhancement-image-size-text {
     padding: 0 2px;
 }
 
-.enhancement-image-marker-line-widget img {
+.enhancement-block-image-marker-line-widget img {
     max-width: 100%;
 }
 
-.enhancement-image-marker-line-widget figure {
+.enhancement-block-image-marker-line-widget figure {
     margin: 0;
     text-align: center;
 }
 
-.enhancement-image-marker-line-widget figcaption {
+.enhancement-block-image-marker-line-widget figcaption {
     text-align: center;
     font-style: italic;
 }
 
-.enhancement-link-marker-span-line {
+.enhancement-block-image-marker-span-line {
     display: none;
 }

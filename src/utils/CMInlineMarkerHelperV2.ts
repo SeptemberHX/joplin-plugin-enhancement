@@ -10,7 +10,7 @@ interface MarkerMatch {
 
 export default class CMInlineMarkerHelperV2 {
     renderer: (match, from, to) => any;
-    lineFilter: (line: string, lineToken: []) => boolean;
+    lineFilter: (line: string) => boolean;
     clicked: (match, e: MouseEvent) => void;
     regex;
     MARKER_CLASS_NAME: string;
@@ -49,8 +49,7 @@ export default class CMInlineMarkerHelperV2 {
             }
 
             if (this.lineFilter) {
-                const lineTokens = this.editor.getLineTokens(lineNo);
-                if (!this.lineFilter(line, lineTokens)) {
+                if (!this.lineFilter(line)) {
                     continue;
                 }
             }

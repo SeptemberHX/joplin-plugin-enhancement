@@ -6,14 +6,20 @@ import {LineHandle} from "codemirror";
 const ENHANCED_LINK_MARKER = 'enhancement-link-marker';
 const ENHANCED_IMAGE_MARKER = 'enhancement-image-marker';
 const ENHANCED_FOOTNOTE_MARKER = 'enhancement-footnote-marker';
+const ENHANCED_BLOCK_IMAGE_MARKER = 'enhancement-block-image-marker';
 
 const ENHANCED_LINK_MARKER_ICON = 'enhancement-link-marker-icon';
 const ENHANCED_LINK_MARKER_TEXT = 'enhancement-link-marker-text';
-const ENHANCEMENT_LINK_SPAN_MARKER_LINE_CLASS = 'enhancement-link-marker-span-line';
 
 const ENHANCED_FOOTNOTE_MARKER_TEXT = 'enhancement-footnote-marker-text';
 
-const ENHANCED_MARKER_LIST = [
+const ENHANCED_IMAGE_MARKER_ICON = 'enhancement-image-marker-icon';
+const ENHANCED_IMAGE_MARKER_TEXT = 'enhancement-image-marker-text';
+const ENHANCED_IMAGE_SIZE_TEXT = 'enhancement-image-size-text';
+
+const ENHANCEMENT_BLOCK_IMAGE_SPAN_MARKER_LINE_CLASS = 'enhancement-block-image-marker-span-line';
+
+const ENHANCED_INLINE_MARKER_LIST = [
     ENHANCED_LINK_MARKER,
     ENHANCED_IMAGE_MARKER,
     ENHANCED_FOOTNOTE_MARKER
@@ -21,9 +27,11 @@ const ENHANCED_MARKER_LIST = [
 
 const regexList = [
     /(?<!\!)\[([^\[]*?)\]\((.*?)\)/g,                 // link
-    /^\s*\!\[([^\[]*?)\]\((.*?)\)(\{.*?\})?\s*$/,     // image
-    /(?<!(^\s*))\[\^(.*?)\]/g,                      // footnote
+    /\!\[([^\[]*?)\]\((.*?)\)(\{.*?\})?/g,            // image
+    /(?<!(^\s*))\[\^(.*?)\]/g,                        // footnote
 ];
+
+const blockImageReg = /^\s*\!\[([^\[]*?)\]\((.*?)\)(\{.*?\})?\s*$/;
 
 module.exports = {
     default: function (_context) {
@@ -70,7 +78,7 @@ module.exports = {
                             }
                         }
                         return markEl;
-                    }, ENHANCED_MARKER_LIST[0], null, async function (match, e) {
+                    }, ENHANCED_INLINE_MARKER_LIST[0], null, async function (match, e) {
                         // open url
                         await _context.postMessage({
                             type: 'openUrl',
@@ -78,7 +86,38 @@ module.exports = {
                         });
                     });
 
-                    const imageMarker = new CMBlockMarkerHelperV2(cm, null, regexList[1], null, (beginMatch, endMatch, content, fromLine, toLine) => {
+                    const inlineImageMarker = new CMInlineMarkerHelperV2(_context, cm, regexList[1], function (match, from, to) {
+                        const markEl = document.createElement('span');
+
+                        markEl.classList.add(ENHANCED_IMAGE_MARKER);
+                        const iconEl = document.createElement('i');
+                        iconEl.classList.add(ENHANCED_IMAGE_MARKER_ICON, 'fas', 'fa-image');
+                        markEl.appendChild(iconEl);
+
+                        const textEl = document.createElement('span');
+                        textEl.classList.add(ENHANCED_IMAGE_MARKER_TEXT);
+                        textEl.textContent = match[1];
+                        markEl.appendChild(textEl);
+
+                        if (match[3]) {
+                            const sizeEl = document.createElement('span');
+                            sizeEl.classList.add(ENHANCED_IMAGE_SIZE_TEXT);
+                            sizeEl.textContent = match[3].substr(1, match[3].length - 2);
+                            markEl.appendChild(sizeEl);
+                        }
+
+                        const typesStr = cm.getTokenTypeAt(from);
+                        if (typesStr) {
+                            for (const typeStr of typesStr.split(' ')) {
+                                markEl.classList.add(`cm-${typeStr}`);
+                            }
+                        }
+                        return markEl;
+                    }, ENHANCED_INLINE_MARKER_LIST[1], function (line) {
+                        return !blockImageReg.test(line);
+                    });
+
+                    const imageMarker = new CMBlockMarkerHelperV2(cm, null, blockImageReg, null, (beginMatch, endMatch, content, fromLine, toLine) => {
                         const markEl = document.createElement('figure');
                         const imgEl = document.createElement('img');
 
@@ -113,11 +152,11 @@ module.exports = {
                         span.textContent = '===> Folded Image Block <===';
                         span.style.cssText = 'color: lightgray; font-size: smaller; font-style: italic;';
                         return span;
-                    }, ENHANCED_MARKER_LIST[1], true, false);
+                    }, ENHANCED_BLOCK_IMAGE_MARKER, true, false);
 
                     cm.on('renderLine', (editor, line: LineHandle, element: Element) => {
-                        if (element.getElementsByClassName(ENHANCED_MARKER_LIST[1]).length > 0) {
-                            element.classList.add(ENHANCEMENT_LINK_SPAN_MARKER_LINE_CLASS);
+                        if (element.getElementsByClassName(ENHANCED_BLOCK_IMAGE_MARKER).length > 0) {
+                            element.classList.add(ENHANCEMENT_BLOCK_IMAGE_SPAN_MARKER_LINE_CLASS);
                         }
                     })
 
@@ -136,13 +175,14 @@ module.exports = {
                             }
                         }
                         return markEl;
-                    }, ENHANCED_MARKER_LIST[2]);
+                    }, ENHANCED_INLINE_MARKER_LIST[2]);
 
                     function process(full: boolean) {
                         cm.startOperation();
                         linkMarker.process(full);
                         imageMarker.process(full);
                         footnoteMarker.process(full);
+                        inlineImageMarker.process(full);
                         cm.endOperation();
                     }
 
