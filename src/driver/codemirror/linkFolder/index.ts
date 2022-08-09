@@ -9,7 +9,7 @@ const ENHANCED_FOOTNOTE_MARKER = 'enhancement-footnote-marker';
 
 const ENHANCED_LINK_MARKER_ICON = 'enhancement-link-marker-icon';
 const ENHANCED_LINK_MARKER_TEXT = 'enhancement-link-marker-text';
-const ENHANCEMENT_LINK_SPAN_MARKER_LINE_CLASS = 'enhancement-link-marker-line-widget';
+const ENHANCEMENT_LINK_SPAN_MARKER_LINE_CLASS = 'enhancement-link-marker-span-line';
 
 const ENHANCED_FOOTNOTE_MARKER_TEXT = 'enhancement-footnote-marker-text';
 
