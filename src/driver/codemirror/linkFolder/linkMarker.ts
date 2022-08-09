@@ -2,6 +2,7 @@ import CMInlineMarkerHelperV2 from "../../../utils/CMInlineMarkerHelperV2";
 import {CMBlockMarkerHelperV2} from "../../../utils/CMBlockMarkerHelperV2";
 import path from "path";
 import {BLOCK_LINK_REG, INLINE_LINK_REG} from "./regexps";
+
 const mime = require('mime-types')
 
 const ENHANCED_LINK_MARKER = 'enhancement-link-marker';
@@ -67,17 +68,23 @@ export function createBlockLinkMarker(context, cm) {
 
         function renderByPath(filePath) {
             const mimeType = mime.contentType(path.extname(filePath));
-            if (mimeType.startsWith('video/')) {
-                const videoEl = document.createElement('video');
-                const source = document.createElement('source');
-                source.setAttribute('src', filePath);
-                source.setAttribute('type', mimeType);
-                videoEl.appendChild(source);
-                videoEl.autoplay = false;
-                videoEl.controls = true;
-                videoEl.muted = false;
+            if (mimeType) {
+                if (mimeType.startsWith('video/')) {
+                    const videoEl = document.createElement('video');
+                    const source = document.createElement('source');
+                    source.setAttribute('src', filePath);
+                    source.setAttribute('type', mimeType);
+                    videoEl.appendChild(source);
+                    videoEl.autoplay = false;
+                    videoEl.controls = true;
+                    videoEl.muted = false;
 
-                markEl.appendChild(videoEl);
+                    markEl.appendChild(videoEl);
+                } else {
+                    const spanEl = document.createElement('span');
+                    spanEl.textContent = filePath;
+                    markEl.appendChild(spanEl);
+                }
             } else {
                 const spanEl = document.createElement('span');
                 spanEl.textContent = filePath;
@@ -96,7 +103,11 @@ export function createBlockLinkMarker(context, cm) {
             })
         } else {
             const spanEl = document.createElement('span');
-            spanEl.textContent = beginMatch[2];
+            if (beginMatch[1].length === 0 && beginMatch[2].length === 0) {
+                spanEl.textContent = 'Everything is empty!';
+            } else {
+                spanEl.textContent = `${beginMatch[1]}: ${beginMatch[2]}`;
+            }
             markEl.appendChild(spanEl);
         }
 
