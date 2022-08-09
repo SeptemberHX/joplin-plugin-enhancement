@@ -2,12 +2,14 @@ import CMInlineMarkerHelperV2 from "../../../utils/CMInlineMarkerHelperV2";
 import {CMBlockMarkerHelperV2} from "../../../utils/CMBlockMarkerHelperV2";
 import path from "path";
 import {BLOCK_LINK_REG, INLINE_LINK_REG} from "./regexps";
+import {findLineWidgetAtLine} from "../../../utils/cm-utils";
 
 const mime = require('mime-types')
 
 const ENHANCED_LINK_MARKER = 'enhancement-link-marker';
 const ENHANCED_LINK_MARKER_ICON = 'enhancement-link-marker-icon';
 const ENHANCED_LINK_MARKER_TEXT = 'enhancement-link-marker-text';
+const ENHANCED_LINK_USER_LABEL = 'enhancement-link-user-label';
 export const ENHANCED_BLOCK_LINK_MARKER = 'enhancement-block-link-marker';
 
 export function createInlineLinkMarker(context, cm) {
@@ -66,7 +68,7 @@ export function createBlockLinkMarker(context, cm) {
     return new CMBlockMarkerHelperV2(cm, null, BLOCK_LINK_REG, null, (beginMatch, endMatch, content, fromLine, toLine) => {
         const markEl = document.createElement('div');
 
-        function renderByPath(filePath) {
+        function renderByPath(userLabel, filePath) {
             const mimeType = mime.contentType(path.extname(filePath));
             if (mimeType) {
                 if (mimeType.startsWith('video/')) {
@@ -80,6 +82,16 @@ export function createBlockLinkMarker(context, cm) {
                     videoEl.muted = false;
 
                     markEl.appendChild(videoEl);
+                } else if (mimeType.startsWith('audio/')) {
+                    const audioEl = document.createElement('audio');
+                    const source = document.createElement('source');
+                    source.setAttribute('src', filePath);
+                    source.setAttribute('type', mimeType);
+                    audioEl.appendChild(source);
+                    audioEl.autoplay = false;
+                    audioEl.controls = true;
+
+                    markEl.appendChild(audioEl);
                 } else {
                     const spanEl = document.createElement('span');
                     spanEl.textContent = filePath;
@@ -90,16 +102,27 @@ export function createBlockLinkMarker(context, cm) {
                 spanEl.textContent = filePath;
                 markEl.appendChild(spanEl);
             }
+
+            if (userLabel && userLabel.length > 0) {
+                const labelEl = document.createElement('div');
+                labelEl.classList.add(ENHANCED_LINK_USER_LABEL);
+                labelEl.textContent = userLabel;
+                markEl.appendChild(labelEl);
+            }
         }
 
         if (beginMatch[2].startsWith('file://')) {
-            renderByPath(beginMatch[2]);
+            renderByPath(beginMatch[1], beginMatch[2]);
         } else if (beginMatch[2].startsWith(':/')) {
             context.postMessage({
                 type: 'imgPath',
                 content: beginMatch[2]
             }).then((filePath) => {
-                renderByPath(filePath);
+                renderByPath(beginMatch[1], filePath);
+                const lineWidget = findLineWidgetAtLine(cm, fromLine, ENHANCED_BLOCK_LINK_MARKER + '-line-widget');
+                if (lineWidget) {
+                    lineWidget.changed();
+                }
             })
         } else {
             const spanEl = document.createElement('span');

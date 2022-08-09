@@ -59,3 +59,7 @@ span.enhancement-image-size-text {
 a.enhancement-link-marker-text {
     cursor: pointer;
 }
+
+.enhancement-block-link-marker-line-widget audio {
+    min-width: 80%;
+}

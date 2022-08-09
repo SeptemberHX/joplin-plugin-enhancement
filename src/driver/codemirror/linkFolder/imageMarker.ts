@@ -1,6 +1,7 @@
 import CMInlineMarkerHelperV2 from "../../../utils/CMInlineMarkerHelperV2";
 import {CMBlockMarkerHelperV2} from "../../../utils/CMBlockMarkerHelperV2";
 import {BLOCK_IMAGE_REG, INLINE_IMAGE_REG} from "./regexps";
+import {findLineWidgetAtLine} from "../../../utils/cm-utils";
 
 const ENHANCED_IMAGE_MARKER = 'enhancement-image-marker';
 export const ENHANCED_BLOCK_IMAGE_MARKER = 'enhancement-block-image-marker';
@@ -54,6 +55,10 @@ export function createBlockImageMarker(context, cm) {
                 content: beginMatch[2]
             }).then((path) => {
                 imgEl.src = path;
+                const lineWidget = findLineWidgetAtLine(cm, fromLine, ENHANCED_BLOCK_IMAGE_MARKER + '-line-widget');
+                if (lineWidget) {
+                    lineWidget.changed();
+                }
             })
         } else {
             imgEl.src = imgUrl;
