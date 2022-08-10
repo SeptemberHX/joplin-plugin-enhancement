@@ -167,5 +167,17 @@ export function createBlockLinkMarker(context, cm) {
         span.textContent = '===> Folded Link Block <===';
         span.style.cssText = 'color: lightgray; font-size: smaller; font-style: italic;';
         return span;
-    }, ENHANCED_BLOCK_LINK_MARKER, true, false);
+    }, ENHANCED_BLOCK_LINK_MARKER, true, false, null, (content, e) => {
+        const match = BLOCK_LINK_REG.exec(content);
+        let link = match[4];
+        const pdfPageMatch = PDF_PAGE_REG.exec(link);
+        if (pdfPageMatch) {
+            link = link.substring(0, pdfPageMatch.index);
+        }
+
+        context.postMessage({
+            type: 'openUrl',
+            content: link
+        });
+    });
 }

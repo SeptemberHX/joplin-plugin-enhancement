@@ -19,6 +19,7 @@ export class CMBlockMarkerHelperV2 {
      * @param MARKER_CLASS_NAME Target marker class name
      * @param clearOnClick Whether we clear the marker with the rendered content when it is clicked by the mouse
      * @param renderWhenEditing Whether showing the rendered line widget when editing target block
+     * @param matchChecker A function helps us to check whether we consider it as a match
      */
     constructor(private readonly editor: CodeMirror.Editor,
                 private readonly blockRegexp: RegExp,
@@ -29,7 +30,8 @@ export class CMBlockMarkerHelperV2 {
                 private readonly MARKER_CLASS_NAME: string,
                 private readonly clearOnClick: boolean,
                 private readonly renderWhenEditing: boolean,
-                private readonly matchChecker?: (editor, line, match) => boolean
+                private readonly matchChecker?: (editor, line, match) => boolean,
+                private readonly metaClicked?: (content: string, e: MouseEvent) => void
     ) {
         this.lineWidgetClassName = this.MARKER_CLASS_NAME + '-line-widget';
     }
@@ -218,11 +220,12 @@ export class CMBlockMarkerHelperV2 {
 
                     // build the line widget just after the marker with the rendered element
                     const wrapper = document.createElement('div');
-                    const element = this.renderer(blockRange.beginMatch, blockRange.endMatch, blockContentLines.join('\n'), from.line, to.line);
+                    const content = blockContentLines.join('\n');
+                    const element = this.renderer(blockRange.beginMatch, blockRange.endMatch, content, from.line, to.line);
                     if (element) {
                         wrapper.appendChild(element);
                         const lineWidget = this.createLineWidgetForMarker(doc, to.line, wrapper);
-                        this.setStyleAndLogical(doc, from, to, textMarker, markerEl, wrapper, lineWidget);
+                        this.setStyleAndLogical(doc, content, textMarker, markerEl, wrapper, lineWidget);
                     }
                 }
             } else {
@@ -260,7 +263,7 @@ export class CMBlockMarkerHelperV2 {
         return doc.addLineWidget(line, element, { className: this.lineWidgetClassName });
     }
 
-    private setStyleAndLogical(doc, from, to, textMarker, makerEl, renderedWrapper, wrapperLineWidget) {
+    private setStyleAndLogical(doc, content, textMarker, makerEl, renderedWrapper, wrapperLineWidget) {
         renderedWrapper.style.cssText = 'border: 2px solid transparent; padding: 4px; width: 100%; border-radius: 4px; background-color: var(--joplin-background-color) !important; transition: border-color 500ms;';
         const editButton = document.createElement('div');
         editButton.innerHTML = `<svg viewBox="0 0 100 100" class="code-glyph" width="16" height="16"><path fill="currentColor" stroke="currentColor" d="M56.6,13.3c-1.6,0-2.9,1.2-3.2,2.7L40.1,82.7c-0.3,1.2,0.1,2.4,1,3.2c0.9,0.8,2.2,1.1,3.3,0.7c1.1-0.4,2-1.4,2.2-2.6 l13.3-66.7c0.2-1,0-2-0.7-2.8S57.6,13.3,56.6,13.3z M24.2,26.6c-1.1,0-2.1,0.5-2.8,1.4l-14.1,20c-0.8,1.2-0.8,2.7,0,3.9l14.1,20 c1.1,1.5,3.1,1.9,4.6,0.8c1.5-1.1,1.9-3.1,0.8-4.6L14.1,50l12.8-18.1c0.7-1,0.8-2.4,0.3-3.5C26.6,27.3,25.4,26.6,24.2,26.6 L24.2,26.6z M76.5,26.6c-1.2,0-2.4,0.8-2.9,1.9c-0.5,1.1-0.4,2.4,0.3,3.4L86.7,50L73.9,68.1c-0.7,1-0.8,2.2-0.3,3.3 s1.5,1.8,2.7,1.9c1.2,0.1,2.3-0.4,3-1.4l14.1-20c0.8-1.2,0.8-2.7,0-3.9l-14.1-20C78.7,27.1,77.7,26.6,76.5,26.6L76.5,26.6z"></path></svg>`;
@@ -301,6 +304,14 @@ export class CMBlockMarkerHelperV2 {
         renderedWrapper.onmouseleave = (e) => {
             editButton.style.opacity = '0';
             renderedWrapper.style.border = '2px solid transparent';
+        };
+        renderedWrapper.onclick = (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                e.preventDefault();
+                if (this.metaClicked) {
+                    this.metaClicked(content, e);
+                }
+            }
         };
     }
 }
