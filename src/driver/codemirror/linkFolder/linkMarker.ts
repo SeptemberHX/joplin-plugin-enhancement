@@ -121,7 +121,7 @@ export function createBlockLinkMarker(context, cm) {
                 renderByPath(beginMatch[1], filePath);
                 const lineWidget = findLineWidgetAtLine(cm, fromLine, ENHANCED_BLOCK_LINK_MARKER + '-line-widget');
                 if (lineWidget) {
-                    lineWidget.changed();
+                    setTimeout(() => {lineWidget.changed()}, 50);
                 }
             })
         } else {
