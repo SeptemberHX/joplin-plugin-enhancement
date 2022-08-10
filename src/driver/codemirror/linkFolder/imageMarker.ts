@@ -57,7 +57,7 @@ export function createBlockImageMarker(context, cm) {
                 imgEl.src = path;
                 const lineWidget = findLineWidgetAtLine(cm, fromLine, ENHANCED_BLOCK_IMAGE_MARKER + '-line-widget');
                 if (lineWidget) {
-                    lineWidget.changed();
+                    setTimeout(() => {lineWidget.changed()}, 50);
                 }
             })
         } else {
@@ -83,5 +83,11 @@ export function createBlockImageMarker(context, cm) {
         span.textContent = '===> Folded Image Block <===';
         span.style.cssText = 'color: lightgray; font-size: smaller; font-style: italic;';
         return span;
-    }, ENHANCED_BLOCK_IMAGE_MARKER, true, false);
+    }, ENHANCED_BLOCK_IMAGE_MARKER, true, false, null, (content, e) => {
+        const match = BLOCK_IMAGE_REG.exec(content);
+        context.postMessage({
+            type: 'openUrl',
+            content: match[2]
+        });
+    });
 }
