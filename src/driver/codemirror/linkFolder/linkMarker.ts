@@ -111,14 +111,14 @@ export function createBlockLinkMarker(context, cm) {
             }
         }
 
-        if (beginMatch[2].startsWith('file://')) {
-            renderByPath(beginMatch[1], beginMatch[2]);
-        } else if (beginMatch[2].startsWith(':/')) {
+        if (beginMatch[4].startsWith('file://')) {
+            renderByPath(beginMatch[2], beginMatch[4]);
+        } else if (beginMatch[4].startsWith(':/')) {
             context.postMessage({
                 type: 'imgPath',
-                content: beginMatch[2]
+                content: beginMatch[4]
             }).then((filePath) => {
-                renderByPath(beginMatch[1], filePath);
+                renderByPath(beginMatch[2], filePath);
                 const lineWidget = findLineWidgetAtLine(cm, fromLine, ENHANCED_BLOCK_LINK_MARKER + '-line-widget');
                 if (lineWidget) {
                     setTimeout(() => {lineWidget.changed()}, 50);
@@ -126,10 +126,10 @@ export function createBlockLinkMarker(context, cm) {
             })
         } else {
             const spanEl = document.createElement('span');
-            if (beginMatch[1].length === 0 && beginMatch[2].length === 0) {
+            if (beginMatch[2].length === 0 && beginMatch[4].length === 0) {
                 spanEl.textContent = 'Everything is empty!';
             } else {
-                spanEl.textContent = `${beginMatch[1]}: ${beginMatch[2]}`;
+                spanEl.textContent = `${beginMatch[2]}: ${beginMatch[4]}`;
             }
             markEl.appendChild(spanEl);
         }

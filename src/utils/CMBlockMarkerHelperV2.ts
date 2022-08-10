@@ -28,7 +28,8 @@ export class CMBlockMarkerHelperV2 {
                 private readonly spanRenderer: () => HTMLElement,
                 private readonly MARKER_CLASS_NAME: string,
                 private readonly clearOnClick: boolean,
-                private readonly renderWhenEditing: boolean
+                private readonly renderWhenEditing: boolean,
+                private readonly matchChecker?: (editor, line, match) => boolean
     ) {
         this.lineWidgetClassName = this.MARKER_CLASS_NAME + '-line-widget';
     }
@@ -61,24 +62,33 @@ export class CMBlockMarkerHelperV2 {
                 // if we find the start token, then we will try to find the end token
                 if (!meetBeginToken && this.blockStartTokenRegexp.test(line)) {
                     beginMatch = this.blockStartTokenRegexp.exec(line);
-                    meetBeginToken = true;
-                    prevBeginTokenLineNumber = i;
-                    continue;
+                    if (this.matchChecker && !this.matchChecker(this.editor, i, beginMatch)) {
+                        ;
+                    } else {
+                        meetBeginToken = true;
+                        prevBeginTokenLineNumber = i;
+                        continue;
+                    }
                 }
 
                 // only find the end token when we met start token before
                 //   if found, we save the block line area to blockRangeList
                 if (meetBeginToken && this.blockEndTokenRegex.test(line)) {
                     if (i >= fromLine) {
-                        blockRangeList.push({
-                            from: prevBeginTokenLineNumber,
-                            to: i,
-                            beginMatch: beginMatch,
-                            endMatch: this.blockEndTokenRegex.exec(line)
-                        });
+                        const endMatch = this.blockEndTokenRegex.exec(line);
+                        if (this.matchChecker && !this.matchChecker(this.editor, i, endMatch)) {
+                            ;
+                        } else {
+                            blockRangeList.push({
+                                from: prevBeginTokenLineNumber,
+                                to: i,
+                                beginMatch: beginMatch,
+                                endMatch: endMatch
+                            });
+                            meetBeginToken = false;
+                            prevBeginTokenLineNumber = -1;
+                        }
                     }
-                    meetBeginToken = false;
-                    prevBeginTokenLineNumber = -1;
                 }
             } else {
                 if (this.blockStartTokenRegexp.test(line)) {

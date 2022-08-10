@@ -58,6 +58,11 @@ export default class CMInlineMarkerHelperV2 {
             //   we need to get all match and process with specific orders
             let lineMatches: MarkerMatch[] = [];
             for (const match of line.matchAll(this.regex)) {
+                // by default, we ignore inline code between ` and ```
+                const tokenType = this.editor.getTokenTypeAt({line: lineNo, ch: match.index});
+                if (tokenType && tokenType.includes('jn-monospace')) {
+                    continue;
+                }
                 lineMatches.push({
                     match: match
                 });
