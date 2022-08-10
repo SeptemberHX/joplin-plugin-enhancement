@@ -14,20 +14,24 @@ module.exports = {
             plugin: function (CodeMirror) {
                 CodeMirror.defineOption("enhancementMathRender", [], async function(cm, val, old) {
                     // Block Katex Math Render
-                    const blockMathHelper = new CMBlockMarkerHelperV2(cm, null, /^\s*\$\$\s*$/, /^\s*\$\$\s*$/, (beginMatch, endMatch, content, fromLine, toLine) => {
+                    const blockMathHelper = new CMBlockMarkerHelperV2(cm, null, /^\s*\$\$\s*$/, /^\s*\$\$\s*$/, (beginMatch, endMatch, content: string, fromLine, toLine) => {
                             let divElement = document.createElement("div");
                             let spanElement = document.createElement('span');
-                            let cCount = 0;
-                            for (let i = content.length - 1; i >= 0; i--) {
-                                if (content[i] === '\\') {
-                                    cCount++;
-                                } else {
-                                    break;
+                            if (content.trim().length > 0) {
+                                let cCount = 0;
+                                for (let i = content.length - 1; i >= 0; i--) {
+                                    if (content[i] === '\\') {
+                                        cCount++;
+                                    } else {
+                                        break;
+                                    }
                                 }
-                            }
 
-                            katex.render(cCount % 2 !== 0 ? content.substring(0, content.length - 1) : content,
-                                spanElement, { throwOnError: false, strict: false, displayMode: true, output: 'html' })
+                                katex.render(cCount % 2 !== 0 ? content.substring(0, content.length - 1) : content,
+                                    spanElement, { throwOnError: false, strict: false, displayMode: true, output: 'html' })
+                            } else {
+                                spanElement.textContent = 'Empty Math Block';
+                            }
                             divElement.appendChild(spanElement);
                             divElement.style.cssText = 'text-align: center;'
                             return divElement;
