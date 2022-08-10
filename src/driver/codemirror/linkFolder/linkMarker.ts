@@ -12,6 +12,8 @@ const ENHANCED_LINK_MARKER_TEXT = 'enhancement-link-marker-text';
 const ENHANCED_LINK_USER_LABEL = 'enhancement-link-user-label';
 export const ENHANCED_BLOCK_LINK_MARKER = 'enhancement-block-link-marker';
 
+const PDF_PAGE_REG = /#(\d+)$/;
+
 export function createInlineLinkMarker(context, cm) {
     return new CMInlineMarkerHelperV2(cm, INLINE_LINK_REG, function (match, from, to) {
         const markEl = document.createElement('span');
@@ -68,7 +70,7 @@ export function createBlockLinkMarker(context, cm) {
     return new CMBlockMarkerHelperV2(cm, null, BLOCK_LINK_REG, null, (beginMatch, endMatch, content, fromLine, toLine) => {
         const markEl = document.createElement('div');
 
-        function renderByPath(userLabel, filePath) {
+        function renderByPath(userLabel, filePath, pdfPageNum?) {
             const mimeType = mime.contentType(path.extname(filePath));
             if (mimeType) {
                 if (mimeType.startsWith('video/')) {
@@ -92,6 +94,16 @@ export function createBlockLinkMarker(context, cm) {
                     audioEl.controls = true;
 
                     markEl.appendChild(audioEl);
+                } else if (mimeType === 'application/pdf') {
+                    const iframeEl = document.createElement('iframe');
+                    iframeEl.classList.add('enhancement-pdf-iframe');
+                    iframeEl.src = filePath + '#toolbar=0';
+                    if (pdfPageNum) {
+                        iframeEl.src += `&page=${pdfPageNum}`
+                    }
+                    iframeEl.width = '100%';
+                    iframeEl.height = '500px';
+                    markEl.appendChild(iframeEl);
                 } else {
                     const spanEl = document.createElement('span');
                     spanEl.textContent = filePath;
@@ -112,13 +124,28 @@ export function createBlockLinkMarker(context, cm) {
         }
 
         if (beginMatch[4].startsWith('file://')) {
-            renderByPath(beginMatch[2], beginMatch[4]);
+            const pdfPageMatch = PDF_PAGE_REG.exec(beginMatch[4]);
+            if (pdfPageMatch) {
+                renderByPath(beginMatch[2], beginMatch[4].substring(0, pdfPageMatch.index), pdfPageMatch[1]);
+            } else {
+                renderByPath(beginMatch[2], beginMatch[4]);
+            }
         } else if (beginMatch[4].startsWith(':/')) {
+            const pdfPageMatch = PDF_PAGE_REG.exec(beginMatch[4]);
+            let resourceId = beginMatch[4];
+            if (pdfPageMatch) {
+                resourceId = resourceId.substring(0, pdfPageMatch.index);
+            }
+
             context.postMessage({
                 type: 'imgPath',
-                content: beginMatch[4]
+                content: resourceId
             }).then((filePath) => {
-                renderByPath(beginMatch[2], filePath);
+                if (pdfPageMatch) {
+                    renderByPath(beginMatch[2], filePath, pdfPageMatch[1]);
+                } else {
+                    renderByPath(beginMatch[2], filePath);
+                }
                 const lineWidget = findLineWidgetAtLine(cm, fromLine, ENHANCED_BLOCK_LINK_MARKER + '-line-widget');
                 if (lineWidget) {
                     setTimeout(() => {lineWidget.changed()}, 50);
