@@ -104,8 +104,8 @@ export namespace settings {
             public: true,
             section: SECTION,
             type: SettingItemType.Bool,
-            label: 'Enable link & image folder',
-            description: "Fold your link & image for clean UI (requires restart)",
+            label: 'Enable link, image, and footnote rendering in markdown editor',
+            description: "It requires restart",
         }
 
         PLUGIN_SETTINGS[ENABLE_SEARCH_REPLACE] = {
