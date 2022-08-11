@@ -154,13 +154,15 @@ Type `/command` in the editor for quick input of table, mermaid, etc.
 * `/tommorow`
 * `/today`
 
-### Auto folder in the editor
+### link/image/footnote renderer in the editor
 
-* link: `cmd/ctrl` + left click to open url directly
-* image (same setting with link)
-* footnote styling (same setting with link)
+> Only single line image/link can be previewed. ctrl/meta + left click on the rendered widgets can open the urls/files
 
-> Only single line image can be previewed. https://i.imgur.com/u3alnYW.gif
+> Link preview only works with PDF/video/audio files
+
+> Inline link and image are folded only.
+
+![image](./screenshot/linkRender.png)
 
 ![Imgur](https://i.imgur.com/u3alnYW.gif)
 
