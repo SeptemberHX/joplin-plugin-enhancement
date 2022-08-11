@@ -288,6 +288,7 @@ export class CMBlockMarkerHelper {
                 {line: from.line + 1, ch: 0},
                 {line: to.line - 1, ch: this.editor.getLine(to.line - 1).length}
             );
+            this.editor.focus();
         }
         renderedWrapper.appendChild(editButton);
         renderedWrapper.onmouseover = (e) => {

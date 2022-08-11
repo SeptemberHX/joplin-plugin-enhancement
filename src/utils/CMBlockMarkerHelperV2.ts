@@ -294,6 +294,7 @@ export class CMBlockMarkerHelperV2 {
                 } else {
                     doc.setSelection(from, to);
                 }
+                this.editor.focus();
             }
         }
         renderedWrapper.appendChild(editButton);
