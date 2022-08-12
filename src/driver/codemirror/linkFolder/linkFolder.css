@@ -64,6 +64,10 @@ a.enhancement-link-marker-text {
     min-width: 80%;
 }
 
+.enhancement-block-link-marker-line-widget video {
+    max-width: 100%;
+}
+
 .enhancement-link-user-label {
     font-style: italic;
 }
