@@ -52,7 +52,9 @@ span.enhancement-image-size-text {
     max-width: 100%;
 }
 
-.enhancement-block-link-marker-span-line, .enhancement-block-image-marker-span-line {
+.enhancement-block-link-marker-span-line,
+.enhancement-block-image-marker-span-line,
+.enhancement-code-block-marker-span-line {
     display: none;
 }
 
@@ -70,4 +72,14 @@ a.enhancement-link-marker-text {
 
 .enhancement-link-user-label {
     font-style: italic;
+}
+
+.enhancement-code-block-marker-line-widget div {
+    font-size: small;
+    white-space: pre-wrap;
+    background-color: #333333;
+    padding: 0.8em;
+    color: white;
+    border-radius: 0.4em;
+    line-height: initial;
 }

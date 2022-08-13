@@ -4,11 +4,12 @@ import {LineHandle} from "codemirror";
 import {createBlockLinkMarker, createInlineLinkMarker, ENHANCED_BLOCK_LINK_MARKER} from "./linkMarker";
 import {createBlockImageMarker, createInlineImageMarker, ENHANCED_BLOCK_IMAGE_MARKER} from "./imageMarker";
 import {createInlineFootnoteMarker} from "./footnoteMarker";
+import {createCodeBlockMarker, ENHANCED_CODE_BLOCK_MARKER} from "./codeMarker";
 
 
 const ENHANCEMENT_BLOCK_IMAGE_SPAN_MARKER_LINE_CLASS = 'enhancement-block-image-marker-span-line';
 const ENHANCEMENT_BLOCK_LINK_SPAN_MARKER_LINE_CLASS = 'enhancement-block-link-marker-span-line';
-
+const ENHANCEMENT_BLOCK_CODE_SPAN_MARKER_LINE_CLASS = 'enhancement-code-block-marker-span-line';
 
 module.exports = {
     default: function (_context) {
@@ -21,11 +22,15 @@ module.exports = {
                     const inlineImageMarker = createInlineImageMarker(_context, cm);
                     const blockImageMarker = createBlockImageMarker(_context, cm);
 
+                    const codeBlockMarker = createCodeBlockMarker(_context, cm)
+
                     cm.on('renderLine', (editor, line: LineHandle, element: Element) => {
                         if (element.getElementsByClassName(ENHANCED_BLOCK_IMAGE_MARKER).length > 0) {
                             element.classList.add(ENHANCEMENT_BLOCK_IMAGE_SPAN_MARKER_LINE_CLASS);
                         } else if (element.getElementsByClassName(ENHANCED_BLOCK_LINK_MARKER).length > 0) {
                             element.classList.add(ENHANCEMENT_BLOCK_LINK_SPAN_MARKER_LINE_CLASS);
+                        } else if (element.getElementsByClassName(ENHANCED_CODE_BLOCK_MARKER).length > 0) {
+                            element.classList.add(ENHANCEMENT_BLOCK_CODE_SPAN_MARKER_LINE_CLASS);
                         }
                     });
 
@@ -38,6 +43,7 @@ module.exports = {
                         footnoteMarker.process(full);
                         inlineImageMarker.process(full);
                         blockLinkMarker.process(full);
+                        codeBlockMarker.process(full);
                         cm.endOperation();
                     }
 
@@ -58,6 +64,9 @@ module.exports = {
                 return [
                     {
                         name: 'linkFolder.css'
+                    },
+                    {
+                        name: 'default.min.css'
                     }
                 ];
             }

@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "dayjs": "^1.11.2",
+    "highlight.js": "^11.6.0",
     "html-entities": "^2.3.3",
     "katex": "^0.16.0",
     "mermaid": "^9.1.4",

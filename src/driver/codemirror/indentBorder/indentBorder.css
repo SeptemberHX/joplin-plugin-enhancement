@@ -23,7 +23,8 @@ pre.cm-rm-blockquote span.cm-quote + span.cm-quote {
 }
 
 pre.cm-jn-code-block.CodeMirror-line {
-    padding-left: 0.4em;
+    padding-left: 0.4em !important;
+    line-height: initial !important;
 }
 
 .CodeMirror-selected {
