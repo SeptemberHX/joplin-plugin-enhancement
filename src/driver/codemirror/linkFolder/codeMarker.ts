@@ -21,7 +21,7 @@ export function createCodeBlockMarker(context, cm) {
         return span;
     }, ENHANCED_CODE_BLOCK_MARKER, true, false, (cm, line, match) => {
         if (match[1]) {
-            return !NOT_RENDERED.includes(match[1].toLowerCase());
+            return !NOT_RENDERED.includes(match[1].toLowerCase()) && hljs.getLanguage(match[1]);
         } else {
             return true;
         }
