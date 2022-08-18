@@ -82,3 +82,8 @@ div.application-menu div.menu-item.separator {
     height: 1px;
     border-bottom: 1px solid rgb(180, 180, 180);
 }
+
+.cm-enhancement-finished-task {
+    text-decoration: line-through;
+    opacity: 0.85;
+}
