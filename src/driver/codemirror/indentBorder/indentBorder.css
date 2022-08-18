@@ -32,5 +32,5 @@ pre.cm-jn-code-block.CodeMirror-line {
 }
 
 .CodeMirror-selectedtext {
-    background-color: var(--g-selectedTextBackgroundColor) !important;
+    background-color: rgba(179, 215, 255, 1) !important;
 }
