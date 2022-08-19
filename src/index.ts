@@ -14,31 +14,16 @@ import {
 	ENABLE_QUICK_COMMANDS,
 	ENABLE_SEARCH_REPLACE,
 	ENABLE_TABLE_FORMATTER,
-	ENABLE_TASK_RENDER,
+	ENABLE_TASK_RENDER, EnhancementConfig,
 } from "./common";
 
 joplin.plugins.register({
 	onStart: async function() {
 
 		await settings.register();
-		const enableTableFormatter = await joplin.settings.value(ENABLE_TABLE_FORMATTER);
-		const enableLocalPDFPreview = await joplin.settings.value(ENABLE_LOCAL_PDF_PREVIEW);
-		const enableImageEnhancement = await joplin.settings.value(ENABLE_IMAGE_ENHANCEMENT);
-		const enableQuickCommands = await joplin.settings.value(ENABLE_QUICK_COMMANDS);
-		const enablePseudocode = await joplin.settings.value(ENABLE_PSEUDOCODE);
-		const enableAdmonitionCmRender = await joplin.settings.value(ENABLE_ADMONITION_CM_RENDER);
-		const enableFrontMatter = await joplin.settings.value(ENABLE_FRONT_MATTER);
-		const enableColorfulQuote = await joplin.settings.value(ENABLE_COLORFUL_QUOTE);
-		const enableLinkFolder = await joplin.settings.value(ENABLE_LINK_FOLDER);
-		const enableSearchReplace = await joplin.settings.value(ENABLE_SEARCH_REPLACE);
-		const enableInlineMarker = await joplin.settings.value(ENABLE_INLINE_MARKER);
-		const enableFocusMode = await joplin.settings.value(ENABLE_FOCUS_MODE);
-		const enableIndentBorder = await joplin.settings.value(ENABLE_INDENT_BORDER);
-		const enableTaskRender = await joplin.settings.value(ENABLE_TASK_RENDER);
-		const enableMathRender = await joplin.settings.value(ENABLE_MATH_RENDER);
-		const enableMermaidRender = await joplin.settings.value(ENABLE_MERMAID_RENDER);
+		const enhancementConfig = await getConfig();
 
-		if (enableImageEnhancement) {
+		if (enhancementConfig.imageEnhancement) {
 			await joplin.contentScripts.register(
 				ContentScriptType.MarkdownItPlugin,
 				'enhancement_figure_width',
@@ -52,7 +37,7 @@ joplin.plugins.register({
 			);
 		}
 
-		if (enableLocalPDFPreview) {
+		if (enhancementConfig.localPdfPreview) {
 			await joplin.contentScripts.register(
 				ContentScriptType.MarkdownItPlugin,
 				'enhancement_preview_renderer',
@@ -60,7 +45,7 @@ joplin.plugins.register({
 			);
 		}
 
-		if (enableQuickCommands) {
+		if (enhancementConfig.quickCommands) {
 			await joplin.contentScripts.register(
 				ContentScriptType.CodeMirrorPlugin,
 				'enhancement_quick_commands',
@@ -68,7 +53,7 @@ joplin.plugins.register({
 			);
 		}
 
-		if (enablePseudocode) {
+		if (enhancementConfig.pseudocode) {
 			await joplin.contentScripts.register(
 				ContentScriptType.MarkdownItPlugin,
 				'enhancement_pseudocode_renderer',
@@ -76,7 +61,7 @@ joplin.plugins.register({
 			);
 		}
 
-		if (enableTableFormatter) {
+		if (enhancementConfig.tableFormatter) {
 			await initTableFormatter();
 		}
 
@@ -86,7 +71,7 @@ joplin.plugins.register({
 			'./driver/codemirror/mode/index.js'
 		);
 
-		if (enableAdmonitionCmRender) {
+		if (enhancementConfig.admonitionCmRender) {
 			await joplin.contentScripts.register(
 				ContentScriptType.CodeMirrorPlugin,
 				'cm_admonition_renderer',
@@ -94,7 +79,7 @@ joplin.plugins.register({
 			);
 		}
 
-		if (enableFrontMatter) {
+		if (enhancementConfig.frontMatterRender) {
 			await joplin.contentScripts.register(
 				ContentScriptType.MarkdownItPlugin,
 				'enhancement_front_matter',
@@ -102,7 +87,7 @@ joplin.plugins.register({
 			);
 		}
 
-		if (enableColorfulQuote) {
+		if (enhancementConfig.colorfulQuote) {
 			await joplin.contentScripts.register(
 				ContentScriptType.MarkdownItPlugin,
 				'enhancement_colorful_quote',
@@ -115,7 +100,7 @@ joplin.plugins.register({
 			);
 		}
 
-		if (enableLinkFolder) {
+		if (enhancementConfig.linkFolder) {
 			await joplin.contentScripts.register(
 				ContentScriptType.CodeMirrorPlugin,
 				'enhancement_link_folder',
@@ -134,7 +119,7 @@ joplin.plugins.register({
 			);
 		}
 
-		if (enableSearchReplace) {
+		if (enhancementConfig.searchReplace) {
 			await joplin.contentScripts.register(
 				ContentScriptType.CodeMirrorPlugin,
 				'enhancement_search_replace',
@@ -142,7 +127,7 @@ joplin.plugins.register({
 			);
 		}
 
-		if (enableInlineMarker) {
+		if (enhancementConfig.inlineMarker) {
 			await joplin.contentScripts.register(
 				ContentScriptType.CodeMirrorPlugin,
 				'enhancement_inline_marker',
@@ -150,7 +135,7 @@ joplin.plugins.register({
 			);
 		}
 
-		if (enableIndentBorder) {
+		if (enhancementConfig.indentBorder) {
 			await joplin.contentScripts.register(
 				ContentScriptType.CodeMirrorPlugin,
 				'enhancement_indent_broder',
@@ -158,7 +143,7 @@ joplin.plugins.register({
 			);
 		}
 
-		if (enableTaskRender) {
+		if (enhancementConfig.taskCmRender) {
 			await joplin.contentScripts.register(
 				ContentScriptType.CodeMirrorPlugin,
 				'enhancement_task_render',
@@ -166,7 +151,7 @@ joplin.plugins.register({
 			);
 		}
 
-		if (enableMathRender) {
+		if (enhancementConfig.mathCmRender) {
 			await joplin.contentScripts.register(
 				ContentScriptType.CodeMirrorPlugin,
 				'enhancement_math_render',
@@ -174,7 +159,7 @@ joplin.plugins.register({
 			);
 		}
 
-		if (enableMermaidRender) {
+		if (enhancementConfig.mermaidCmRender) {
 			await joplin.contentScripts.register(
 				ContentScriptType.CodeMirrorPlugin,
 				'enhancement_mermaid_render',
@@ -182,7 +167,7 @@ joplin.plugins.register({
 			);
 		}
 
-		if (enableFocusMode) {
+		if (enhancementConfig.focusMode) {
 			await joplin.contentScripts.register(
 				ContentScriptType.CodeMirrorPlugin,
 				'enhancement_focus_mode',
@@ -286,4 +271,25 @@ async function initTableFormatter() {
 		'alignColumnSlash',
 		ToolbarButtonLocation.EditorToolbar,
 	);
+}
+
+async function getConfig(): Promise<EnhancementConfig> {
+	const config = new EnhancementConfig();
+	config.tableFormatter = await joplin.settings.value(ENABLE_TABLE_FORMATTER);
+	config.localPdfPreview = await joplin.settings.value(ENABLE_LOCAL_PDF_PREVIEW);
+	config.imageEnhancement = await joplin.settings.value(ENABLE_IMAGE_ENHANCEMENT);
+	config.quickCommands = await joplin.settings.value(ENABLE_QUICK_COMMANDS);
+	config.pseudocode = await joplin.settings.value(ENABLE_PSEUDOCODE);
+	config.admonitionCmRender = await joplin.settings.value(ENABLE_ADMONITION_CM_RENDER);
+	config.frontMatterRender = await joplin.settings.value(ENABLE_FRONT_MATTER);
+	config.colorfulQuote = await joplin.settings.value(ENABLE_COLORFUL_QUOTE);
+	config.linkFolder = await joplin.settings.value(ENABLE_LINK_FOLDER);
+	config.searchReplace = await joplin.settings.value(ENABLE_SEARCH_REPLACE);
+	config.inlineMarker = await joplin.settings.value(ENABLE_INLINE_MARKER);
+	config.focusMode = await joplin.settings.value(ENABLE_FOCUS_MODE);
+	config.indentBorder = await joplin.settings.value(ENABLE_INDENT_BORDER);
+	config.taskCmRender = await joplin.settings.value(ENABLE_TASK_RENDER);
+	config.mathCmRender = await joplin.settings.value(ENABLE_MATH_RENDER);
+	config.mermaidCmRender = await joplin.settings.value(ENABLE_MERMAID_RENDER);
+	return config;
 }

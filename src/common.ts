@@ -14,3 +14,23 @@ export const ENABLE_INDENT_BORDER = 'enhancementEnableIndentBorder';
 export const ENABLE_TASK_RENDER = 'enhancementEnableTaskRender';
 export const ENABLE_MATH_RENDER = 'enhancementEnableMathRender';
 export const ENABLE_MERMAID_RENDER = 'enhancementEnableMermaidRender';
+
+
+export class EnhancementConfig {
+    public tableFormatter: boolean;
+    public localPdfPreview: boolean;
+    public imageEnhancement: boolean;
+    public quickCommands: boolean;
+    public pseudocode: boolean;
+    public admonitionCmRender: boolean;
+    public frontMatterRender: boolean;
+    public colorfulQuote: boolean;
+    public linkFolder: boolean;
+    public searchReplace: boolean;
+    public inlineMarker: boolean;
+    public focusMode: boolean;
+    public indentBorder: boolean;
+    public taskCmRender: boolean;
+    public mathCmRender: boolean;
+    public mermaidCmRender: boolean
+}
