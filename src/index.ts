@@ -6,15 +6,19 @@ import {
 	ENABLE_COLORFUL_QUOTE,
 	ENABLE_FOCUS_MODE,
 	ENABLE_FRONT_MATTER,
-	ENABLE_IMAGE_ENHANCEMENT, ENABLE_INDENT_BORDER,
+	ENABLE_IMAGE_ENHANCEMENT,
+	ENABLE_INDENT_BORDER,
 	ENABLE_INLINE_MARKER,
 	ENABLE_LINK_FOLDER,
-	ENABLE_LOCAL_PDF_PREVIEW, ENABLE_MATH_RENDER, ENABLE_MERMAID_RENDER,
+	ENABLE_LOCAL_PDF_PREVIEW,
+	ENABLE_MATH_RENDER,
+	ENABLE_MERMAID_RENDER,
 	ENABLE_PSEUDOCODE,
 	ENABLE_QUICK_COMMANDS,
 	ENABLE_SEARCH_REPLACE,
 	ENABLE_TABLE_FORMATTER,
-	ENABLE_TASK_RENDER, EnhancementConfig,
+	ENABLE_TASK_RENDER,
+	EnhancementConfig,
 } from "./common";
 
 joplin.plugins.register({
@@ -22,6 +26,13 @@ joplin.plugins.register({
 
 		await settings.register();
 		const enhancementConfig = await getConfig();
+
+		// Default overlays. Others can depend on this. Cannot be turned off
+		await joplin.contentScripts.register(
+			ContentScriptType.CodeMirrorPlugin,
+			'enhancement-overlay',
+			'./driver/codemirror/overlay/index.js'
+		);
 
 		if (enhancementConfig.imageEnhancement) {
 			await joplin.contentScripts.register(
