@@ -185,3 +185,10 @@ span.cm-overlay.cm-enhancement-image-size {
 .cm-overlay.cm-enhancement-katex-inline-math {
     color: gray !important;
 }
+
+pre.footnote.CodeMirror-line {
+    font-size: smaller;
+    opacity: 0.75;
+    padding-left: 2em;
+    padding-bottom: 5px;
+}

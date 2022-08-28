@@ -58,11 +58,30 @@ module.exports = {
                         };
                     }
 
+                    function createFootnoteOverlay() {
+                        return {
+                            token: function(stream, state) {
+                                if(stream.sol()){
+                                    if (stream.match(/\[([^\]]+)\]:\s?(.*)/)) {
+                                        return `line-footnote`;
+                                    }
+                                    stream.skipToEnd();
+                                    return null;
+                                } else {
+                                    stream.skipToEnd();
+                                    return null;
+                                }
+                            },
+                            blankLine: blankLine
+                        };
+                    }
+
                     var gfmAdmonitionOverlay = createAdmonitionOverlay('!!!', '!');
                     var gfmAdmonitionColonOverlay = createAdmonitionOverlay(':::', ':');
+                    const footnoteOverlay = createFootnoteOverlay();
 
                     const mode1 = CodeMirror.overlayMode(CodeMirror.getMode(config, modeConfig.backdrop || 'joplin-markdown'), gfmAdmonitionColonOverlay, true);
-                    return CodeMirror.overlayMode(mode1, gfmAdmonitionOverlay, true);
+                    return CodeMirror.overlayMode(CodeMirror.overlayMode(mode1, gfmAdmonitionOverlay, true), footnoteOverlay, true);
                 });
 
                 CodeMirror.defineOption("gfm-joplin-markdown", [], async function(cm, val, old) {
