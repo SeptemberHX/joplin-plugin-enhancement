@@ -48,8 +48,6 @@ export function onRenderLine(cm: any, line: any, element: HTMLElement, CodeMirro
 
     let off = CodeMirror.countColumn(line.text, matches[0].length, cm.getOption("tabSize")) * spaceWidth;
 
-    console.log('============> Off: ', off);
-
     // Special case handling for checkboxes with monospace enabled
     if (matches[0].indexOf('[') > 0) {
         // "- [ ] " is 6 characters
