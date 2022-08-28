@@ -1,11 +1,33 @@
 import {exec} from "../../../utils/reg";
+import * as IndentHandlers from './indent';
+
+export const highlight_regex = /(?<!\\)==(?=[^\s])[^=]*[^=\s\\]==/g;
+export const insert_regex = /(?<!\\)\+\+(?=[^\s])[^\+]*[^\+\s\\]\+\+/g;
+export const sub_regex = /(?<![\\~])~(?=[^\s])[^~]*[^~\s\\]~/g;
+export const sup_regex = /(?<![\\[])\^(?=[^\s])[^\^]*[^\^\s\\[]\^/g;
+export const emph_star_regex = /(?<![\\\*])\*(?!\*)/g;
+export const emph_underline_regex = /(?<![\\\_])\_(?!\_)/g;
+export const strong_star_regex = /(?<![\\\*])\*\*(?!\*)/g;
+export const strong_underline_regex = /(?<![\\\_])\_\_(?!\_)/g;
+export const highlight_token_regex = /(?<![\\=])==(?!=)/g;
+export const insert_token_regex = /(?<![\\\+])\+\+(?!\+)/g;
+export const sub_token_regex = /(?<![\\~])~(?!~)/g;
+export const sup_token_regex = /(?<![\\\^])\^(?!\^)/g;
+export const strike_token_regex = /(?<![\\~])~~(?!~~)/g;
+export const header_regex = /^\s*#+\s/g;
+// Taken from codemirror/addon/edit/continuelist.js
+export const list_token_regex = /^(\s*)([*+-] \[[Xx ]\]\s|[*+->]\s|(\d+)([.)]\s))(\s*)/g;
+// Taken from codemirror/mode/markdown/markdown.js
+export const hr_regex = /^([*\-_])(?:\s*\1){2,}\s*$/;
+export const blockquote_regex = /^\s*\>+\s/g;
+
 
 module.exports = {
     default: function(_context) {
         return {
             plugin: function (CodeMirror) {
                 CodeMirror.defineOption("enhancement-overlay", [], async function(cm, val, old) {
-                    function addOverlay(cm, reg, className) {
+                    function regexOverlay(cm, className, reg) {
                         cm.addOverlay({
                             requiredSettings: ['extraCSS'],
                             token: function (stream: any) {
@@ -33,15 +55,42 @@ module.exports = {
                         });
                     }
 
-                    addOverlay(cm, /(?<=(!\[.*]\(.*\)))(\{.*\})/g, 'enhancement-image-size');
-                    addOverlay(cm, /(?<!\$)\$(.+?)\$(?!\$)/g, 'enhancement-katex-inline-math');
-                    addOverlay(cm, /- \[[x|X]\]\s+.*/g, 'enhancement-finished-task');
+                    regexOverlay(cm, 'enhancement-image-size', /(?<=(!\[.*]\(.*\)))(\{.*\})/g);
+                    regexOverlay(cm, 'enhancement-katex-inline-math', /(?<!\$)\$(.+?)\$(?!\$)/g);
+                    regexOverlay(cm, 'enhancement-finished-task', /- \[[x|X]\]\s+.*/g);
+                    regexOverlay(cm, 'rm-list-token', list_token_regex);
+                    regexOverlay(cm, 'rm-ins', insert_regex);
+                    regexOverlay(cm, 'rm-sub', sub_regex);
+                    regexOverlay(cm, 'rm-sup', sup_regex);
+                    regexOverlay(cm, 'rm-header-token', header_regex);
+                    regexOverlay(cm, 'line-cm-rm-blockquote', blockquote_regex);
+                    regexOverlay(cm, 'rm-em-token', emph_star_regex);
+                    regexOverlay(cm, 'rm-em-token', emph_underline_regex);
+                    regexOverlay(cm, 'rm-strong-token', strong_star_regex);
+                    regexOverlay(cm, 'rm-strong-token', strong_underline_regex);
+                    regexOverlay(cm, 'rm-highlight', highlight_regex);
+                    regexOverlay(cm, 'rm-highlight-token', highlight_token_regex);
+                    regexOverlay(cm, 'rm-ins-token', insert_token_regex);
+                    regexOverlay(cm, 'rm-sub-token', sub_token_regex);
+                    regexOverlay(cm, 'rm-sup-token', sup_token_regex);
+                    regexOverlay(cm, 'rm-strike-token', strike_token_regex);
+                    regexOverlay(cm, 'rm-hr line-cm-rm-hr', hr_regex);
+
+                    function on_renderLine(cm: any, line: any, element: HTMLElement) {
+                        IndentHandlers.onRenderLine(cm, line, element, CodeMirror);
+                    }
+                    cm.on('renderLine', on_renderLine);
+                    IndentHandlers.calculateSpaceWidth(cm);
                 });
             },
             codeMirrorResources: ['addon/mode/overlay'],
             codeMirrorOptions: { 'enhancement-overlay': true },
             assets: function() {
-                return [ ];
+                return [
+                    {
+                        name: 'overlay.css'
+                    }
+                ];
             }
         }
     },

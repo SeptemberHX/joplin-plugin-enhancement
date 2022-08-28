@@ -189,6 +189,6 @@ span.cm-overlay.cm-enhancement-image-size {
 pre.footnote.CodeMirror-line {
     font-size: smaller;
     opacity: 0.75;
-    padding-left: 2em;
+    padding-left: 2em !important;
     padding-bottom: 5px;
 }
