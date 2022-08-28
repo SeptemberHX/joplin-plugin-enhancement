@@ -14,6 +14,12 @@ Pseudocode block:
 
 ![](./screenshot/pseudocode.png)
 
+### Codeblocks
+
+Highlight.js based codeblocks
+
+![](./screenshot/codeblock.png)
+
 ### Image
 
 Allow following md works:
@@ -97,11 +103,7 @@ It supports both `!!!` style and `:::` style admonitions.
 
 ### Border for indent list in markdown editor
 
-> It needs the joplin-rich-markdown plugin installed and the feature 'indent list' enabled
-
 ![IndentBorder](./screenshot/indentBorder.png)
-
-> Enable 'Add additional CSS classes for enhanced customization' in joplin-rich-markdown plugin to get rendered quote
 
 ![QuoteRender](./screenshot/quoteRender.png)
 

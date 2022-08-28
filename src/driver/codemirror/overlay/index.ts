@@ -1,3 +1,9 @@
+// This part mainly comes from https://github.com/CalebJohn/joplin-rich-markdown.
+//    Some parts of the Enhancement plugin depends on the overlays of joplin-rich-markdown.
+//    However, some features are conflict with joplin-rich-markdown (image, link, etc.).
+//    Thus, codes below are copied from joplin-rich-markdown
+
+
 import {exec} from "../../../utils/reg";
 import * as IndentHandlers from './indent';
 
