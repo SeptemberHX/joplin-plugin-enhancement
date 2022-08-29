@@ -34,3 +34,16 @@ export class EnhancementConfig {
     public mathCmRender: boolean;
     public mermaidCmRender: boolean
 }
+
+
+export enum ContextMsgType {
+    GET_SETTINGS,
+    OPEN_URL,
+    RESOURCE_PATH,
+}
+
+
+export class ContextMsg {
+    type: ContextMsgType;
+    content: any;
+}

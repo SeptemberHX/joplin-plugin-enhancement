@@ -2,6 +2,8 @@ import joplin from 'api';
 import {ContentScriptType, ToolbarButtonLocation} from "api/types";
 import {settings} from "./settings";
 import {
+	ContextMsg,
+	ContextMsgType,
 	ENABLE_ADMONITION_CM_RENDER,
 	ENABLE_COLORFUL_QUOTE,
 	ENABLE_FOCUS_MODE,
@@ -27,11 +29,23 @@ joplin.plugins.register({
 		await settings.register();
 		const enhancementConfig = await getConfig();
 
-		// Default overlays. Others can depend on this. Cannot be turned off
 		await joplin.contentScripts.register(
 			ContentScriptType.CodeMirrorPlugin,
-			'enhancement-overlay',
-			'./driver/codemirror/overlay/index.js'
+			'enhancement_codemirror_items',
+			'./driver/codemirror/index.js'
+		);
+
+		await joplin.contentScripts.onMessage(
+			'enhancement_codemirror_items',
+			async (msg: ContextMsg) => {
+				if (msg.type === ContextMsgType.GET_SETTINGS) {
+					return await getConfig();
+				} else if (msg.type === ContextMsgType.OPEN_URL && msg.content && msg.content !== '') {
+					return await joplin.commands.execute('openItem', msg.content);
+				} else if (msg.type === ContextMsgType.RESOURCE_PATH && msg.content && msg.content !== '') {
+					return await joplin.data.resourcePath(msg.content.substr(2));
+				}
+			}
 		);
 
 		if (enhancementConfig.imageEnhancement) {
@@ -76,12 +90,6 @@ joplin.plugins.register({
 			await initTableFormatter();
 		}
 
-		await joplin.contentScripts.register(
-			ContentScriptType.CodeMirrorPlugin,
-			'enhancement_codemirror_mode',
-			'./driver/codemirror/mode/index.js'
-		);
-
 		if (enhancementConfig.admonitionCmRender) {
 			await joplin.contentScripts.register(
 				ContentScriptType.CodeMirrorPlugin,
@@ -108,25 +116,6 @@ joplin.plugins.register({
 				ContentScriptType.CodeMirrorPlugin,
 				'enhancement_quote_folder',
 				'./driver/codemirror/blockquote/index.js'
-			);
-		}
-
-		if (enhancementConfig.linkFolder) {
-			await joplin.contentScripts.register(
-				ContentScriptType.CodeMirrorPlugin,
-				'enhancement_link_folder',
-				'./driver/codemirror/linkFolder/index.js'
-			);
-
-			await joplin.contentScripts.onMessage(
-				'enhancement_link_folder',
-				async (msg) => {
-					if (msg.type === 'openUrl' && msg.content && msg.content !== '') {
-						return await joplin.commands.execute('openItem', msg.content);
-					} else if (msg.type === 'imgPath' && msg.content && msg.content !== '') {
-						return await joplin.data.resourcePath(msg.content.substr(2));
-					}
-				}
 			);
 		}
 

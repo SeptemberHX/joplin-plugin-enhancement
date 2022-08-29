@@ -2,6 +2,7 @@ import CMInlineMarkerHelperV2 from "../../../utils/CMInlineMarkerHelperV2";
 import {CMBlockMarkerHelperV2} from "../../../utils/CMBlockMarkerHelperV2";
 import {BLOCK_IMAGE_REG, INLINE_IMAGE_REG} from "./regexps";
 import {findLineWidgetAtLine} from "../../../utils/cm-utils";
+import {ContextMsgType} from "../../../common";
 
 const ENHANCED_IMAGE_MARKER = 'enhancement-image-marker';
 export const ENHANCED_BLOCK_IMAGE_MARKER = 'enhancement-block-image-marker';
@@ -51,7 +52,7 @@ export function createBlockImageMarker(context, cm) {
         let imgUrl = beginMatch[2] ? beginMatch[2] : '';
         if (imgUrl.startsWith(':/')) {
             context.postMessage({
-                type: 'imgPath',
+                type: ContextMsgType.RESOURCE_PATH,
                 content: beginMatch[2]
             }).then((path) => {
                 imgEl.src = path;
@@ -86,7 +87,7 @@ export function createBlockImageMarker(context, cm) {
     }, ENHANCED_BLOCK_IMAGE_MARKER, true, false, null, (content, e) => {
         const match = BLOCK_IMAGE_REG.exec(content);
         context.postMessage({
-            type: 'openUrl',
+            type: ContextMsgType.OPEN_URL,
             content: match[2]
         });
     });

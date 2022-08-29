@@ -1,25 +1,9 @@
-module.exports = {
-    default: function(_context) {
-        return {
-            plugin: function (CodeMirror) {
-                const ignoreOverlay = {
-                    token: function (stream, state) {
-                        stream.next()
-                        return null
-                    }
-                };
+export function initCodeMode(context, CodeMirror) {
+    CodeMirror.defineMode('markmap', function (config, modeConfig) {
+        return CodeMirror.getMode(config, 'joplin-markdown');
+    });
 
-                CodeMirror.defineMode('markmap', function (config, modeConfig) {
-                    return CodeMirror.getMode(config, 'joplin-markdown');
-                });
-
-                CodeMirror.defineMode('pseudocode', function (config, modeConfig) {
-                    return CodeMirror.getMode(config, { name: 'stex', inMathMode: false });
-                });
-            },
-            assets: function() {
-                return [ ];
-            }
-        }
-    },
+    CodeMirror.defineMode('pseudocode', function (config, modeConfig) {
+        return CodeMirror.getMode(config, { name: 'stex', inMathMode: false });
+    });
 }

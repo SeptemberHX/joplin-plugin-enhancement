@@ -6,6 +6,7 @@
 
 import {exec} from "../../../utils/reg";
 import * as IndentHandlers from './indent';
+import {enhancement_overlay_option} from "../common";
 
 export const highlight_regex = /(?<!\\)==(?=[^\s])[^=]*[^=\s\\]==/g;
 export const insert_regex = /(?<!\\)\+\+(?=[^\s])[^\+]*[^\+\s\\]\+\+/g;
@@ -28,76 +29,62 @@ export const hr_regex = /^([*\-_])(?:\s*\1){2,}\s*$/;
 export const blockquote_regex = /^\s*\>+\s/g;
 
 
-module.exports = {
-    default: function(_context) {
-        return {
-            plugin: function (CodeMirror) {
-                CodeMirror.defineOption("enhancement-overlay", [], async function(cm, val, old) {
-                    function regexOverlay(cm, className, reg) {
-                        cm.addOverlay({
-                            requiredSettings: ['extraCSS'],
-                            token: function (stream: any) {
-                                const match = exec(reg, stream);
+export function initOverlayOption(_context, CodeMirror) {
+    CodeMirror.defineOption(enhancement_overlay_option, [], async function(cm, val, old) {
+        function regexOverlay(cm, className, reg) {
+            cm.addOverlay({
+                requiredSettings: ['extraCSS'],
+                token: function (stream: any) {
+                    const match = exec(reg, stream);
 
-                                const baseToken = stream.baseToken();
-                                if (baseToken?.type && (
-                                    baseToken.type.includes("jn-inline-code") ||
-                                    baseToken.type.includes("comment") ||
-                                    baseToken.type.includes("katex"))) {
-                                    stream.pos += baseToken.size;
-                                } else if (match && match.index === stream.pos) {
-                                    // advance
-                                    stream.pos += match[0].length || 1;
-                                    return className;
-                                } else if (match) {
-                                    // jump to the next match
-                                    stream.pos = match.index;
-                                } else {
-                                    stream.skipToEnd();
-                                }
-
-                                return null;
-                            }
-                        });
+                    const baseToken = stream.baseToken();
+                    if (baseToken?.type && (
+                        baseToken.type.includes("jn-inline-code") ||
+                        baseToken.type.includes("comment") ||
+                        baseToken.type.includes("katex"))) {
+                        stream.pos += baseToken.size;
+                    } else if (match && match.index === stream.pos) {
+                        // advance
+                        stream.pos += match[0].length || 1;
+                        return className;
+                    } else if (match) {
+                        // jump to the next match
+                        stream.pos = match.index;
+                    } else {
+                        stream.skipToEnd();
                     }
 
-                    regexOverlay(cm, 'enhancement-image-size', /(?<=(!\[.*]\(.*\)))(\{.*\})/g);
-                    regexOverlay(cm, 'enhancement-katex-inline-math', /(?<!\$)\$(.+?)\$(?!\$)/g);
-                    regexOverlay(cm, 'enhancement-finished-task', /- \[[x|X]\]\s+.*/g);
-                    regexOverlay(cm, 'rm-list-token', list_token_regex);
-                    regexOverlay(cm, 'rm-ins', insert_regex);
-                    regexOverlay(cm, 'rm-sub', sub_regex);
-                    regexOverlay(cm, 'rm-sup', sup_regex);
-                    regexOverlay(cm, 'rm-header-token', header_regex);
-                    regexOverlay(cm, 'line-cm-rm-blockquote', blockquote_regex);
-                    regexOverlay(cm, 'rm-em-token', emph_star_regex);
-                    regexOverlay(cm, 'rm-em-token', emph_underline_regex);
-                    regexOverlay(cm, 'rm-strong-token', strong_star_regex);
-                    regexOverlay(cm, 'rm-strong-token', strong_underline_regex);
-                    regexOverlay(cm, 'rm-highlight', highlight_regex);
-                    regexOverlay(cm, 'rm-highlight-token', highlight_token_regex);
-                    regexOverlay(cm, 'rm-ins-token', insert_token_regex);
-                    regexOverlay(cm, 'rm-sub-token', sub_token_regex);
-                    regexOverlay(cm, 'rm-sup-token', sup_token_regex);
-                    regexOverlay(cm, 'rm-strike-token', strike_token_regex);
-                    regexOverlay(cm, 'rm-hr line-cm-rm-hr', hr_regex);
-
-                    function on_renderLine(cm: any, line: any, element: HTMLElement) {
-                        IndentHandlers.onRenderLine(cm, line, element, CodeMirror);
-                    }
-                    cm.on('renderLine', on_renderLine);
-                    IndentHandlers.calculateSpaceWidth(cm);
-                });
-            },
-            codeMirrorResources: ['addon/mode/overlay'],
-            codeMirrorOptions: { 'enhancement-overlay': true },
-            assets: function() {
-                return [
-                    {
-                        name: 'overlay.css'
-                    }
-                ];
-            }
+                    return null;
+                }
+            });
         }
-    },
+
+        regexOverlay(cm, 'enhancement-image-size', /(?<=(!\[.*]\(.*\)))(\{.*\})/g);
+        regexOverlay(cm, 'enhancement-katex-inline-math', /(?<!\$)\$(.+?)\$(?!\$)/g);
+        regexOverlay(cm, 'enhancement-finished-task', /- \[[x|X]\]\s+.*/g);
+        regexOverlay(cm, 'rm-list-token', list_token_regex);
+        regexOverlay(cm, 'rm-ins', insert_regex);
+        regexOverlay(cm, 'rm-sub', sub_regex);
+        regexOverlay(cm, 'rm-sup', sup_regex);
+        regexOverlay(cm, 'rm-header-token', header_regex);
+        regexOverlay(cm, 'line-cm-rm-blockquote', blockquote_regex);
+        regexOverlay(cm, 'rm-em-token', emph_star_regex);
+        regexOverlay(cm, 'rm-em-token', emph_underline_regex);
+        regexOverlay(cm, 'rm-strong-token', strong_star_regex);
+        regexOverlay(cm, 'rm-strong-token', strong_underline_regex);
+        regexOverlay(cm, 'rm-highlight', highlight_regex);
+        regexOverlay(cm, 'rm-highlight-token', highlight_token_regex);
+        regexOverlay(cm, 'rm-ins-token', insert_token_regex);
+        regexOverlay(cm, 'rm-sub-token', sub_token_regex);
+        regexOverlay(cm, 'rm-sup-token', sup_token_regex);
+        regexOverlay(cm, 'rm-strike-token', strike_token_regex);
+        regexOverlay(cm, 'rm-hr line-cm-rm-hr', hr_regex);
+
+        function on_renderLine(cm: any, line: any, element: HTMLElement) {
+            IndentHandlers.onRenderLine(cm, line, element, CodeMirror);
+        }
+
+        cm.on('renderLine', on_renderLine);
+        IndentHandlers.calculateSpaceWidth(cm);
+    });
 }

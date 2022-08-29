@@ -3,6 +3,7 @@ import {CMBlockMarkerHelperV2} from "../../../utils/CMBlockMarkerHelperV2";
 import path from "path";
 import {BLOCK_LINK_REG, INLINE_LINK_REG} from "./regexps";
 import {findLineWidgetAtLine} from "../../../utils/cm-utils";
+import {ContextMsgType} from "../../../common";
 
 const mime = require('mime-types')
 
@@ -60,7 +61,7 @@ export function createInlineLinkMarker(context, cm) {
     }, async function (match, e) {
         // open url
         await context.postMessage({
-            type: 'openUrl',
+            type: ContextMsgType.OPEN_URL,
             content: match[2]
         });
     });
@@ -138,7 +139,7 @@ export function createBlockLinkMarker(context, cm) {
             }
 
             context.postMessage({
-                type: 'imgPath',
+                type: ContextMsgType.RESOURCE_PATH,
                 content: resourceId
             }).then((filePath) => {
                 if (pdfPageMatch) {
@@ -176,7 +177,7 @@ export function createBlockLinkMarker(context, cm) {
         }
 
         context.postMessage({
-            type: 'openUrl',
+            type: ContextMsgType.OPEN_URL,
             content: link
         });
     });
