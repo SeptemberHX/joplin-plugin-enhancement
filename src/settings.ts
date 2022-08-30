@@ -13,7 +13,7 @@ import {
     ENABLE_SEARCH_REPLACE,
     ENABLE_INLINE_MARKER,
     ENABLE_FOCUS_MODE,
-    ENABLE_INDENT_BORDER, ENABLE_TASK_RENDER, ENABLE_MATH_RENDER, ENABLE_MERMAID_RENDER,
+    ENABLE_INDENT_BORDER, ENABLE_TASK_RENDER, ENABLE_MATH_RENDER, ENABLE_MERMAID_RENDER, ENABLE_CODEBLOCK_HL,
 } from "./common";
 
 export namespace settings {
@@ -169,6 +169,15 @@ export namespace settings {
             type: SettingItemType.Bool,
             label: 'Render mermaid code block to svg in markdown editor',
             description: "It requires restart",
+        }
+
+        PLUGIN_SETTINGS[ENABLE_CODEBLOCK_HL] = {
+            value: true,
+            public: true,
+            section: SECTION,
+            type: SettingItemType.Bool,
+            label: 'Render code block with highlight.js in markdown editor',
+            description: "For more details, please refer to https://highlightjs.org/static/demo/",
         }
 
         await joplin.settings.registerSettings(PLUGIN_SETTINGS);

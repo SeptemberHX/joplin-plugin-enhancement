@@ -20,6 +20,7 @@ import {
 	ENABLE_SEARCH_REPLACE,
 	ENABLE_TABLE_FORMATTER,
 	ENABLE_TASK_RENDER,
+	ENABLE_CODEBLOCK_HL,
 	EnhancementConfig,
 } from "./common";
 
@@ -148,14 +149,6 @@ joplin.plugins.register({
 				ContentScriptType.CodeMirrorPlugin,
 				'enhancement_task_render',
 				'./driver/codemirror/taskRender/index.js'
-			);
-		}
-
-		if (enhancementConfig.mathCmRender) {
-			await joplin.contentScripts.register(
-				ContentScriptType.CodeMirrorPlugin,
-				'enhancement_math_render',
-				'./driver/codemirror/mathRender/index.js'
 			);
 		}
 
@@ -291,5 +284,6 @@ async function getConfig(): Promise<EnhancementConfig> {
 	config.taskCmRender = await joplin.settings.value(ENABLE_TASK_RENDER);
 	config.mathCmRender = await joplin.settings.value(ENABLE_MATH_RENDER);
 	config.mermaidCmRender = await joplin.settings.value(ENABLE_MERMAID_RENDER);
+	config.codeBlockHL = await joplin.settings.value(ENABLE_CODEBLOCK_HL);
 	return config;
 }

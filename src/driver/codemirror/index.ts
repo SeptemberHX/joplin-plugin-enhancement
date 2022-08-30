@@ -66,6 +66,9 @@ module.exports = {
                     },
                     {
                         name: './linkFolder/default.min.css'
+                    },
+                    {
+                        name: './linkFolder/katex.min.css'
                     }
                 ];
             }

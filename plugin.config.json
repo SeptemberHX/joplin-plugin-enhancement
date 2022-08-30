@@ -18,7 +18,7 @@
 		"driver/codemirror/focusMode/index.ts",
 		"driver/codemirror/indentBorder/index.ts",
 		"driver/codemirror/taskRender/index.ts",
-		"driver/codemirror/mathRender/index.ts",
+
 		"driver/codemirror/mermaidRender/index.ts",
 
 		"driver/codemirror/index.ts"

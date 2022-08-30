@@ -5,11 +5,13 @@ import {createBlockLinkMarker, createInlineLinkMarker, ENHANCED_BLOCK_LINK_MARKE
 import {createBlockImageMarker, createInlineImageMarker, ENHANCED_BLOCK_IMAGE_MARKER} from "./imageMarker";
 import {createInlineFootnoteMarker} from "./footnoteMarker";
 import {createCodeBlockMarker, ENHANCED_CODE_BLOCK_MARKER} from "./codeMarker";
+import {createBlockMathMarker, createInlineMathMarker, ENHANCEMENT_MATH_BLOCK_SPAN_MARKER_CLASS} from "./mathMaker";
 
 
 const ENHANCEMENT_BLOCK_IMAGE_SPAN_MARKER_LINE_CLASS = 'enhancement-block-image-marker-span-line';
 const ENHANCEMENT_BLOCK_LINK_SPAN_MARKER_LINE_CLASS = 'enhancement-block-link-marker-span-line';
 const ENHANCEMENT_BLOCK_CODE_SPAN_MARKER_LINE_CLASS = 'enhancement-code-block-marker-span-line';
+const ENHANCEMENT_MATH_BLOCK_SPAN_MARKER_LINE_CLASS = 'enhancement-math-block-marker-line';
 
 
 export async function linkFolderOptionFunc(_context, cm, val, old) {
@@ -21,6 +23,9 @@ export async function linkFolderOptionFunc(_context, cm, val, old) {
 
     const codeBlockMarker = createCodeBlockMarker(_context, cm)
 
+    const blockMathMarker = createBlockMathMarker(_context, cm);
+    const inlineMathMarker = createInlineMathMarker(_context, cm);
+
     cm.on('renderLine', (editor, line: LineHandle, element: Element) => {
         if (element.getElementsByClassName(ENHANCED_BLOCK_IMAGE_MARKER).length > 0) {
             element.classList.add(ENHANCEMENT_BLOCK_IMAGE_SPAN_MARKER_LINE_CLASS);
@@ -28,6 +33,8 @@ export async function linkFolderOptionFunc(_context, cm, val, old) {
             element.classList.add(ENHANCEMENT_BLOCK_LINK_SPAN_MARKER_LINE_CLASS);
         } else if (element.getElementsByClassName(ENHANCED_CODE_BLOCK_MARKER).length > 0) {
             element.classList.add(ENHANCEMENT_BLOCK_CODE_SPAN_MARKER_LINE_CLASS);
+        } else if (element.getElementsByClassName(ENHANCEMENT_MATH_BLOCK_SPAN_MARKER_CLASS).length > 0) {
+            element.classList.add(ENHANCEMENT_MATH_BLOCK_SPAN_MARKER_LINE_CLASS);
         }
     });
 
@@ -43,7 +50,15 @@ export async function linkFolderOptionFunc(_context, cm, val, old) {
                 footnoteMarker.process(full);
                 inlineImageMarker.process(full);
                 blockLinkMarker.process(full);
+            }
+
+            if (cm.state.enhancement.settings.codeBlockHL) {
                 codeBlockMarker.process(full);
+            }
+
+            if (cm.state.enhancement.settings.mathCmRender) {
+                inlineMathMarker.process(full);
+                blockMathMarker.process(full);
             }
         } else {
             inlineLinkMarker.process(full);
@@ -52,6 +67,9 @@ export async function linkFolderOptionFunc(_context, cm, val, old) {
             inlineImageMarker.process(full);
             blockLinkMarker.process(full);
             codeBlockMarker.process(full);
+
+            inlineMathMarker.process(full);
+            blockMathMarker.process(full);
         }
         cm.endOperation();
     }
