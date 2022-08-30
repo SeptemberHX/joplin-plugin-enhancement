@@ -84,4 +84,6 @@ export async function linkFolderOptionFunc(_context, cm, val, old) {
             process(true);
         }
     });
+
+    await foldDebounce();
 }
