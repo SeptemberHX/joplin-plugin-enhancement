@@ -28,6 +28,7 @@ export const list_token_regex = /^(\s*)([*+-] \[[Xx ]\]\s|[*+->]\s|(\d+)([.)]\s)
 export const hr_regex = /^([*\-_])(?:\s*\1){2,}\s*$/;
 export const blockquote_regex = /^\s*\>+\s/g;
 export const blockquote_token_regex = /^(\s*)>(?=(\s+.*))/g;
+export const todo_priority_regex = /(?<=(-\s\[[xX\s]\].*\s))(!([1234]))/g;
 
 const WRAP_CLASS = "CodeMirror-activeline";
 
@@ -62,6 +63,34 @@ export function initOverlayOption(_context, CodeMirror) {
             });
         }
 
+        function todoPriorityRegexOverlay(cm, className, reg) {
+            cm.addOverlay({
+                requiredSettings: ['extraCSS'],
+                token: function (stream: any) {
+                    const match = exec(reg, stream);
+
+                    const baseToken = stream.baseToken();
+                    if (baseToken?.type && (
+                        baseToken.type.includes("jn-inline-code") ||
+                        baseToken.type.includes("comment") ||
+                        baseToken.type.includes("katex"))) {
+                        stream.pos += baseToken.size;
+                    } else if (match && match.index === stream.pos) {
+                        // advance
+                        stream.pos += match[0].length || 1;
+                        return className + '-' + match[3];
+                    } else if (match) {
+                        // jump to the next match
+                        stream.pos = match.index;
+                    } else {
+                        stream.skipToEnd();
+                    }
+
+                    return null;
+                }
+            });
+        }
+
         regexOverlay(cm, 'enhancement-image-size', /(?<=(!\[.*]\(.*\)))(\{.*\})/g);
         regexOverlay(cm, 'enhancement-katex-inline-math', /(?<!\$)\$(.+?)\$(?!\$)/g);
         regexOverlay(cm, 'enhancement-finished-task', /- \[[x|X]\]\s+.*/g);
@@ -83,6 +112,7 @@ export function initOverlayOption(_context, CodeMirror) {
         regexOverlay(cm, 'rm-strike-token', strike_token_regex);
         regexOverlay(cm, 'rm-hr line-cm-rm-hr', hr_regex);
         regexOverlay(cm, 'rm-blockquote-token', blockquote_token_regex);
+        todoPriorityRegexOverlay(cm, 'rm-todo-priority', todo_priority_regex);
 
         function on_renderLine(cm: any, line: any, element: HTMLElement) {
             IndentHandlers.onRenderLine(cm, line, element, CodeMirror);

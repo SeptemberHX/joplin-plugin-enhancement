@@ -22,3 +22,28 @@
 /* Needed for the renderLine indent hack to work */
 .CodeMirror pre > * { text-indent: 0px; }
 
+span.cm-variable-2.cm-overlay.cm-rm-todo-priority-1,
+span.cm-variable-2.cm-overlay.cm-rm-todo-priority-2,
+span.cm-variable-2.cm-overlay.cm-rm-todo-priority-3,
+span.cm-variable-2.cm-overlay.cm-rm-todo-priority-4 {
+    padding: 0 3px;
+    border-radius: 4px;
+    color: white !important;
+    opacity: 0.75;
+}
+
+span.cm-variable-2.cm-overlay.cm-rm-todo-priority-1 {
+    background: #e33e2f;
+}
+
+span.cm-variable-2.cm-overlay.cm-rm-todo-priority-2 {
+    background: #f8d15f;
+}
+
+span.cm-variable-2.cm-overlay.cm-rm-todo-priority-3 {
+    background: #549644;
+}
+
+span.cm-variable-2.cm-overlay.cm-rm-todo-priority-4 {
+    background: #ececec;
+}
