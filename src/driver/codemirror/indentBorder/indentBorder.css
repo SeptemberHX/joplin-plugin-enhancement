@@ -36,10 +36,10 @@ pre.cm-jn-code-block.CodeMirror-line {
 /*}*/
 
 
-div.CodeMirror-activeline span.cm-rm-blockquote-token {
+div.CodeMirror-activeline > pre > span > span.cm-rm-blockquote-token {
     opacity: 0.7 !important;
 }
 
-div:not(.CodeMirror-activeline) span.cm-rm-blockquote-token {
+div:not(.CodeMirror-activeline) > pre > span > span.cm-rm-blockquote-token {
     opacity: 0;
 }
