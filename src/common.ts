@@ -35,6 +35,7 @@ export class EnhancementConfig {
     public mathCmRender: boolean;
     public mermaidCmRender: boolean;
     public codeBlockHL: boolean;
+    public dateFormat: string;
 }
 
 

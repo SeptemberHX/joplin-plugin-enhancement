@@ -2,6 +2,8 @@ import {initCodeMode} from "./mode";
 import {ContextMsgType, EnhancementConfig} from "../../common";
 import {initOverlayOption} from "./overlay";
 import {linkFolderOptionFunc} from "./linkFolder";
+import QuickCommands, {ExtendedEditor} from "./quickCommands/quickCommands";
+import {Editor} from "codemirror";
 
 
 module.exports = {
@@ -41,6 +43,10 @@ module.exports = {
                                 settings
                             };
                             await linkFolderOptionFunc(context, cm, val, old);
+
+                            if (settings.quickCommands) {
+                                new QuickCommands(context, cm as ExtendedEditor & Editor, CodeMirror);
+                            }
                         }
                     }
                     // Set the first timeout to 50 because settings are usually ready immediately
@@ -49,7 +55,8 @@ module.exports = {
                 });
             },
             codeMirrorResources: [
-                'addon/mode/overlay'                            // Enable ./overlay
+                'addon/mode/overlay',                           // Enable ./overlay
+                'addon/hint/show-hint',                         // Enable ./quickCommands
             ],
             codeMirrorOptions: {
                 'enable-enhancement-codemirror': true,
@@ -69,6 +76,9 @@ module.exports = {
                     },
                     {
                         name: './linkFolder/katex.min.css'
+                    },
+                    {
+                        name: './quickCommands/quickCommands.css'
                     }
                 ];
             }

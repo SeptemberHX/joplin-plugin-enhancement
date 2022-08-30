@@ -71,14 +71,6 @@ joplin.plugins.register({
 			);
 		}
 
-		if (enhancementConfig.quickCommands) {
-			await joplin.contentScripts.register(
-				ContentScriptType.CodeMirrorPlugin,
-				'enhancement_quick_commands',
-				'./driver/codemirror/quickCommands/index.js'
-			);
-		}
-
 		if (enhancementConfig.pseudocode) {
 			await joplin.contentScripts.register(
 				ContentScriptType.MarkdownItPlugin,
@@ -285,5 +277,6 @@ async function getConfig(): Promise<EnhancementConfig> {
 	config.mathCmRender = await joplin.settings.value(ENABLE_MATH_RENDER);
 	config.mermaidCmRender = await joplin.settings.value(ENABLE_MERMAID_RENDER);
 	config.codeBlockHL = await joplin.settings.value(ENABLE_CODEBLOCK_HL);
+	config.dateFormat = await joplin.settings.globalValue('dateFormat');
 	return config;
 }

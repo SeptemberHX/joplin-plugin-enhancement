@@ -3,7 +3,7 @@
 import {Editor, Position} from "codemirror";
 import CodeMirror from "codemirror";
 import PlantumlHints from './PlantumlHints'
-import DateHints from "./DateHints";
+import {getDateHints} from "./DateHints";
 import MermaidHints from "./MermaidHints";
 
 const TRIGGER_SYMBOL = '/';
@@ -31,7 +31,6 @@ let customHints: Hint[] = [
 ]
 
 customHints = customHints.concat(PlantumlHints)
-customHints = customHints.concat(DateHints)
 customHints = customHints.concat(MermaidHints);
 
 interface Completion {
@@ -71,10 +70,10 @@ export default class QuickCommands {
         const symbolRange = [{ line: pos.line, ch: pos.ch - TRIGGER_SYMBOL.length }, pos] as const;
         const chars = this.doc.getRange(...symbolRange);
 
-        if (chars === TRIGGER_SYMBOL) {
+        if (chars === TRIGGER_SYMBOL && !/\S/.test(this.doc.getRange(pos, {line: pos.line, ch: pos.ch + 1}))) {
             this.symbolRange = { from: symbolRange[0], to: symbolRange[1] };
             this.editor.showHint({
-                closeCharacters: /[()\[\]{};:>, ]/,
+                closeCharacters: /[()\[\]{};:>,/ ]/,
                 closeOnUnfocus: true,
                 completeSingle: false,
                 hint: this.getCommandCompletion.bind(this),
@@ -118,7 +117,7 @@ export default class QuickCommands {
         }
 
         // add indent when there exists 'tab' before or add a new line for non-inline hints
-        for (let customHint of customHints) {
+        for (let customHint of customHints.concat(getDateHints(this.editor.state.enhancement.settings.dateFormat))) {
             // filter the hints by keyword
             if (customHint.displayText.includes(keyword)) {
                 let indentText = '';

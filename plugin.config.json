@@ -1,7 +1,6 @@
 {
 	"extraScripts": [
 		"driver/codemirror/tableFormatter/index.ts",
-		"driver/codemirror/quickCommands/index.ts",
 
 		"driver/markdownItRenderer/filePreview/index.ts",
 		"driver/markdownItRenderer/image/index.ts",

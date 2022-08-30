@@ -69,7 +69,7 @@ export namespace settings {
             section: SECTION,
             type: SettingItemType.Bool,
             label: 'Enable quick commands for quick input',
-            description: "Insert mermaid graph, tables, etc. with /commands. (requires restart)",
+            description: "Insert mermaid graph, tables, etc. with /commands.",
         }
 
         PLUGIN_SETTINGS[ENABLE_ADMONITION_CM_RENDER] = {
