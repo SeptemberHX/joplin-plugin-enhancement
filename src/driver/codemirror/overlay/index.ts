@@ -28,7 +28,11 @@ export const list_token_regex = /^(\s*)([*+-] \[[Xx ]\]\s|[*+->]\s|(\d+)([.)]\s)
 export const hr_regex = /^([*\-_])(?:\s*\1){2,}\s*$/;
 export const blockquote_regex = /^\s*\>+\s/g;
 export const blockquote_token_regex = /^(\s*)>(?=(\s+.*))/g;
+
 export const todo_priority_regex = /(?<=(-\s\[[xX\s]\].*\s))(!([1234]))/g;
+export const todo_project_regex = /(?<=(-\s\[[xX\s]\].*\s))(@\S+)/g;
+export const todo_tag_regex = /(?<=(-\s\[[xX\s]\].*\s))(\+\S+)/g;
+export const todo_date_regex = /(?<=(-\s\[[xX\s]\].*\s))(\/\/\S+)/g;
 
 const WRAP_CLASS = "CodeMirror-activeline";
 
@@ -112,6 +116,10 @@ export function initOverlayOption(_context, CodeMirror) {
         regexOverlay(cm, 'rm-strike-token', strike_token_regex);
         regexOverlay(cm, 'rm-hr line-cm-rm-hr', hr_regex);
         regexOverlay(cm, 'rm-blockquote-token', blockquote_token_regex);
+
+        regexOverlay(cm, 'rm-todo-project', todo_project_regex);
+        regexOverlay(cm, 'rm-todo-tag', todo_tag_regex);
+        regexOverlay(cm, 'rm-todo-date', todo_date_regex);
         todoPriorityRegexOverlay(cm, 'rm-todo-priority', todo_priority_regex);
 
         function on_renderLine(cm: any, line: any, element: HTMLElement) {
