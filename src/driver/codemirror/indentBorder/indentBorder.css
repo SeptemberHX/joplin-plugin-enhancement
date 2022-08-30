@@ -34,3 +34,12 @@ pre.cm-jn-code-block.CodeMirror-line {
 /*.CodeMirror-selectedtext {*/
 /*    background-color: rgba(179, 215, 255, 1) !important;*/
 /*}*/
+
+
+div.CodeMirror-activeline span.cm-rm-blockquote-token {
+    opacity: 0.7 !important;
+}
+
+div:not(.CodeMirror-activeline) span.cm-rm-blockquote-token {
+    opacity: 0;
+}

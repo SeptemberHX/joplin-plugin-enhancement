@@ -54,6 +54,7 @@ module.exports = {
             codeMirrorOptions: {
                 'enable-enhancement-codemirror': true,
                 enhancement_overlay_option: true,               // Enable ./overlay
+                styleActiveLine: true
             },
             assets: function() {
                 return [

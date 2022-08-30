@@ -27,6 +27,9 @@ export const list_token_regex = /^(\s*)([*+-] \[[Xx ]\]\s|[*+->]\s|(\d+)([.)]\s)
 // Taken from codemirror/mode/markdown/markdown.js
 export const hr_regex = /^([*\-_])(?:\s*\1){2,}\s*$/;
 export const blockquote_regex = /^\s*\>+\s/g;
+export const blockquote_token_regex = /^(\s*)>(?=(\s+.*))/g;
+
+const WRAP_CLASS = "CodeMirror-activeline";
 
 
 export function initOverlayOption(_context, CodeMirror) {
@@ -79,6 +82,7 @@ export function initOverlayOption(_context, CodeMirror) {
         regexOverlay(cm, 'rm-sup-token', sup_token_regex);
         regexOverlay(cm, 'rm-strike-token', strike_token_regex);
         regexOverlay(cm, 'rm-hr line-cm-rm-hr', hr_regex);
+        regexOverlay(cm, 'rm-blockquote-token', blockquote_token_regex);
 
         function on_renderLine(cm: any, line: any, element: HTMLElement) {
             IndentHandlers.onRenderLine(cm, line, element, CodeMirror);
@@ -87,4 +91,30 @@ export function initOverlayOption(_context, CodeMirror) {
         cm.on('renderLine', on_renderLine);
         IndentHandlers.calculateSpaceWidth(cm);
     });
+
+    CodeMirror.defineOption("styleActiveLine", false, function(cm, val, old) {
+        var prev = old && old != CodeMirror.Init;
+        if (!prev) {
+            updateActiveLine(cm);
+            cm.on("cursorActivity", updateActiveLine);
+        } else if (!val && prev) {
+            cm.off("cursorActivity", updateActiveLine);
+            clearActiveLine(cm);
+            delete cm._activeLine;
+        }
+    });
+
+    function clearActiveLine(cm) {
+        if ("_activeLine" in cm) {
+            cm.removeLineClass(cm._activeLine, "wrap", WRAP_CLASS);
+        }
+    }
+
+    function updateActiveLine(cm) {
+        var line = cm.getLineHandle(cm.getCursor().line);
+        if (cm._activeLine == line) return;
+        clearActiveLine(cm);
+        cm.addLineClass(line, "wrap", WRAP_CLASS);
+        cm._activeLine = line;
+    }
 }
