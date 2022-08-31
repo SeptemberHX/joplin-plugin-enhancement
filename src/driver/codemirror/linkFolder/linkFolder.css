@@ -11,6 +11,7 @@ span.enhancement-joplin-icon {
     display: inline-block;
     vertical-align: middle;
     background-color: var(--g-linkColor);
+    margin-left: 2px;
 }
 
 i.enhancement-link-marker-icon, i.enhancement-image-marker-icon {
