@@ -23,7 +23,8 @@ export const sup_token_regex = /(?<![\\\^])\^(?!\^)/g;
 export const strike_token_regex = /(?<![\\~])~~(?!~~)/g;
 export const header_regex = /^\s*#+\s/g;
 // Taken from codemirror/addon/edit/continuelist.js
-export const list_token_regex = /^(\s*)([*+-] \[[Xx ]\]\s|[*+->]\s|(\d+)([.)]\s))(\s*)/g;
+// export const list_token_regex = /^(\s*)([*+-]?=( \[[Xx ]\]\s)|[*+->]\s|(\d+)([.)]\s))(\s*)/g;
+export const list_token_regex = /^(\s*)([*+-](?=( \[[Xx ]\]\s))|[*+->](?=\s))(\s*?)/g;
 // Taken from codemirror/mode/markdown/markdown.js
 export const hr_regex = /^([*\-_])(?:\s*\1){2,}\s*$/;
 export const blockquote_regex = /^\s*\>+\s/g;
