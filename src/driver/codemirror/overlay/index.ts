@@ -23,8 +23,8 @@ export const sup_token_regex = /(?<![\\\^])\^(?!\^)/g;
 export const strike_token_regex = /(?<![\\~])~~(?!~~)/g;
 export const header_regex = /^\s*#+\s/g;
 // Taken from codemirror/addon/edit/continuelist.js
-// export const list_token_regex = /^(\s*)([*+-]?=( \[[Xx ]\]\s)|[*+->]\s|(\d+)([.)]\s))(\s*)/g;
-export const list_token_regex = /^(\s*)([*+-](?=( \[[Xx ]\]\s))|[*+->](?=\s))(\s*?)/g;
+export const list_token_regex = /^(\s*)([*+-] ?=(\[[Xx ]\]\s)|[*+->]\s|(\d+)([.)]\s))(\s*)/g;
+export const single_list_token_regex = /^(\s*)([*+-](?=( \[[Xx ]\]\s))|[*+->](?=\s))(\s*?)/g;
 // Taken from codemirror/mode/markdown/markdown.js
 export const hr_regex = /^([*\-_])(?:\s*\1){2,}\s*$/;
 export const blockquote_regex = /^\s*\>+\s/g;
@@ -99,7 +99,7 @@ export function initOverlayOption(_context, CodeMirror) {
         regexOverlay(cm, 'enhancement-image-size', /(?<=(!\[.*]\(.*\)))(\{.*\})/g);
         regexOverlay(cm, 'enhancement-katex-inline-math', /(?<!\$)\$(.+?)\$(?!\$)/g);
         regexOverlay(cm, 'enhancement-finished-task', /- \[[x|X]\]\s+.*/g);
-        regexOverlay(cm, 'rm-list-token', list_token_regex);
+        regexOverlay(cm, 'rm-list-token', single_list_token_regex);
         regexOverlay(cm, 'rm-ins', insert_regex);
         regexOverlay(cm, 'rm-sub', sub_regex);
         regexOverlay(cm, 'rm-sup', sup_regex);
