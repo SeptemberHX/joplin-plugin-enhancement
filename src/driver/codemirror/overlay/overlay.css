@@ -8,10 +8,10 @@
     vertical-align: sub;
     font-size: smaller;
 }
-.cm-rm-sup {
-    vertical-align: super;
-    font-size: smaller;
-}
+/*.cm-rm-sup {*/
+/*    vertical-align: super;*/
+/*    font-size: smaller;*/
+/*}*/
 .cm-rm-highlight {
     background-color: var(--joplin-search-marker-background-color);
     color: var(--joplin-search-marker-color);
