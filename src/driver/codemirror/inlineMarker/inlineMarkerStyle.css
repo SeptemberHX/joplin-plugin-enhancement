@@ -1,19 +1,25 @@
-.cm-editor-marker-revisit {
-    padding: 3px 4px;
-    background-color: antiquewhite;
-    border-radius: 2px;
-}
-
-.cm-editor-marker-rewrite {
-    padding: 3px 4px;
-    background-color: #fceaee;
-    border-radius: 2px;
-}
-
 .cm-editor-marker-keyword {
-    color: red !important;
+    color: rgba(88, 172, 222, 0.75);
     font-weight: bold;
-    padding: 0 0 0.8em 0;
-    vertical-align: super;
-    font-size: smaller;
+}
+
+.cm-editor-marker-left-open,
+.cm-editor-marker-keyword,
+.cm-editor-marker-colons {
+    background-color: #f5f6f8;
+}
+
+.cm-editor-marker-left-open {
+    border-radius: 1em 0 0 1em;
+    color: transparent;
+}
+
+.cm-editor-marker-right-close {
+    border-radius: 0 1em 1em 0;
+    color: transparent;
+}
+
+.cm-editor-marker-right-close,
+.cm-editor-marker-text {
+    background-color: #e3e5e8;
 }
