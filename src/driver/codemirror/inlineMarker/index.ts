@@ -1,7 +1,7 @@
 import {exec} from "../../../utils/reg";
 
-const markerKeywordReg = /(?<=\[)\S+::(?=[^\]]+\])/g;
-const markerPart = /\[(\S+)::[^\]]+\]/g;
+const markerKeywordReg = /(?<=\()\S+::(?=[^\]]+\))/g;
+const markerPart = /\((\S+)::[^\]]+\)/g;
 
 module.exports = {
     default: function(_context) {
