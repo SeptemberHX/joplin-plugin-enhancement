@@ -1,5 +1,6 @@
+.cm-editor-marker-colons,
 .cm-editor-marker-keyword {
-    color: rgba(88, 172, 222, 0.75) !important;
+    color: orangered !important;
     font-weight: bold;
 }
 
@@ -21,5 +22,9 @@
 
 .cm-editor-marker-right-close,
 .cm-editor-marker-text {
-    background-color: #e3e5e8;
+    background-color: deepskyblue;
+}
+
+.cm-editor-marker-text {
+    color: white !important;
 }
