@@ -1,5 +1,5 @@
 .cm-editor-marker-keyword {
-    color: rgba(88, 172, 222, 0.75);
+    color: rgba(88, 172, 222, 0.75) !important;
     font-weight: bold;
 }
 
@@ -11,12 +11,12 @@
 
 .cm-editor-marker-left-open {
     border-radius: 1em 0 0 1em;
-    color: transparent;
+    color: transparent !important;
 }
 
 .cm-editor-marker-right-close {
     border-radius: 0 1em 1em 0;
-    color: transparent;
+    color: transparent !important;
 }
 
 .cm-editor-marker-right-close,
