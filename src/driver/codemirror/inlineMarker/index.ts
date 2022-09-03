@@ -1,10 +1,11 @@
 import {exec} from "../../../utils/reg";
 
-const markerTagsReg = /(?<=\()\S+(?=::[^)]+\))/g;
-const markerColons = /(?<=\(\S+)::(?=[^)]+\))/g;
-const markerLeftOpen = /\((?=\S+::[^)]+\))/g;
-const markerRightClose = /(?<=\(\S+::[^)]+)\)/g;
-const markerText = /(?<=\(\S+::)[^)]+(?=\))/g;
+// todo: \S+ 部分会匹配到 )，导致链接和 tags 在一行时会错误补获
+const markerTagsReg = /(?<=\()[^\s)]+?(?=::[^)]+\))/g;
+const markerColons = /(?<=\([^\s)]+?)::(?=[^)]+\))/g;
+const markerLeftOpen = /\((?=[^\s)]+?::[^)]+\))/g;
+const markerRightClose = /(?<=\([^\s)]+?::[^)]+)\)/g;
+const markerText = /(?<=\([^\s)]+?::)[^)]+(?=\))/g;
 
 module.exports = {
     default: function(_context) {
