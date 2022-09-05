@@ -65,6 +65,8 @@ Because I have no idea how to create a context menu, currently all the operation
 
 It supports both `!!!` style and `:::` style admonitions.
 
+> You still need Admonition markdown extension plugin installed to render admonitions in the preview window & PDF exports. This plugin only renders admonitions in the markdown editor.
+
 ![Admonition Editor Renderer](./screenshot/admonition.png)
 
 ### Enhanced blockquote support
