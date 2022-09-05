@@ -4,6 +4,7 @@ import {initOverlayOption} from "./overlay";
 import {linkFolderOptionFunc} from "./linkFolder";
 import QuickCommands, {ExtendedEditor} from "./quickCommands/quickCommands";
 import {Editor} from "codemirror";
+import {taskAndHeaderRender} from "./taskRender";
 
 
 module.exports = {
@@ -47,6 +48,10 @@ module.exports = {
                             if (settings.quickCommands) {
                                 new QuickCommands(context, cm as ExtendedEditor & Editor, CodeMirror);
                             }
+
+                            if (settings.taskCmRender || settings.headerHashRender) {
+                                taskAndHeaderRender(cm);
+                            }
                         }
                     }
                     // Set the first timeout to 50 because settings are usually ready immediately
@@ -79,6 +84,9 @@ module.exports = {
                     },
                     {
                         name: './quickCommands/quickCommands.css'
+                    },
+                    {
+                        name: './taskRender/taskRender.css'
                     }
                 ];
             }

@@ -72,16 +72,16 @@ span.cm-variable-2.cm-overlay.cm-rm-todo-project.cm-overlay.cm-rm-todo-project {
     opacity: 0.75;
 }
 
-.cm-variable-2.cm-rm-list-token,
-.cm-variable-3.cm-rm-list-token,
-.cm-keyword.cm-rm-list-token {
+.cm-variable-2.cm-rm-single-list-token,
+.cm-variable-3.cm-rm-single-list-token,
+.cm-keyword.cm-rm-single-list-token {
     visibility: hidden;
     position: relative;
 }
 
-.cm-variable-2.cm-rm-list-token:after,
-.cm-variable-3.cm-rm-list-token:after,
-.cm-keyword.cm-rm-list-token:after {
+.cm-variable-2.cm-rm-single-list-token:after,
+.cm-variable-3.cm-rm-single-list-token:after,
+.cm-keyword.cm-rm-single-list-token:after {
     visibility: visible;
     content: '\2022';
     position: absolute;

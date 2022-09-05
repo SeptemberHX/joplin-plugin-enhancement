@@ -1,5 +1,5 @@
 import joplin from 'api';
-import {ContentScriptType, ToolbarButtonLocation} from "api/types";
+import {ContentScriptType, ModelType, ToolbarButtonLocation} from "api/types";
 import {settings} from "./settings";
 import {
 	ContextMsg,
@@ -21,7 +21,7 @@ import {
 	ENABLE_TABLE_FORMATTER,
 	ENABLE_TASK_RENDER,
 	ENABLE_CODEBLOCK_HL,
-	EnhancementConfig,
+	EnhancementConfig, ENABLE_BLOCK_LINK_FOLDER, ENABLE_BLOCK_IMAGE_FOLDER, ENABLE_HEADER_HASH_RENDER,
 } from "./common";
 
 joplin.plugins.register({
@@ -44,7 +44,12 @@ joplin.plugins.register({
 				} else if (msg.type === ContextMsgType.OPEN_URL && msg.content && msg.content !== '') {
 					return await joplin.commands.execute('openItem', msg.content);
 				} else if (msg.type === ContextMsgType.RESOURCE_PATH && msg.content && msg.content !== '') {
-					return await joplin.data.resourcePath(msg.content.substr(2));
+					const itemType = await joplin.data.itemType(msg.content.substr(2));
+					if (itemType === ModelType.Resource) {
+						return await joplin.data.resourcePath(msg.content.substr(2));
+					} else {
+						return null;
+					}
 				}
 			}
 		);
@@ -133,14 +138,6 @@ joplin.plugins.register({
 				ContentScriptType.CodeMirrorPlugin,
 				'enhancement_indent_broder',
 				'./driver/codemirror/indentBorder/index.js'
-			);
-		}
-
-		if (enhancementConfig.taskCmRender) {
-			await joplin.contentScripts.register(
-				ContentScriptType.CodeMirrorPlugin,
-				'enhancement_task_render',
-				'./driver/codemirror/taskRender/index.js'
 			);
 		}
 
@@ -269,11 +266,14 @@ async function getConfig(): Promise<EnhancementConfig> {
 	config.frontMatterRender = await joplin.settings.value(ENABLE_FRONT_MATTER);
 	config.colorfulQuote = await joplin.settings.value(ENABLE_COLORFUL_QUOTE);
 	config.linkFolder = await joplin.settings.value(ENABLE_LINK_FOLDER);
+	config.blockLinkFolder = await joplin.settings.value(ENABLE_BLOCK_LINK_FOLDER);
+	config.blockImageFolder = await joplin.settings.value(ENABLE_BLOCK_IMAGE_FOLDER);
 	config.searchReplace = await joplin.settings.value(ENABLE_SEARCH_REPLACE);
 	config.inlineMarker = await joplin.settings.value(ENABLE_INLINE_MARKER);
 	config.focusMode = await joplin.settings.value(ENABLE_FOCUS_MODE);
 	config.indentBorder = await joplin.settings.value(ENABLE_INDENT_BORDER);
 	config.taskCmRender = await joplin.settings.value(ENABLE_TASK_RENDER);
+	config.headerHashRender = await joplin.settings.value(ENABLE_HEADER_HASH_RENDER);
 	config.mathCmRender = await joplin.settings.value(ENABLE_MATH_RENDER);
 	config.mermaidCmRender = await joplin.settings.value(ENABLE_MERMAID_RENDER);
 	config.codeBlockHL = await joplin.settings.value(ENABLE_CODEBLOCK_HL);

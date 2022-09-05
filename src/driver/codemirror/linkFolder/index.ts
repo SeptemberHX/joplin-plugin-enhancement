@@ -46,10 +46,16 @@ export async function linkFolderOptionFunc(_context, cm, val, old) {
         if (cm.state.enhancement) {
             if (cm.state.enhancement.settings.linkFolder) {
                 inlineLinkMarker.process(full);
-                blockImageMarker.process(full);
                 footnoteMarker.process(full);
                 inlineImageMarker.process(full);
+            }
+
+            if (cm.state.enhancement.settings.blockLinkFolder) {
                 blockLinkMarker.process(full);
+            }
+
+            if (cm.state.enhancement.settings.blockLinkFolder) {
+                blockImageMarker.process(full);
             }
 
             if (cm.state.enhancement.settings.codeBlockHL) {

@@ -15,6 +15,11 @@ export const ENHANCED_BLOCK_LINK_MARKER = 'enhancement-block-link-marker';
 
 const PDF_PAGE_REG = /#(\d+)$/;
 
+enum LinkType {
+    NOTE,
+    OTHER
+}
+
 export function createInlineLinkMarker(context, cm) {
     return new CMInlineMarkerHelperV2(cm, INLINE_LINK_REG, function (match, from, to) {
         const markEl = document.createElement('span');
@@ -145,7 +150,11 @@ export function createBlockLinkMarker(context, cm) {
                 if (pdfPageMatch) {
                     renderByPath(beginMatch[2], filePath, pdfPageMatch[1]);
                 } else {
-                    renderByPath(beginMatch[2], filePath);
+                    if (filePath) {
+                        renderByPath(beginMatch[2], filePath);
+                    } else {
+                        markEl.appendChild(renderBlockNoteLink(beginMatch[2], beginMatch[4]));
+                    }
                 }
                 const lineWidget = findLineWidgetAtLine(cm, fromLine, ENHANCED_BLOCK_LINK_MARKER + '-line-widget');
                 if (lineWidget) {
@@ -153,13 +162,7 @@ export function createBlockLinkMarker(context, cm) {
                 }
             })
         } else {
-            const spanEl = document.createElement('span');
-            if (beginMatch[2].length === 0 && beginMatch[4].length === 0) {
-                spanEl.textContent = 'Everything is empty!';
-            } else {
-                spanEl.textContent = `${beginMatch[2]}: ${beginMatch[4]}`;
-            }
-            markEl.appendChild(spanEl);
+            markEl.appendChild(renderBlockNormalLink(beginMatch[2], beginMatch[4]));
         }
 
         return markEl;
@@ -181,4 +184,34 @@ export function createBlockLinkMarker(context, cm) {
             content: link
         });
     });
+}
+
+function renderBlockNoteLink(title, link) {
+    return renderBlockLink(title, link, LinkType.NOTE);
+}
+
+function renderBlockNormalLink(title, link) {
+    return renderBlockLink(title, link, LinkType.OTHER);
+}
+
+function renderBlockLink(title, link, type: LinkType) {
+    const result = document.createElement('div');
+    if (type === LinkType.NOTE) {
+        const joplinIcon = document.createElement('span');
+        joplinIcon.classList.add(ENHANCED_LINK_MARKER_ICON, 'enhancement-joplin-icon');
+        result.appendChild(joplinIcon);
+    } else if (type === LinkType.OTHER) {
+        const iconEl = document.createElement('i');
+        iconEl.classList.add(ENHANCED_LINK_MARKER_ICON, 'fas', 'fa-link');
+        result.appendChild(iconEl);
+    }
+
+    const textSpanEl = document.createElement('span');
+    if (title.length === 0 && link.length === 0) {
+        textSpanEl.textContent = 'Everything is empty!';
+    } else {
+        textSpanEl.textContent = `${title}: ${link}`;
+    }
+    result.appendChild(textSpanEl);
+    return result;
 }

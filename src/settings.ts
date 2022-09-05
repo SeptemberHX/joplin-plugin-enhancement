@@ -10,10 +10,16 @@ import {
     ENABLE_FRONT_MATTER,
     ENABLE_COLORFUL_QUOTE,
     ENABLE_LINK_FOLDER,
+    ENABLE_BLOCK_LINK_FOLDER,
     ENABLE_SEARCH_REPLACE,
     ENABLE_INLINE_MARKER,
     ENABLE_FOCUS_MODE,
-    ENABLE_INDENT_BORDER, ENABLE_TASK_RENDER, ENABLE_MATH_RENDER, ENABLE_MERMAID_RENDER, ENABLE_CODEBLOCK_HL,
+    ENABLE_INDENT_BORDER,
+    ENABLE_TASK_RENDER,
+    ENABLE_MATH_RENDER,
+    ENABLE_MERMAID_RENDER,
+    ENABLE_CODEBLOCK_HL,
+    ENABLE_BLOCK_IMAGE_FOLDER, ENABLE_HEADER_HASH_RENDER,
 } from "./common";
 
 export namespace settings {
@@ -104,8 +110,26 @@ export namespace settings {
             public: true,
             section: SECTION,
             type: SettingItemType.Bool,
-            label: 'Enable link, image, and footnote rendering in markdown editor',
-            description: "It requires restart",
+            label: 'Enable inline link, image, and footnote rendering in markdown editor',
+            description: "",
+        }
+
+        PLUGIN_SETTINGS[ENABLE_BLOCK_LINK_FOLDER] = {
+            value: false,
+            public: true,
+            section: SECTION,
+            type: SettingItemType.Bool,
+            label: 'Enable block link rendering in markdown editor',
+            description: "More works are still needed. It requires restart",
+        }
+
+        PLUGIN_SETTINGS[ENABLE_BLOCK_IMAGE_FOLDER] = {
+            value: true,
+            public: true,
+            section: SECTION,
+            type: SettingItemType.Bool,
+            label: 'Enable block image rendering in markdown editor',
+            description: "Image needs to be on a separate line",
         }
 
         PLUGIN_SETTINGS[ENABLE_SEARCH_REPLACE] = {
@@ -150,7 +174,16 @@ export namespace settings {
             section: SECTION,
             type: SettingItemType.Bool,
             label: 'Render markdown task to clickable checkbox in markdown editor',
-            description: "From https://github.com/Zettlr/Zettlr. It requires restart",
+            description: "From https://github.com/Zettlr/Zettlr",
+        }
+
+        PLUGIN_SETTINGS[ENABLE_HEADER_HASH_RENDER] = {
+            value: true,
+            public: true,
+            section: SECTION,
+            type: SettingItemType.Bool,
+            label: 'Render markdown header hash characters to clickable menu in markdown editor',
+            description: "From https://github.com/Zettlr/Zettlr",
         }
 
         PLUGIN_SETTINGS[ENABLE_MATH_RENDER] = {
