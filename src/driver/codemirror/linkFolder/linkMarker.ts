@@ -204,8 +204,8 @@ function renderBlockLink(title, link, type: LinkType) {
         joplinIcon.classList.add(ENHANCED_LINK_MARKER_ICON, 'enhancement-joplin-icon');
         iconDiv.appendChild(joplinIcon);
     } else if (type === LinkType.OTHER) {
-        const iconEl = document.createElement('i');
-        iconEl.classList.add(ENHANCED_LINK_MARKER_ICON, 'fas', 'fa-link');
+        const iconEl = document.createElement('span');
+        iconEl.classList.add(ENHANCED_LINK_MARKER_ICON, 'enhancement-www-icon');
         iconDiv.appendChild(iconEl);
     }
     result.appendChild(iconDiv);

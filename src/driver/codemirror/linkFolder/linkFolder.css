@@ -14,6 +14,17 @@ span.enhancement-joplin-icon {
     margin-left: 2px;
 }
 
+span.enhancement-www-icon {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg version='1.1' id='Capa_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 32 32' style='enable-background:new 0 0 32 32;' xml:space='preserve'%3E%3Cstyle type='text/css'%3E .st0%7Bfill:url(%23SVGID_1_);%7D%0A%3C/style%3E%3ClinearGradient id='SVGID_1_' gradientUnits='userSpaceOnUse' x1='1.066' y1='10.5632' x2='30.9401' y2='21.4365'%3E%3Cstop offset='0' style='stop-color:%232183BF'/%3E%3Cstop offset='1' style='stop-color:%2319086D'/%3E%3C/linearGradient%3E%3Cpath class='st0' d='M6.5,6.2c0.4,0.3,0.9,0.7,1.4,0.9C7.6,7.8,7.4,8.4,7.2,9h1.9c0.1-0.3,0.2-0.6,0.3-1c0.9,0.4,1.8,0.7,2.8,1h7.5 c1-0.2,1.9-0.6,2.8-1c0.1,0.3,0.2,0.6,0.3,1h1.9c-0.2-0.6-0.4-1.2-0.6-1.8c0.5-0.3,0.9-0.6,1.4-0.9C26.3,7.1,27.1,8,27.7,9h2.7 C27.8,3.7,22.3,0,16,0C9.7,0,4.2,3.7,1.6,9h2.7C4.9,8,5.7,7.1,6.5,6.2z M24.1,5.1c-0.2,0.2-0.5,0.3-0.8,0.5c-0.3-0.6-0.7-1.1-1-1.6 C23,4.3,23.5,4.7,24.1,5.1z M21.8,6.4c-0.8,0.4-1.6,0.7-2.5,0.9c-0.2-1.7-0.6-3.4-1.1-4.7C19.6,3.3,20.8,4.7,21.8,6.4z M15.8,2.4 c0.1,0,0.1,0,0.2,0c0.1,0,0.1,0,0.2,0c0.4,0.7,1,2.5,1.4,5.2c-0.5,0.1-1,0.1-1.5,0.1c-0.5,0-1,0-1.5-0.1C14.9,4.9,15.4,3.1,15.8,2.4 z M13.8,2.7c-0.5,1.3-0.8,2.9-1.1,4.6c-0.8-0.2-1.7-0.5-2.5-0.9C11.2,4.7,12.4,3.4,13.8,2.7z M9.7,3.9C9.3,4.4,9,5,8.6,5.6 C8.4,5.4,8.1,5.3,7.9,5.1C8.5,4.7,9.1,4.3,9.7,3.9z M25.5,25.8c-0.4-0.3-0.9-0.7-1.4-0.9c0.2-0.6,0.5-1.2,0.6-1.8h-1.9 c-0.1,0.3-0.2,0.7-0.3,1c-0.9-0.4-1.8-0.7-2.8-1h-7.5c-1,0.2-1.9,0.5-2.8,1c-0.1-0.3-0.2-0.6-0.3-1H7.2c0.2,0.6,0.4,1.2,0.6,1.8 c-0.5,0.3-0.9,0.6-1.4,0.9C5.7,24.9,4.9,24,4.3,23H1.6c2.6,5.3,8.1,9,14.4,9s11.8-3.7,14.4-9h-2.7C27.1,24,26.3,24.9,25.5,25.8z M7.9,26.9c0.2-0.2,0.5-0.4,0.7-0.5c0.3,0.6,0.7,1.1,1,1.6C9.1,27.7,8.5,27.4,7.9,26.9z M10.3,25.6c0.8-0.4,1.6-0.7,2.5-0.9 c0.2,1.7,0.6,3.4,1.1,4.6C12.4,28.6,11.2,27.3,10.3,25.6z M16.2,29.6c-0.1,0-0.1,0-0.2,0s-0.1,0-0.2,0c-0.4-0.7-1-2.5-1.4-5.2 c0.5-0.1,1-0.1,1.5-0.1c0.5,0,1,0,1.5,0.1C17.1,27.1,16.6,28.9,16.2,29.6z M18.2,29.4c0.5-1.3,0.8-2.9,1.1-4.7 c0.9,0.2,1.7,0.5,2.5,0.9C20.8,27.3,19.6,28.7,18.2,29.4z M22.3,28.1c0.4-0.5,0.7-1.1,1-1.6c0.3,0.2,0.5,0.3,0.8,0.5 C23.5,27.4,23,27.7,22.3,28.1z M4.8,19.2l0.6-2.2c0.2-0.6,0.3-1.2,0.4-2h0c0.1,0.8,0.2,1.4,0.4,2l0.6,2.2h1.9l1.9-6.4H8.7l-0.5,2.5 c-0.1,0.7-0.3,1.4-0.4,2.2h0c-0.1-0.7-0.3-1.4-0.5-2.2l-0.6-2.5H5.1l-0.7,2.6c-0.2,0.6-0.3,1.4-0.5,2.1h0c-0.1-0.7-0.2-1.4-0.4-2.1 l-0.5-2.6h-2l1.8,6.4L4.8,19.2L4.8,19.2z M18.3,15.3c-0.1,0.7-0.3,1.4-0.4,2.2h0c-0.1-0.7-0.3-1.4-0.5-2.2l-0.6-2.5h-1.6l-0.7,2.6 c-0.2,0.6-0.3,1.4-0.5,2.1h0c-0.1-0.7-0.2-1.4-0.4-2.1l-0.5-2.6h-2l1.8,6.4h1.9l0.6-2.2c0.2-0.6,0.3-1.2,0.4-2h0 c0.1,0.8,0.2,1.4,0.4,2l0.6,2.2h1.9l1.9-6.4h-1.9L18.3,15.3z M28.4,15.3c-0.1,0.7-0.3,1.4-0.4,2.2h0c-0.1-0.7-0.3-1.4-0.5-2.2 l-0.6-2.5h-1.6l-0.7,2.6c-0.2,0.6-0.3,1.4-0.5,2.1h0c-0.1-0.7-0.2-1.4-0.4-2.1l-0.5-2.6h-2l1.8,6.4H25l0.6-2.2 c0.2-0.6,0.3-1.2,0.4-2h0c0.1,0.8,0.2,1.4,0.4,2l0.6,2.2H29l1.9-6.4H29L28.4,15.3z'/%3E%3C/svg%3E%0A");
+    -webkit-mask-repeat: no-repeat;
+    height: 1em;
+    width: 1em;
+    display: inline-block;
+    vertical-align: middle;
+    background-color: var(--g-linkColor);
+    margin-left: 2px;
+}
+
 i.enhancement-link-marker-icon, i.enhancement-image-marker-icon {
     font-family: 'Font Awesome 5 Free' !important;
     font-size: small;
@@ -90,10 +101,10 @@ a.enhancement-link-marker-text {
 }
 
 .enhancement-link-block-icon {
-    font-size: 2em;
+    font-size: 2.2em;
     vertical-align: middle;
     float: left;
-    margin: 0 0.5em;
+    margin: 0 0.8em 0 0.5em;
 }
 
 .enhancement-link-block {
@@ -105,11 +116,17 @@ a.enhancement-link-marker-text {
 
 .enhancement-link-block-url {
     font-size: small;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .enhancement-link-block-title {
     font-size: 1.25em;
     display: block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .enhancement-link-block i.enhancement-link-marker-icon.fas.fa-link {
