@@ -196,22 +196,46 @@ function renderBlockNormalLink(title, link) {
 
 function renderBlockLink(title, link, type: LinkType) {
     const result = document.createElement('div');
+    result.classList.add('enhancement-link-block');
+    const iconDiv = document.createElement('div');
+    iconDiv.classList.add('enhancement-link-block-icon');
     if (type === LinkType.NOTE) {
         const joplinIcon = document.createElement('span');
         joplinIcon.classList.add(ENHANCED_LINK_MARKER_ICON, 'enhancement-joplin-icon');
-        result.appendChild(joplinIcon);
+        iconDiv.appendChild(joplinIcon);
     } else if (type === LinkType.OTHER) {
         const iconEl = document.createElement('i');
         iconEl.classList.add(ENHANCED_LINK_MARKER_ICON, 'fas', 'fa-link');
-        result.appendChild(iconEl);
+        iconDiv.appendChild(iconEl);
     }
+    result.appendChild(iconDiv);
+
+    const textDiv = document.createElement('div');
+    textDiv.classList.add('enhancement-link-block-text');
 
     const textSpanEl = document.createElement('span');
-    if (title.length === 0 && link.length === 0) {
+    textSpanEl.classList.add('enhancement-link-block-title');
+
+    const urlSpanEl = document.createElement('span');
+    urlSpanEl.classList.add('enhancement-link-block-url');
+
+    textDiv.appendChild(textSpanEl);
+    textDiv.appendChild(urlSpanEl);
+
+    if (title.length === 0) {
         textSpanEl.textContent = 'Everything is empty!';
+        textSpanEl.classList.add('enhancement-link-block-title-warning');
     } else {
-        textSpanEl.textContent = `${title}: ${link}`;
+        textSpanEl.textContent = `${title}`;
     }
-    result.appendChild(textSpanEl);
+
+    if (link.length !== 0) {
+        urlSpanEl.textContent = link;
+    } else {
+        urlSpanEl.textContent = 'Empty link address';
+        urlSpanEl.classList.add('enhancement-link-block-url-warning');
+    }
+
+    result.appendChild(textDiv);
     return result;
 }

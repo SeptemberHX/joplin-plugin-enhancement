@@ -49,8 +49,8 @@ span.enhancement-image-size-text {
 }
 
 .enhancement-block-link-marker-line-widget {
-    text-align: center;
     max-width: 100%;
+    text-align: center;
 }
 
 .enhancement-block-link-marker-span-line,
@@ -83,4 +83,40 @@ a.enhancement-link-marker-text {
     color: white;
     border-radius: 0.4em;
     line-height: initial;
+}
+
+.enhancement-link-block-text {
+    text-align: left;
+}
+
+.enhancement-link-block-icon {
+    font-size: 2em;
+    vertical-align: middle;
+    float: left;
+    margin: 0 0.5em;
+}
+
+.enhancement-link-block {
+    border: 1px solid lightgray;
+    padding: 8px;
+    border-radius: 4px;
+    text-align: unset;
+}
+
+.enhancement-link-block-url {
+    font-size: small;
+}
+
+.enhancement-link-block-title {
+    font-size: 1.25em;
+    display: block;
+}
+
+.enhancement-link-block i.enhancement-link-marker-icon.fas.fa-link {
+    font-size: 1em;
+}
+
+.enhancement-link-block-title-warning,
+.enhancement-link-block-url-warning {
+    color: red;
 }
