@@ -26,6 +26,8 @@ export function taskAndHeaderRender(cm) {
     cm.on('cursorActivity', callback)
     cm.on('viewportChange', callback) // renderElements)
     cm.on('optionChange', callback)
+
+    callback(cm);
 }
 
 function renderElements (cm: CodeMirror.Editor, viewPort: boolean): void {
