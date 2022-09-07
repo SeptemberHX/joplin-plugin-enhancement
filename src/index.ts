@@ -125,27 +125,11 @@ joplin.plugins.register({
 			);
 		}
 
-		if (enhancementConfig.inlineMarker) {
-			await joplin.contentScripts.register(
-				ContentScriptType.CodeMirrorPlugin,
-				'enhancement_inline_marker',
-				'./driver/codemirror/inlineMarker/index.js'
-			);
-		}
-
 		if (enhancementConfig.indentBorder) {
 			await joplin.contentScripts.register(
 				ContentScriptType.CodeMirrorPlugin,
 				'enhancement_indent_broder',
 				'./driver/codemirror/indentBorder/index.js'
-			);
-		}
-
-		if (enhancementConfig.mermaidCmRender) {
-			await joplin.contentScripts.register(
-				ContentScriptType.CodeMirrorPlugin,
-				'enhancement_mermaid_render',
-				'./driver/codemirror/mermaidRender/index.js'
 			);
 		}
 

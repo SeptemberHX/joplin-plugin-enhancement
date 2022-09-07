@@ -48,7 +48,7 @@ export namespace settings {
             section: SECTION,
             type: SettingItemType.Bool,
             label: 'Enable pseudocode in fenced code block',
-            description: "Render pseudocode in fenced code block by pseudocode.js + Katex. (requires restart)",
+            description: "Render pseudocode in fenced code block by pseudocode.js + Katex in pdf preview. (requires restart)",
         }
 
         PLUGIN_SETTINGS[ENABLE_LOCAL_PDF_PREVIEW] = {
@@ -84,7 +84,7 @@ export namespace settings {
             section: SECTION,
             type: SettingItemType.Bool,
             label: 'Enable the admonition styling in the markdown editor',
-            description: "Decorate the admonition area in the editor. [It conflicts with the 'Align wrapped list items' of Rich Markdown plugin]. (requires restart)",
+            description: "Decorate the admonition area in the editor. (requires restart)",
         }
 
         PLUGIN_SETTINGS[ENABLE_FRONT_MATTER] = {
@@ -146,8 +146,8 @@ export namespace settings {
             public: true,
             section: SECTION,
             type: SettingItemType.Bool,
-            label: 'Enable inline marker in note editor and pdf',
-            description: "[tag::content] (requires restart)",
+            label: 'Enable inline marker in note editor',
+            description: "syntax: (tag1|tag2::content)",
         }
 
         PLUGIN_SETTINGS[ENABLE_FOCUS_MODE] = {
@@ -192,7 +192,7 @@ export namespace settings {
             section: SECTION,
             type: SettingItemType.Bool,
             label: 'Render markdown inline/block latex to math in markdown editor',
-            description: "It significantly hurts your joplin's performance, especially with lots of math block. It requires restart",
+            description: "It significantly hurts your joplin's performance, especially with lots of math block.",
         }
 
         PLUGIN_SETTINGS[ENABLE_MERMAID_RENDER] = {
@@ -201,7 +201,7 @@ export namespace settings {
             section: SECTION,
             type: SettingItemType.Bool,
             label: 'Render mermaid code block to svg in markdown editor',
-            description: "It requires restart",
+            description: "It can hurt your joplin's performance",
         }
 
         PLUGIN_SETTINGS[ENABLE_CODEBLOCK_HL] = {

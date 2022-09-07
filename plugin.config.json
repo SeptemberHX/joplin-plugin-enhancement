@@ -13,11 +13,8 @@
 		"driver/codemirror/admonition/index.ts",
 		"driver/codemirror/blockquote/index.ts",
 		"driver/codemirror/searchReplace/index.ts",
-		"driver/codemirror/inlineMarker/index.ts",
 		"driver/codemirror/focusMode/index.ts",
 		"driver/codemirror/indentBorder/index.ts",
-
-		"driver/codemirror/mermaidRender/index.ts",
 
 		"driver/codemirror/index.ts"
 	]

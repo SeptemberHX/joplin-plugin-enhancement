@@ -5,6 +5,9 @@ import {linkFolderOptionFunc} from "./linkFolder";
 import QuickCommands, {ExtendedEditor} from "./quickCommands/quickCommands";
 import {Editor} from "codemirror";
 import {taskAndHeaderRender} from "./taskRender";
+import {enhancement_mermaid_render} from "./common";
+import mermaidRender from "./mermaidRender";
+import inlineMarkerRender from "./inlineMarker";
 
 
 module.exports = {
@@ -52,6 +55,14 @@ module.exports = {
                             if (settings.taskCmRender || settings.headerHashRender) {
                                 taskAndHeaderRender(cm);
                             }
+
+                            if (settings.mermaidCmRender) {
+                                mermaidRender(cm);
+                            }
+
+                            if (settings.inlineMarker) {
+                                inlineMarkerRender(cm);
+                            }
                         }
                     }
                     // Set the first timeout to 50 because settings are usually ready immediately
@@ -66,7 +77,7 @@ module.exports = {
             codeMirrorOptions: {
                 'enable-enhancement-codemirror': true,
                 enhancement_overlay_option: true,               // Enable ./overlay
-                styleActiveLine: true
+                styleActiveLine: true,
             },
             assets: function() {
                 return [
@@ -87,6 +98,12 @@ module.exports = {
                     },
                     {
                         name: './taskRender/taskRender.css'
+                    },
+                    {
+                        name: './mermaidRender/mermaid.css'
+                    },
+                    {
+                        name: './inlineMarker/inlineMarkerStyle.css'
                     }
                 ];
             }
