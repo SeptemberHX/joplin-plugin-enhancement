@@ -20,7 +20,7 @@ enum LinkType {
     OTHER
 }
 
-export function createInlineLinkMarker(context, cm) {
+export function createInlineLinkMarker(context, cm, renderBlock: boolean = false) {
     return new CMInlineMarkerHelperV2(cm, INLINE_LINK_REG, function (match, from, to) {
         const markEl = document.createElement('span');
         markEl.classList.add(ENHANCED_LINK_MARKER);
@@ -62,7 +62,7 @@ export function createInlineLinkMarker(context, cm) {
         }
         return markEl;
     }, ENHANCED_LINK_MARKER, function (line) {
-        return !BLOCK_LINK_REG.test(line);
+        return renderBlock ? true : !BLOCK_LINK_REG.test(line);
     }, async function (match, e) {
         // open url
         await context.postMessage({

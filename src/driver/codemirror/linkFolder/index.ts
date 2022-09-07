@@ -15,7 +15,8 @@ const ENHANCEMENT_MATH_BLOCK_SPAN_MARKER_LINE_CLASS = 'enhancement-math-block-ma
 
 
 export async function linkFolderOptionFunc(_context, cm, val, old) {
-    const inlineLinkMarker = createInlineLinkMarker(_context, cm);
+    const renderBlockLink = cm.state.enhancement ? !cm.state.enhancement.settings.blockLinkFolder : false;
+    const inlineLinkMarker = createInlineLinkMarker(_context, cm, renderBlockLink);
     const blockLinkMarker = createBlockLinkMarker(_context, cm);
 
     const inlineImageMarker = createInlineImageMarker(_context, cm);
@@ -54,7 +55,7 @@ export async function linkFolderOptionFunc(_context, cm, val, old) {
                 blockLinkMarker.process(full);
             }
 
-            if (cm.state.enhancement.settings.blockLinkFolder) {
+            if (cm.state.enhancement.settings.blockImageFolder) {
                 blockImageMarker.process(full);
             }
 

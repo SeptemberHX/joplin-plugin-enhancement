@@ -120,7 +120,7 @@ export namespace settings {
             section: SECTION,
             type: SettingItemType.Bool,
             label: 'Enable block link rendering in markdown editor',
-            description: "More works are still needed. It requires restart",
+            description: "More works are still needed",
         }
 
         PLUGIN_SETTINGS[ENABLE_BLOCK_IMAGE_FOLDER] = {
