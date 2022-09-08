@@ -4,8 +4,8 @@ import path from "path";
 import {BLOCK_LINK_REG, INLINE_LINK_REG} from "./regexps";
 import {findLineWidgetAtLine} from "../../../utils/cm-utils";
 import {ContextMsgType} from "../../../common";
-var md = require('markdown-it')()
-            .use(require('markdown-it-mark'));
+import {renderStrToDom} from "../../../utils/string-render";
+
 
 const mime = require('mime-types')
 
@@ -43,7 +43,7 @@ export function createInlineLinkMarker(context, cm, renderBlock: boolean = false
         textEl.classList.add(ENHANCED_LINK_MARKER_TEXT);
         markEl.appendChild(textEl);
 
-        textEl.innerHTML = md.renderInline(match[1]);
+        textEl.innerHTML = renderStrToDom(match[1]);
         textEl.title = match[2];
 
         const typesStr = cm.getTokenTypeAt(from);

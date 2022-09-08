@@ -3,8 +3,8 @@ import {CMBlockMarkerHelperV2} from "../../../utils/CMBlockMarkerHelperV2";
 import {BLOCK_IMAGE_REG, INLINE_IMAGE_REG} from "./regexps";
 import {findLineWidgetAtLine} from "../../../utils/cm-utils";
 import {ContextMsgType} from "../../../common";
-var md = require('markdown-it')()
-            .use(require('markdown-it-mark'));
+import {renderStrToDom} from "../../../utils/string-render";
+
 
 const ENHANCED_IMAGE_MARKER = 'enhancement-image-marker';
 export const ENHANCED_BLOCK_IMAGE_MARKER = 'enhancement-block-image-marker';
@@ -24,7 +24,7 @@ export function createInlineImageMarker(context, cm) {
 
         const textEl = document.createElement('span');
         textEl.classList.add(ENHANCED_IMAGE_MARKER_TEXT);
-        textEl.innerHTML = md.renderInline(match[1]);
+        textEl.innerHTML = renderStrToDom(match[1]);
         markEl.appendChild(textEl);
 
         if (match[3]) {
@@ -70,7 +70,7 @@ export function createBlockImageMarker(context, cm) {
 
         if (beginMatch[1]) {
             const captionEl = document.createElement('figcaption');
-            captionEl.innerHTML = md.renderInline(beginMatch[1]);
+            captionEl.innerHTML = renderStrToDom(beginMatch[1]);
             markEl.appendChild(captionEl);
         }
 
