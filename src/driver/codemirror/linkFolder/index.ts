@@ -6,7 +6,7 @@ import {createBlockImageMarker, createInlineImageMarker, ENHANCED_BLOCK_IMAGE_MA
 import {createInlineFootnoteMarker} from "./footnoteMarker";
 import {createCodeBlockMarker, ENHANCED_CODE_BLOCK_MARKER} from "./codeMarker";
 import {createBlockMathMarker, createInlineMathMarker, ENHANCEMENT_MATH_BLOCK_SPAN_MARKER_CLASS} from "./mathMaker";
-import {createHtmlTagMarkRenderMarker} from "./htmlTagRender";
+import {createHtmlTagInsRenderMarker, createHtmlTagMarkRenderMarker} from "./htmlTagRender";
 
 
 const ENHANCEMENT_BLOCK_IMAGE_SPAN_MARKER_LINE_CLASS = 'enhancement-block-image-marker-span-line';
@@ -29,6 +29,7 @@ export async function linkFolderOptionFunc(_context, cm, val, old) {
     const inlineMathMarker = createInlineMathMarker(_context, cm);
 
     const htmlMarkMarker = createHtmlTagMarkRenderMarker(_context, cm);
+    const htmlInsMarker = createHtmlTagInsRenderMarker(_context, cm);
 
     cm.on('renderLine', (editor, line: LineHandle, element: Element) => {
         if (element.getElementsByClassName(ENHANCED_BLOCK_IMAGE_MARKER).length > 0) {
@@ -72,6 +73,7 @@ export async function linkFolderOptionFunc(_context, cm, val, old) {
             }
 
             htmlMarkMarker.process(full);
+            htmlInsMarker.process(full);
         } else {
             inlineLinkMarker.process(full);
             blockImageMarker.process(full);
@@ -83,6 +85,7 @@ export async function linkFolderOptionFunc(_context, cm, val, old) {
             inlineMathMarker.process(full);
             blockMathMarker.process(full);
             htmlMarkMarker.process(full);
+            htmlInsMarker.process(full);
         }
         cm.endOperation();
     }

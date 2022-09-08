@@ -12,4 +12,6 @@ export const CODE_BLOCK_END = /^\s*```\s*$/;
 
 
 export const HTML_MARK_REG = /<mark[^>]*?>(.*?)<\/mark>/g;
-export const HTML_MARK_STYLE_REG = /style="(.*?)"/;
+export const HTML_TAG_STYLE_REG = /style="(.*?)"/;
+
+export const HTML_INS_REG = /<ins[^>]*?>(.*?)<\/ins>/g;
