@@ -4,6 +4,8 @@ import path from "path";
 import {BLOCK_LINK_REG, INLINE_LINK_REG} from "./regexps";
 import {findLineWidgetAtLine} from "../../../utils/cm-utils";
 import {ContextMsgType} from "../../../common";
+var md = require('markdown-it')()
+            .use(require('markdown-it-mark'));
 
 const mime = require('mime-types')
 
@@ -41,17 +43,7 @@ export function createInlineLinkMarker(context, cm, renderBlock: boolean = false
         textEl.classList.add(ENHANCED_LINK_MARKER_TEXT);
         markEl.appendChild(textEl);
 
-        let regularLinkCaption = match[1];
-        regularLinkCaption = regularLinkCaption.replace(/\*\*([^*]+?)\*\*/g, '<strong>$1</strong>')
-        regularLinkCaption = regularLinkCaption.replace(/__([^_]+?)__/g, '<strong>$1</strong>')
-        regularLinkCaption = regularLinkCaption.replace(/\*([^*]+?)\*/g, '<em>$1</em>')
-        regularLinkCaption = regularLinkCaption.replace(/\s_([^_]+?)_/g, ' <em>$1</em>')
-        regularLinkCaption = regularLinkCaption.replace(/^_([^_]+?)_/, '<em>$1</em>')
-        regularLinkCaption = regularLinkCaption.replace(/~~([^~]+?)~~/g, '<del>$1</del>')
-        regularLinkCaption = regularLinkCaption.replace(/`([^`]+?)`/g, '<code>$1</code>')
-        regularLinkCaption = regularLinkCaption.replace(/==([^=]+?)==/g, '<mark>$1</mark>')
-        regularLinkCaption = regularLinkCaption.replace(/\+\+([^\+]+?)\+\+/g, '<ins>$1</ins>')
-        textEl.innerHTML = regularLinkCaption;
+        textEl.innerHTML = md.renderInline(match[1]);
         textEl.title = match[2];
 
         const typesStr = cm.getTokenTypeAt(from);
