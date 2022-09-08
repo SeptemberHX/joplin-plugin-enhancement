@@ -9,3 +9,7 @@ export const BLOCK_LINK_REG = /^\s*(\[((?:\[[^\]]*\]|[^\[\]])*)\]\([ \t]*()<?((?
 
 export const CODE_BLOCK_START = /^\s*```\s*(\S+)\s*$/;
 export const CODE_BLOCK_END = /^\s*```\s*$/;
+
+
+export const HTML_MARK_REG = /<mark[^>]*?>(.*?)<\/mark>/g;
+export const HTML_MARK_STYLE_REG = /style="(.*?)"/;
