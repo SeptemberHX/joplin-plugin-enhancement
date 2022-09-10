@@ -19,7 +19,7 @@ import {
     ENABLE_MATH_RENDER,
     ENABLE_MERMAID_RENDER,
     ENABLE_CODEBLOCK_HL,
-    ENABLE_BLOCK_IMAGE_FOLDER, ENABLE_HEADER_HASH_RENDER,
+    ENABLE_BLOCK_IMAGE_FOLDER, ENABLE_HEADER_HASH_RENDER, ENABLE_TABLE_RENDER,
 } from "./common";
 
 export namespace settings {
@@ -183,6 +183,15 @@ export namespace settings {
             section: SECTION,
             type: SettingItemType.Bool,
             label: 'Render markdown header hash characters to clickable menu in markdown editor',
+            description: "From https://github.com/Zettlr/Zettlr",
+        }
+
+        PLUGIN_SETTINGS[ENABLE_TABLE_RENDER] = {
+            value: false,
+            public: true,
+            section: SECTION,
+            type: SettingItemType.Bool,
+            label: 'Render markdown table to editable table in markdown editor',
             description: "From https://github.com/Zettlr/Zettlr",
         }
 

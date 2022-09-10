@@ -21,7 +21,11 @@ import {
 	ENABLE_TABLE_FORMATTER,
 	ENABLE_TASK_RENDER,
 	ENABLE_CODEBLOCK_HL,
-	EnhancementConfig, ENABLE_BLOCK_LINK_FOLDER, ENABLE_BLOCK_IMAGE_FOLDER, ENABLE_HEADER_HASH_RENDER,
+	EnhancementConfig,
+	ENABLE_BLOCK_LINK_FOLDER,
+	ENABLE_BLOCK_IMAGE_FOLDER,
+	ENABLE_HEADER_HASH_RENDER,
+	ENABLE_TABLE_RENDER,
 } from "./common";
 
 joplin.plugins.register({
@@ -258,6 +262,7 @@ async function getConfig(): Promise<EnhancementConfig> {
 	config.indentBorder = await joplin.settings.value(ENABLE_INDENT_BORDER);
 	config.taskCmRender = await joplin.settings.value(ENABLE_TASK_RENDER);
 	config.headerHashRender = await joplin.settings.value(ENABLE_HEADER_HASH_RENDER);
+	config.tableCmRender = await joplin.settings.value(ENABLE_TABLE_RENDER);
 	config.mathCmRender = await joplin.settings.value(ENABLE_MATH_RENDER);
 	config.mermaidCmRender = await joplin.settings.value(ENABLE_MERMAID_RENDER);
 	config.codeBlockHL = await joplin.settings.value(ENABLE_CODEBLOCK_HL);

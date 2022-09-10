@@ -15,6 +15,7 @@ export const ENABLE_FOCUS_MODE = 'enhancementEnableFocusMode';
 export const ENABLE_INDENT_BORDER = 'enhancementEnableIndentBorder';
 export const ENABLE_TASK_RENDER = 'enhancementEnableTaskRender';
 export const ENABLE_HEADER_HASH_RENDER = 'enhancementEnableHeaderHashRender';
+export const ENABLE_TABLE_RENDER = 'enhancementEnableTableRender';
 export const ENABLE_MATH_RENDER = 'enhancementEnableMathRender';
 export const ENABLE_MERMAID_RENDER = 'enhancementEnableMermaidRender';
 export const ENABLE_CODEBLOCK_HL = 'enhancementEnableCodeBlockHighlight';
@@ -38,6 +39,7 @@ export class EnhancementConfig {
     public indentBorder: boolean;
     public taskCmRender: boolean;
     public headerHashRender: boolean;
+    public tableCmRender: boolean;
     public mathCmRender: boolean;
     public mermaidCmRender: boolean;
     public codeBlockHL: boolean;

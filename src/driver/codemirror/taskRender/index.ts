@@ -1,5 +1,6 @@
 import {markdownRenderTasks} from "./taskRender";
 import {markdownRenderHTags} from "./render-h-tags";
+import {markdownRenderTables} from "./render-tables";
 
 
 export function taskAndHeaderRender(cm) {
@@ -39,8 +40,13 @@ function renderElements (cm: CodeMirror.Editor, viewPort: boolean): void {
         if (cm.state.enhancement.settings.headerHashRender) {
             markdownRenderHTags(cm, viewPort);
         }
+
+        if (cm.state.enhancement.settings.tableCmRender) {
+            markdownRenderTables(cm);
+        }
     } else {
         markdownRenderTasks(cm, viewPort);
         markdownRenderHTags(cm, viewPort);
+        markdownRenderTables(cm);
     }
 }

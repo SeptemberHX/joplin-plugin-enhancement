@@ -87,3 +87,20 @@ div.application-menu div.menu-item.separator {
     text-decoration: line-through;
     opacity: 0.85;
 }
+
+.table-helper {
+    border: 1px solid #e6e6e6;
+}
+
+.table-helper tr:nth-child(odd) {
+    background-color: #f4f5f5;
+}
+
+table.table-helper td {
+    padding: 6px;
+    border: 1px solid #E6E6E6;
+}
+
+table.table-helper tr p {
+    margin: 0;
+}
