@@ -5,9 +5,13 @@ import {
 	ContextMsg,
 	ContextMsgType,
 	ENABLE_ADMONITION_CM_RENDER,
+	ENABLE_BLOCK_IMAGE_FOLDER,
+	ENABLE_BLOCK_LINK_FOLDER,
+	ENABLE_CODEBLOCK_HL,
 	ENABLE_COLORFUL_QUOTE,
-	ENABLE_FOCUS_MODE,
+	ENABLE_FOCUS_MODE, ENABLE_FORMATTING_BAR,
 	ENABLE_FRONT_MATTER,
+	ENABLE_HEADER_HASH_RENDER,
 	ENABLE_IMAGE_ENHANCEMENT,
 	ENABLE_INDENT_BORDER,
 	ENABLE_INLINE_MARKER,
@@ -19,13 +23,9 @@ import {
 	ENABLE_QUICK_COMMANDS,
 	ENABLE_SEARCH_REPLACE,
 	ENABLE_TABLE_FORMATTER,
-	ENABLE_TASK_RENDER,
-	ENABLE_CODEBLOCK_HL,
-	EnhancementConfig,
-	ENABLE_BLOCK_LINK_FOLDER,
-	ENABLE_BLOCK_IMAGE_FOLDER,
-	ENABLE_HEADER_HASH_RENDER,
 	ENABLE_TABLE_RENDER,
+	ENABLE_TASK_RENDER,
+	EnhancementConfig,
 } from "./common";
 
 joplin.plugins.register({
@@ -53,6 +53,23 @@ joplin.plugins.register({
 						return await joplin.data.resourcePath(msg.content.substr(2));
 					} else {
 						return null;
+					}
+				} else if (msg.type === ContextMsgType.SHORTCUT) {
+					switch (msg.content) {
+						case 'markdownBold':
+							await joplin.commands.execute('textBold');
+							break;
+						case 'markdownItalic':
+							await joplin.commands.execute('textItalic');
+							break;
+						case 'markdownLink':
+							await joplin.commands.execute('textLink');
+							break;
+						case 'markdownCode':
+							await joplin.commands.execute('textCode');
+							break;
+						default:
+							break;
 					}
 				}
 			}
@@ -266,6 +283,7 @@ async function getConfig(): Promise<EnhancementConfig> {
 	config.mathCmRender = await joplin.settings.value(ENABLE_MATH_RENDER);
 	config.mermaidCmRender = await joplin.settings.value(ENABLE_MERMAID_RENDER);
 	config.codeBlockHL = await joplin.settings.value(ENABLE_CODEBLOCK_HL);
+	config.formattingBar = await joplin.settings.value(ENABLE_FORMATTING_BAR);
 	config.dateFormat = await joplin.settings.globalValue('dateFormat');
 	return config;
 }

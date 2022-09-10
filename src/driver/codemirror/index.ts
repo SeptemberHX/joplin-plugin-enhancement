@@ -8,6 +8,7 @@ import {taskAndHeaderRender} from "./taskRender";
 import {enhancement_mermaid_render} from "./common";
 import mermaidRender from "./mermaidRender";
 import inlineMarkerRender from "./inlineMarker";
+import formattingBarHook from "./formattingBar/formattingBart";
 
 
 module.exports = {
@@ -63,6 +64,10 @@ module.exports = {
                             if (settings.inlineMarker) {
                                 inlineMarkerRender(cm);
                             }
+
+                            if (settings.formattingBar) {
+                                formattingBarHook(context, cm);
+                            }
                         }
                     }
                     // Set the first timeout to 50 because settings are usually ready immediately
@@ -104,6 +109,9 @@ module.exports = {
                     },
                     {
                         name: './inlineMarker/inlineMarkerStyle.css'
+                    },
+                    {
+                        name: './formattingBar/formattingBar.css'
                     }
                 ];
             }

@@ -19,6 +19,7 @@ export const ENABLE_TABLE_RENDER = 'enhancementEnableTableRender';
 export const ENABLE_MATH_RENDER = 'enhancementEnableMathRender';
 export const ENABLE_MERMAID_RENDER = 'enhancementEnableMermaidRender';
 export const ENABLE_CODEBLOCK_HL = 'enhancementEnableCodeBlockHighlight';
+export const ENABLE_FORMATTING_BAR = 'enhancementEnableFormattingBar';
 
 
 export class EnhancementConfig {
@@ -43,6 +44,7 @@ export class EnhancementConfig {
     public mathCmRender: boolean;
     public mermaidCmRender: boolean;
     public codeBlockHL: boolean;
+    public formattingBar: boolean;
     public dateFormat: string;
 }
 
@@ -51,6 +53,7 @@ export enum ContextMsgType {
     GET_SETTINGS,
     OPEN_URL,
     RESOURCE_PATH,
+    SHORTCUT
 }
 
 

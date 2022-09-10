@@ -19,7 +19,7 @@ import {
     ENABLE_MATH_RENDER,
     ENABLE_MERMAID_RENDER,
     ENABLE_CODEBLOCK_HL,
-    ENABLE_BLOCK_IMAGE_FOLDER, ENABLE_HEADER_HASH_RENDER, ENABLE_TABLE_RENDER,
+    ENABLE_BLOCK_IMAGE_FOLDER, ENABLE_HEADER_HASH_RENDER, ENABLE_TABLE_RENDER, ENABLE_FORMATTING_BAR,
 } from "./common";
 
 export namespace settings {
@@ -220,6 +220,15 @@ export namespace settings {
             type: SettingItemType.Bool,
             label: 'Render code block with highlight.js in markdown editor',
             description: "For more details, please refer to https://highlightjs.org/static/demo/",
+        }
+
+        PLUGIN_SETTINGS[ENABLE_FORMATTING_BAR] = {
+            value: true,
+            public: true,
+            section: SECTION,
+            type: SettingItemType.Bool,
+            label: 'Show a formatting bar when text is selected',
+            description: "From https://github.com/Zettlr/Zettlr",
         }
 
         await joplin.settings.registerSettings(PLUGIN_SETTINGS);
