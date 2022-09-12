@@ -68,6 +68,17 @@ joplin.plugins.register({
 						case 'markdownCode':
 							await joplin.commands.execute('textCode');
 							break;
+						case 'markdownHLRed':
+						case 'markdownHLGreen':
+						case 'markdownHLBlue':
+						case 'markdownHLYellow':
+						case 'markdownHLPink':
+						case 'markdownHLPurple':
+						case 'markdownHLOrange':
+							await joplin.commands.execute('editor.execCommand', {
+								name: msg.content
+							});
+							break;
 						default:
 							break;
 					}

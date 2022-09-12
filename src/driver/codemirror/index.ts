@@ -9,6 +9,7 @@ import {enhancement_mermaid_render} from "./common";
 import mermaidRender from "./mermaidRender";
 import inlineMarkerRender from "./inlineMarker";
 import formattingBarHook from "./formattingBar/formattingBart";
+import {initCommands} from "./commands";
 
 
 module.exports = {
@@ -44,6 +45,8 @@ module.exports = {
                             setTimeout(backoff, timeout * 2, timeout * 2);
                         }
                         else {
+                            initCommands(cm, CodeMirror);
+
                             cm.state.enhancement = {
                                 settings
                             };

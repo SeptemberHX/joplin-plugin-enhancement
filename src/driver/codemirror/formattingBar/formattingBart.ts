@@ -29,10 +29,17 @@ let formattingBar: Instance|undefined
  * Contains the HTML contents of the formatting bar that will be shown.
  */
 const FORMATTING_BAR_HTML = `<div class="editor-formatting-bar">
-<div class="button" data-command="markdownBold"><i class="fas fa-bold"></i></div>
-<div class="button" data-command="markdownItalic"><i class="fas fa-italic"></i></div>
-<div class="button" data-command="markdownLink"><i class="fas fa-link"></i></div>
-<div class="button" data-command="markdownCode"><i class="fas fa-code"></i></div>
+<div class="button" data-command="markdownBold"><i class="fas fa-bold in-button"></i></div>
+<div class="button" data-command="markdownItalic"><i class="fas fa-italic in-button"></i></div>
+<div class="button" data-command="markdownLink"><i class="fas fa-link in-button"></i></div>
+<div class="button" data-command="markdownCode"><i class="fas fa-code in-button"></i></div>
+<div class="button" data-command="markdownHLYellow"><i class="fas fa-circle yellow in-button"></i></div>
+<div class="button" data-command="markdownHLGreen"><i class="fas fa-circle green in-button"></i></div>
+<div class="button" data-command="markdownHLPink"><i class="fas fa-circle pink in-button"></i></div>
+<div class="button" data-command="markdownHLPurple"><i class="fas fa-circle purple in-button"></i></div>
+<div class="button" data-command="markdownHLRed"><i class="fas fa-circle red in-button"></i></div>
+<div class="button" data-command="markdownHLBlue"><i class="fas fa-circle blue in-button"></i></div>
+<div class="button" data-command="markdownHLOrange"><i class="fas fa-circle orange in-button"></i></div>
 </div>`
 
 export default function formattingBarHook (context, cm: CodeMirror.Editor): void {
@@ -114,8 +121,11 @@ function showFormattingBar (context, cm: CodeMirror.Editor): void {
 
         const target = event.target as HTMLElement
 
-        if (target.tagName === 'CLR-ICON') {
-            cm.execCommand(target.parentElement?.dataset.command as string)
+        if (target.tagName === 'I') {
+            context.postMessage({
+                type: ContextMsgType.SHORTCUT,
+                content: target.parentElement?.dataset.command as string
+            });
             ;(formattingBar as Instance).destroy()
             formattingBar = undefined
         } else if (target.classList.contains('button')) {
