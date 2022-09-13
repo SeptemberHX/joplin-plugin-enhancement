@@ -7,12 +7,16 @@ import {createInlineFootnoteMarker} from "./footnoteMarker";
 import {createCodeBlockMarker, ENHANCED_CODE_BLOCK_MARKER} from "./codeMarker";
 import {createBlockMathMarker, createInlineMathMarker, ENHANCEMENT_MATH_BLOCK_SPAN_MARKER_CLASS} from "./mathMaker";
 import {createHtmlTagInsRenderMarker, createHtmlTagMarkRenderMarker} from "./htmlTagRender";
+import createPlantumlMarker, {
+    ENHANCEMENT_PLANTUML_SPAN_MARKER_CLASS
+} from "./plantumlMarker";
 
 
 const ENHANCEMENT_BLOCK_IMAGE_SPAN_MARKER_LINE_CLASS = 'enhancement-block-image-marker-span-line';
 const ENHANCEMENT_BLOCK_LINK_SPAN_MARKER_LINE_CLASS = 'enhancement-block-link-marker-span-line';
 const ENHANCEMENT_BLOCK_CODE_SPAN_MARKER_LINE_CLASS = 'enhancement-code-block-marker-span-line';
 const ENHANCEMENT_MATH_BLOCK_SPAN_MARKER_LINE_CLASS = 'enhancement-math-block-marker-line';
+const ENHANCEMENT_PLANTUML_SPAN_MARKER_LINE_CLASS = 'enhancement-plantuml-block-marker-line';
 
 
 export async function linkFolderOptionFunc(_context, cm, val, old) {
@@ -31,6 +35,8 @@ export async function linkFolderOptionFunc(_context, cm, val, old) {
     const htmlMarkMarker = createHtmlTagMarkRenderMarker(_context, cm);
     const htmlInsMarker = createHtmlTagInsRenderMarker(_context, cm);
 
+    const plantumlMarker = createPlantumlMarker(_context, cm);
+
     cm.on('renderLine', (editor, line: LineHandle, element: Element) => {
         if (element.getElementsByClassName(ENHANCED_BLOCK_IMAGE_MARKER).length > 0) {
             element.classList.add(ENHANCEMENT_BLOCK_IMAGE_SPAN_MARKER_LINE_CLASS);
@@ -40,6 +46,8 @@ export async function linkFolderOptionFunc(_context, cm, val, old) {
             element.classList.add(ENHANCEMENT_BLOCK_CODE_SPAN_MARKER_LINE_CLASS);
         } else if (element.getElementsByClassName(ENHANCEMENT_MATH_BLOCK_SPAN_MARKER_CLASS).length > 0) {
             element.classList.add(ENHANCEMENT_MATH_BLOCK_SPAN_MARKER_LINE_CLASS);
+        } else if (element.getElementsByClassName(ENHANCEMENT_PLANTUML_SPAN_MARKER_CLASS).length > 0) {
+            element.classList.add(ENHANCEMENT_PLANTUML_SPAN_MARKER_LINE_CLASS);
         }
     });
 
@@ -74,6 +82,10 @@ export async function linkFolderOptionFunc(_context, cm, val, old) {
 
             htmlMarkMarker.process(full);
             htmlInsMarker.process(full);
+
+            if (cm.state.enhancement.settings.plantumlCmRender) {
+                plantumlMarker.process(full);
+            }
         } else {
             inlineLinkMarker.process(full);
             blockImageMarker.process(full);
@@ -86,6 +98,8 @@ export async function linkFolderOptionFunc(_context, cm, val, old) {
             blockMathMarker.process(full);
             htmlMarkMarker.process(full);
             htmlInsMarker.process(full);
+
+            plantumlMarker.process(full);
         }
         cm.endOperation();
     }

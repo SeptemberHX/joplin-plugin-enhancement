@@ -40,6 +40,7 @@
     "markdown-it-mark": "^3.0.1",
     "mermaid": "8.14.0",
     "mime-types": "^2.1.35",
+    "plantuml-encoder": "^1.4.0",
     "pseudocode": "^2.2.0",
     "showdown": "^2.1.0",
     "tippy.js": "^6.3.7",

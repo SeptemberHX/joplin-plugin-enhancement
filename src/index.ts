@@ -18,7 +18,7 @@ import {
 	ENABLE_LINK_FOLDER,
 	ENABLE_LOCAL_PDF_PREVIEW,
 	ENABLE_MATH_RENDER,
-	ENABLE_MERMAID_RENDER,
+	ENABLE_MERMAID_RENDER, ENABLE_PLANTUML_RENDER,
 	ENABLE_PSEUDOCODE,
 	ENABLE_QUICK_COMMANDS,
 	ENABLE_SEARCH_REPLACE,
@@ -296,5 +296,6 @@ async function getConfig(): Promise<EnhancementConfig> {
 	config.codeBlockHL = await joplin.settings.value(ENABLE_CODEBLOCK_HL);
 	config.formattingBar = await joplin.settings.value(ENABLE_FORMATTING_BAR);
 	config.dateFormat = await joplin.settings.globalValue('dateFormat');
+	config.plantumlCmRender = await joplin.settings.value(ENABLE_PLANTUML_RENDER);
 	return config;
 }

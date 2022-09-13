@@ -18,6 +18,7 @@ export const ENABLE_HEADER_HASH_RENDER = 'enhancementEnableHeaderHashRender';
 export const ENABLE_TABLE_RENDER = 'enhancementEnableTableRender';
 export const ENABLE_MATH_RENDER = 'enhancementEnableMathRender';
 export const ENABLE_MERMAID_RENDER = 'enhancementEnableMermaidRender';
+export const ENABLE_PLANTUML_RENDER = 'enhancementEnablePlantUmlRenderer';
 export const ENABLE_CODEBLOCK_HL = 'enhancementEnableCodeBlockHighlight';
 export const ENABLE_FORMATTING_BAR = 'enhancementEnableFormattingBar';
 
@@ -46,6 +47,7 @@ export class EnhancementConfig {
     public codeBlockHL: boolean;
     public formattingBar: boolean;
     public dateFormat: string;
+    public plantumlCmRender: boolean;
 }
 
 

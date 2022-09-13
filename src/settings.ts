@@ -19,7 +19,11 @@ import {
     ENABLE_MATH_RENDER,
     ENABLE_MERMAID_RENDER,
     ENABLE_CODEBLOCK_HL,
-    ENABLE_BLOCK_IMAGE_FOLDER, ENABLE_HEADER_HASH_RENDER, ENABLE_TABLE_RENDER, ENABLE_FORMATTING_BAR,
+    ENABLE_BLOCK_IMAGE_FOLDER,
+    ENABLE_HEADER_HASH_RENDER,
+    ENABLE_TABLE_RENDER,
+    ENABLE_FORMATTING_BAR,
+    ENABLE_PLANTUML_RENDER,
 } from "./common";
 
 export namespace settings {
@@ -184,6 +188,14 @@ export namespace settings {
             type: SettingItemType.Bool,
             label: 'Render markdown header hash characters to clickable menu in markdown editor',
             description: "From https://github.com/Zettlr/Zettlr",
+        }
+
+        PLUGIN_SETTINGS[ENABLE_PLANTUML_RENDER] = {
+            value: true,
+            public: true,
+            section: SECTION,
+            type: SettingItemType.Bool,
+            label: 'Render Plantuml code block to remote url on www.plantuml.com in markdown editor'
         }
 
         PLUGIN_SETTINGS[ENABLE_TABLE_RENDER] = {

@@ -2,7 +2,7 @@ import {CMBlockMarkerHelperV2} from "../../../utils/CMBlockMarkerHelperV2";
 import {CODE_BLOCK_END, CODE_BLOCK_START} from "./regexps";
 
 export const ENHANCED_CODE_BLOCK_MARKER = 'enhancement-code-block-marker';
-const NOT_RENDERED = 'paper|mermaid|pseudocode';
+const NOT_RENDERED = 'paper|mermaid|pseudocode|plantuml';
 
 const hljs = require('highlight.js');
 

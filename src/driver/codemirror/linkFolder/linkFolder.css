@@ -66,7 +66,8 @@ span.enhancement-image-size-text {
 
 .enhancement-block-link-marker-span-line,
 .enhancement-block-image-marker-span-line,
-.enhancement-code-block-marker-span-line {
+.enhancement-code-block-marker-span-line,
+.enhancement-plantuml-block-marker-line {
     display: none;
 }
 
