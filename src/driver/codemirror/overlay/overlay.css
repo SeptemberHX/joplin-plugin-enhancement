@@ -22,53 +22,53 @@
 /* Needed for the renderLine indent hack to work */
 .CodeMirror pre > * { text-indent: 0px; }
 
-span.cm-variable-2.cm-overlay.cm-rm-todo-priority-1,
-span.cm-variable-2.cm-overlay.cm-rm-todo-priority-2,
-span.cm-variable-2.cm-overlay.cm-rm-todo-priority-3,
-span.cm-variable-2.cm-overlay.cm-rm-todo-priority-4 {
+span.cm-overlay.cm-rm-todo-priority-1,
+span.cm-overlay.cm-rm-todo-priority-2,
+span.cm-overlay.cm-rm-todo-priority-3,
+span.cm-overlay.cm-rm-todo-priority-4 {
     padding: 1px 2px;
     border-radius: 4px;
     color: white !important;
     opacity: 0.75;
 }
 
-span.cm-variable-2.cm-overlay.cm-rm-todo-priority-1 {
+span.cm-overlay.cm-rm-todo-priority-1 {
     background: #e33e2f;
 }
 
-span.cm-variable-2.cm-overlay.cm-rm-todo-priority-2 {
+span.cm-overlay.cm-rm-todo-priority-2 {
     background: #f8d15f;
 }
 
-span.cm-variable-2.cm-overlay.cm-rm-todo-priority-3 {
+span.cm-overlay.cm-rm-todo-priority-3 {
     background: #549644;
 }
 
-span.cm-variable-2.cm-overlay.cm-rm-todo-priority-4 {
+span.cm-overlay.cm-rm-todo-priority-4 {
     background: #ececec;
 }
 
-span.cm-variable-2.cm-overlay.cm-rm-todo-date.cm-overlay.cm-rm-todo-date {
+span.cm-overlay.cm-rm-todo-date {
     background: #316cf4;
     padding: 1px 2px;
     border-radius: 4px;
-    color: white;
+    color: white !important;
     opacity: 0.75;
 }
 
-span.cm-variable-2.cm-overlay.cm-rm-todo-tag.cm-overlay.cm-rm-todo-tag {
+span.cm-overlay.cm-rm-todo-tag {
     background: #5dc7ec;
     padding: 1px 2px;
     border-radius: 4px;
-    color: white;
+    color: white !important;
     opacity: 0.75;
 }
 
-span.cm-variable-2.cm-overlay.cm-rm-todo-project.cm-overlay.cm-rm-todo-project {
+span.cm-overlay.cm-rm-todo-project {
     background: #f6c344;
     padding: 1px 2px;
     border-radius: 4px;
-    color: white;
+    color: white !important;
     opacity: 0.75;
 }
 
