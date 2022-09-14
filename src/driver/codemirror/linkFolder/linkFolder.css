@@ -45,7 +45,8 @@ span.enhancement-image-size-text {
     padding: 0 2px;
 }
 
-.enhancement-block-image-marker-line-widget img {
+.enhancement-block-image-marker-line-widget img,
+.enhancement-plantuml-block-marker-line-widget img {
     max-width: 100%;
 }
 
