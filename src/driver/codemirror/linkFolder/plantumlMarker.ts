@@ -9,7 +9,7 @@ export default function createPlantumlMarker(context, cm) {
         let divElement = document.createElement("div");
         let imgElement = document.createElement('img');
         const encoded = plantumlEncoder.encode(content);
-        imgElement.src = `http://www.plantuml.com/plantuml/img/${encoded}`;
+        imgElement.src = `http://www.plantuml.com/plantuml/svg/${encoded}`;
         divElement.appendChild(imgElement);
         divElement.style.cssText = 'text-align: center;'
         return divElement;
