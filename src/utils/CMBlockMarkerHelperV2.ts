@@ -263,6 +263,16 @@ export class CMBlockMarkerHelperV2 {
         return doc.addLineWidget(line, element, { className: this.lineWidgetClassName });
     }
 
+    /**
+     *
+     * @param doc
+     * @param content
+     * @param textMarker The marker that replaces the content
+     * @param makerEl The HTML element in textMarker
+     * @param renderedWrapper The HTML element appended after the textMarker
+     * @param wrapperLineWidget The line widget created based on renderedWrapper
+     * @private
+     */
     private setStyleAndLogical(doc, content, textMarker, makerEl, renderedWrapper, wrapperLineWidget) {
         renderedWrapper.style.cssText = 'border: 2px solid transparent; padding: 4px; width: 100%; border-radius: 4px; background-color: var(--joplin-background-color) !important; transition: border-color 500ms;';
         const editButton = document.createElement('div');
@@ -275,27 +285,12 @@ export class CMBlockMarkerHelperV2 {
                 wrapperLineWidget.clear();
                 clickAndClear(textMarker, this.editor)(e);
             };
+            renderedWrapper.ondblclick = (e) => {
+                this.clearMarkerAndSelectContent(textMarker, wrapperLineWidget);
+            }
         }
         editButton.onclick = (e) => {
-            if (textMarker) {
-                if (!this.renderWhenEditing) {
-                    wrapperLineWidget.clear();
-                }
-
-                const from = textMarker.find().from;
-                const to = textMarker.find().to;
-                textMarker.clear();
-
-                if (from.line !== to.line) {
-                    doc.setSelection(
-                        {line: from.line + 1, ch: 0},
-                        {line: to.line - 1, ch: this.editor.getLine(to.line - 1).length}
-                    );
-                } else {
-                    doc.setSelection(from, to);
-                }
-                this.editor.focus();
-            }
+            this.clearMarkerAndSelectContent(textMarker, wrapperLineWidget);
         }
         renderedWrapper.appendChild(editButton);
         renderedWrapper.onmouseover = (e) => {
@@ -314,5 +309,28 @@ export class CMBlockMarkerHelperV2 {
                 }
             }
         };
+    }
+
+    private clearMarkerAndSelectContent(textMarker, wrapperLineWidget) {
+        if (textMarker) {
+            const doc = this.editor.getDoc();
+            if (!this.renderWhenEditing) {
+                wrapperLineWidget.clear();
+            }
+
+            const from = textMarker.find().from;
+            const to = textMarker.find().to;
+            textMarker.clear();
+
+            if (from.line !== to.line) {
+                doc.setSelection(
+                    {line: from.line + 1, ch: 0},
+                    {line: to.line - 1, ch: this.editor.getLine(to.line - 1).length}
+                );
+            } else {
+                doc.setSelection(from, to);
+            }
+            this.editor.focus();
+        }
     }
 }
