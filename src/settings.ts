@@ -23,7 +23,7 @@ import {
     ENABLE_HEADER_HASH_RENDER,
     ENABLE_TABLE_RENDER,
     ENABLE_FORMATTING_BAR,
-    ENABLE_PLANTUML_RENDER,
+    ENABLE_PLANTUML_RENDER, ENABLE_BULLET_LIST_RENDER,
 } from "./common";
 
 export namespace settings {
@@ -239,8 +239,16 @@ export namespace settings {
             public: true,
             section: SECTION,
             type: SettingItemType.Bool,
-            label: 'Show a formatting bar when text is selected',
+            label: 'Show a formatting bar when text is selected in markdown editor',
             description: "From https://github.com/Zettlr/Zettlr",
+        }
+
+        PLUGIN_SETTINGS[ENABLE_BULLET_LIST_RENDER] = {
+            value: true,
+            public: true,
+            section: SECTION,
+            type: SettingItemType.Bool,
+            label: 'Enable bullet list rendering in markdown editor'
         }
 
         await joplin.settings.registerSettings(PLUGIN_SETTINGS);

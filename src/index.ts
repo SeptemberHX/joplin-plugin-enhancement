@@ -6,7 +6,7 @@ import {
 	ContextMsgType,
 	ENABLE_ADMONITION_CM_RENDER,
 	ENABLE_BLOCK_IMAGE_FOLDER,
-	ENABLE_BLOCK_LINK_FOLDER,
+	ENABLE_BLOCK_LINK_FOLDER, ENABLE_BULLET_LIST_RENDER,
 	ENABLE_CODEBLOCK_HL,
 	ENABLE_COLORFUL_QUOTE,
 	ENABLE_FOCUS_MODE, ENABLE_FORMATTING_BAR,
@@ -297,5 +297,6 @@ async function getConfig(): Promise<EnhancementConfig> {
 	config.formattingBar = await joplin.settings.value(ENABLE_FORMATTING_BAR);
 	config.dateFormat = await joplin.settings.globalValue('dateFormat');
 	config.plantumlCmRender = await joplin.settings.value(ENABLE_PLANTUML_RENDER);
+	config.bulletListCmRender = await joplin.settings.value(ENABLE_BULLET_LIST_RENDER);
 	return config;
 }
