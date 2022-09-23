@@ -9,6 +9,7 @@ export const ENABLE_COLORFUL_QUOTE = 'enhancementEnableColorfulQuote';
 export const ENABLE_LINK_FOLDER = 'enhancementEnableLinkFolder';
 export const ENABLE_BLOCK_LINK_FOLDER = 'enhancementEnableBlockLinkFolder';
 export const ENABLE_BLOCK_IMAGE_FOLDER = 'enhancementEnableBlockImageFolder';
+export const ENABLE_BLOCK_IMAGE_CAPTION = 'enhancementEnableBlockImageCaption';
 export const ENABLE_SEARCH_REPLACE = 'enhancementEnableSearchReplace';
 export const ENABLE_INLINE_MARKER = 'enhancementEnableInlineMarker';
 export const ENABLE_FOCUS_MODE = 'enhancementEnableFocusMode';
@@ -36,6 +37,7 @@ export class EnhancementConfig {
     public linkFolder: boolean;
     public blockLinkFolder: boolean;
     public blockImageFolder: boolean;
+    public blockImageCaption: boolean;
     public searchReplace: boolean;
     public inlineMarker: boolean;
     public focusMode: boolean;

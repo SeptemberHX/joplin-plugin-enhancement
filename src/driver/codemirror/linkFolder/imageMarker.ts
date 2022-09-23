@@ -46,7 +46,7 @@ export function createInlineImageMarker(context, cm) {
     });
 }
 
-export function createBlockImageMarker(context, cm) {
+export function createBlockImageMarker(context, cm, enableCaption: boolean) {
     return new CMBlockMarkerHelperV2(cm, null, BLOCK_IMAGE_REG, null, (beginMatch, endMatch, content, fromLine, toLine) => {
         const markEl = document.createElement('figure');
         const imgEl = document.createElement('img');
@@ -68,7 +68,7 @@ export function createBlockImageMarker(context, cm) {
         }
         markEl.appendChild(imgEl);
 
-        if (beginMatch[1]) {
+        if (enableCaption && beginMatch[1]) {
             const captionEl = document.createElement('figcaption');
             captionEl.innerHTML = renderStrToDom(beginMatch[1]);
             markEl.appendChild(captionEl);

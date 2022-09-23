@@ -4,7 +4,7 @@ import {settings} from "./settings";
 import {
 	ContextMsg,
 	ContextMsgType,
-	ENABLE_ADMONITION_CM_RENDER,
+	ENABLE_ADMONITION_CM_RENDER, ENABLE_BLOCK_IMAGE_CAPTION,
 	ENABLE_BLOCK_IMAGE_FOLDER,
 	ENABLE_BLOCK_LINK_FOLDER, ENABLE_BULLET_LIST_RENDER,
 	ENABLE_CODEBLOCK_HL,
@@ -284,6 +284,7 @@ async function getConfig(): Promise<EnhancementConfig> {
 	config.linkFolder = await joplin.settings.value(ENABLE_LINK_FOLDER);
 	config.blockLinkFolder = await joplin.settings.value(ENABLE_BLOCK_LINK_FOLDER);
 	config.blockImageFolder = await joplin.settings.value(ENABLE_BLOCK_IMAGE_FOLDER);
+	config.blockImageCaption = await joplin.settings.value(ENABLE_BLOCK_IMAGE_CAPTION);
 	config.searchReplace = await joplin.settings.value(ENABLE_SEARCH_REPLACE);
 	config.inlineMarker = await joplin.settings.value(ENABLE_INLINE_MARKER);
 	config.focusMode = await joplin.settings.value(ENABLE_FOCUS_MODE);

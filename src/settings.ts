@@ -23,7 +23,7 @@ import {
     ENABLE_HEADER_HASH_RENDER,
     ENABLE_TABLE_RENDER,
     ENABLE_FORMATTING_BAR,
-    ENABLE_PLANTUML_RENDER, ENABLE_BULLET_LIST_RENDER,
+    ENABLE_PLANTUML_RENDER, ENABLE_BULLET_LIST_RENDER, ENABLE_BLOCK_IMAGE_CAPTION,
 } from "./common";
 
 export namespace settings {
@@ -134,6 +134,14 @@ export namespace settings {
             type: SettingItemType.Bool,
             label: 'Enable block image rendering in markdown editor',
             description: "Image needs to be on a separate line",
+        }
+
+        PLUGIN_SETTINGS[ENABLE_BLOCK_IMAGE_CAPTION] = {
+            value: true,
+            public: true,
+            section: SECTION,
+            type: SettingItemType.Bool,
+            label: 'Enable block image rendering with figure caption. Restart required'
         }
 
         PLUGIN_SETTINGS[ENABLE_SEARCH_REPLACE] = {
