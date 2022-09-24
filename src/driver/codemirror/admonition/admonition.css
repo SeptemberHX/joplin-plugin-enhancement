@@ -16,10 +16,6 @@
     color: blue;
 }
 
-.cm-admonition-type.cm-note, .cm-admonition-end.cm-note {
-    color: olive;
-}
-
 .cm-admonition-type.cm-warning, .cm-admonition-end.cm-warning {
     color: orange;
 }
@@ -191,4 +187,8 @@ pre.footnote.CodeMirror-line {
     opacity: 0.75;
     padding-left: 2em !important;
     padding-bottom: 5px;
+}
+
+.cm-admonition-type, .cm-admonition-end {
+    opacity: 0.5;
 }

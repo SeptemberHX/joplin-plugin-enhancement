@@ -57,7 +57,7 @@ span.enhancement-image-size-text {
 
 .enhancement-block-image-marker-line-widget figcaption {
     text-align: center;
-    font-style: italic;
+    opacity: 0.55;
 }
 
 .enhancement-block-link-marker-line-widget {

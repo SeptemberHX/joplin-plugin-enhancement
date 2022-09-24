@@ -40,6 +40,7 @@ export function createBlockMathMarker(context, cm) {
         span.style.cssText = 'color: lightgray; font-size: smaller; font-style: italic;';
         return span;
     },ENHANCEMENT_MATH_BLOCK_SPAN_MARKER_CLASS, true, true, (editor, line, match) => {
-        return !editor.getTokenTypeAt({line: line, ch: match.index}).includes('jn-monospace');
+        const token = editor.getTokenTypeAt({line: line, ch: match.index});
+        return !token || !token.includes('jn-monospace');
     });
 }
