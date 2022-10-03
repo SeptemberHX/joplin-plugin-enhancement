@@ -5,6 +5,7 @@ import CodeMirror from "codemirror";
 import PlantumlHints from './PlantumlHints'
 import {getDateHints} from "./DateHints";
 import MermaidHints from "./MermaidHints";
+import ShortTypeHints from "./ShortTypeHints";
 
 const TRIGGER_SYMBOL = '/';
 const HINT_ITEM_CLASS = 'quick-commands-hint';
@@ -31,7 +32,8 @@ let customHints: Hint[] = [
 ]
 
 customHints = customHints.concat(PlantumlHints)
-customHints = customHints.concat(MermaidHints);
+customHints = customHints.concat(MermaidHints)
+customHints = customHints.concat(ShortTypeHints);
 
 interface Completion {
     from: Position;
