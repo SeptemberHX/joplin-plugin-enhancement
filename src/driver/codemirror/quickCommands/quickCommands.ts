@@ -26,7 +26,7 @@ let customHints: Hint[] = [
     {
         text: '|     |     |     |\r\n| --- | --- | --- |\r\n|     |     |     |',
         displayText: '/table',
-        description: 'markdown table',
+        description: 'Markdown table',
         inline: false
     }
 ]
