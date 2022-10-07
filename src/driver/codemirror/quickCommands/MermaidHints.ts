@@ -7,7 +7,7 @@ const MermaidHints: Hint[] = [
             '\n' +
             '```',
         displayText: '/flowchart',
-        description: 'mermaid flowchart',
+        description: 'Mermaid flowchart',
         inline: false
     },
     {
@@ -16,7 +16,7 @@ const MermaidHints: Hint[] = [
             '\n' +
             '```',
         displayText: '/sequenceDiagram',
-        description: 'mermaid sequence diagram',
+        description: 'Mermaid sequence diagram',
         inline: false
     },
     {
@@ -25,7 +25,7 @@ const MermaidHints: Hint[] = [
             '\n' +
             '```',
         displayText: '/gantt',
-        description: 'mermaid gantt diagram',
+        description: 'Mermaid gantt diagram',
         inline: false
     },
     {
@@ -34,7 +34,7 @@ const MermaidHints: Hint[] = [
             '\n' +
             '```',
         displayText: '/classDiagram',
-        description: 'mermaid class diagram',
+        description: 'Mermaid class diagram',
         inline: false
     },
     {
@@ -43,7 +43,7 @@ const MermaidHints: Hint[] = [
             '\n' +
             '```',
         displayText: '/erDiagram',
-        description: 'mermaid entity relationship diagram',
+        description: 'Mermaid entity relationship diagram',
         inline: false
     },
     {
@@ -52,7 +52,7 @@ const MermaidHints: Hint[] = [
             '\n' +
             '```',
         displayText: '/journey',
-        description: 'mermaid journey diagram',
+        description: 'Mermaid journey diagram',
         inline: false
     }
 ]
