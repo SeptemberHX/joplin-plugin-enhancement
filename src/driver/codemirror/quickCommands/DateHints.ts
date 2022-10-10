@@ -12,7 +12,7 @@ export function getDateHints(dateFormat: string) {
     {
       text: dayjs().format(`${dateFormat} HH:mm:ss`),
       displayText: '/now',
-      description: 'now',
+      description: 'Now',
       inline: true
     },
     {
