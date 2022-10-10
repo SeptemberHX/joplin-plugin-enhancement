@@ -1,0 +1,15 @@
+.cm-variable-2.cm-rm-single-list-token,
+.cm-variable-3.cm-rm-single-list-token,
+.cm-keyword.cm-rm-single-list-token {
+    visibility: hidden;
+    position: relative;
+}
+
+.cm-variable-2.cm-rm-single-list-token:after,
+.cm-variable-3.cm-rm-single-list-token:after,
+.cm-keyword.cm-rm-single-list-token:after {
+    visibility: visible;
+    content: '\2022';
+    position: absolute;
+    right: 0;
+}

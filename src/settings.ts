@@ -256,7 +256,7 @@ export namespace settings {
             public: true,
             section: SECTION,
             type: SettingItemType.Bool,
-            label: 'Enable bullet list rendering in markdown editor'
+            label: 'Enable bullet list rendering in markdown editor (Restart required)'
         }
 
         await joplin.settings.registerSettings(PLUGIN_SETTINGS);

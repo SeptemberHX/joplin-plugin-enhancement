@@ -165,6 +165,14 @@ joplin.plugins.register({
 			);
 		}
 
+		if (enhancementConfig.bulletListCmRender) {
+			await joplin.contentScripts.register(
+				ContentScriptType.CodeMirrorPlugin,
+				'enhancement_bullet_list',
+				'./driver/codemirror/overlay/bulletList.js'
+			);
+		}
+
 		if (enhancementConfig.focusMode) {
 			await joplin.contentScripts.register(
 				ContentScriptType.CodeMirrorPlugin,
