@@ -32,3 +32,11 @@ span.katex-display {
 .katex-error {
     background-color: yellow !important;
 }
+
+.katex .fontsize-ensurer.reset-size6.size3, .katex .sizing.reset-size6.size3 {
+    font-size: 0.7em !important;
+}
+
+.katex .fontsize-ensurer.reset-size3.size1, .katex .sizing.reset-size3.size1 {
+    font-size: .71428571em !important;
+}
