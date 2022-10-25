@@ -184,11 +184,11 @@ span.cm-overlay.cm-enhancement-image-size {
 
 pre.footnote.CodeMirror-line {
     font-size: smaller;
-    opacity: 0.75;
+    opacity: 0.75 !important;
     padding-left: 2em !important;
     padding-bottom: 5px;
 }
 
 .cm-admonition-type, .cm-admonition-end {
-    opacity: 0.35;
+    opacity: 0.35 !important;
 }

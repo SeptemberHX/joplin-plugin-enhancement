@@ -139,3 +139,8 @@ a.enhancement-link-marker-text {
 .enhancement-link-block-url-warning {
     color: red;
 }
+
+mark.enhancement-html-mark-marker {
+    border-radius: 4px;
+    padding: 0 2px;
+}
