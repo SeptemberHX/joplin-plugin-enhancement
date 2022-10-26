@@ -41,5 +41,5 @@ div.CodeMirror-activeline > pre > span > span.cm-rm-blockquote-token {
 }
 
 div:not(.CodeMirror-activeline) > pre > span > span.cm-rm-blockquote-token {
-    opacity: 0;
+    opacity: 0 !important;
 }
