@@ -39,7 +39,7 @@ span.enhancement-image-size-text {
 
 .enhancement-footnote-marker {
     font-size: smaller;
-    background-color: #ececec;
+    background-color: var(--joplin-divider-color);
     vertical-align: super;
     border-radius: 3px;
     padding: 0 2px;
