@@ -1,5 +1,5 @@
 .enhancement-link-marker, .enhancement-image-marker {
-    color: var(--g-linkColor) !important;
+    color: var(--joplin-url-color) !important;
     text-decoration: underline;
 }
 
@@ -10,7 +10,7 @@ span.enhancement-joplin-icon {
     width: 1em;
     display: inline-block;
     vertical-align: middle;
-    background-color: var(--g-linkColor);
+    background-color: var(--joplin-url-color);
     margin-left: 2px;
 }
 
@@ -21,7 +21,7 @@ span.enhancement-www-icon {
     width: 1em;
     display: inline-block;
     vertical-align: middle;
-    background-color: var(--g-linkColor);
+    background-color: var(--joplin-url-color)
     margin-left: 2px;
 }
 
