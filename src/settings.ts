@@ -88,7 +88,7 @@ export namespace settings {
             section: SECTION,
             type: SettingItemType.Bool,
             label: 'Enable the admonition styling in the markdown editor',
-            description: "Decorate the admonition area in the editor. (requires restart)",
+            description: "Decorate the admonition area in the editor. It still NEEDS joplin-plugin-admonition plugin installed to render it in PDF or preview window.(requires restart)",
         }
 
         PLUGIN_SETTINGS[ENABLE_FRONT_MATTER] = {
