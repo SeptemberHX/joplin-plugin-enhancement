@@ -103,7 +103,7 @@ a.enhancement-link-marker-text {
 }
 
 .enhancement-link-block-icon {
-    font-size: 2.2em;
+    font-size: 2.2em !important;
     vertical-align: middle;
     float: left;
     margin: 0 0.8em 0 0.5em;
