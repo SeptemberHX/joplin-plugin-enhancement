@@ -21,11 +21,12 @@ const ENHANCEMENT_PLANTUML_SPAN_MARKER_LINE_CLASS = 'enhancement-plantuml-block-
 
 export async function linkFolderOptionFunc(_context, cm, val, old) {
     const renderBlockLink = cm.state.enhancement ? !cm.state.enhancement.settings.blockLinkFolder : false;
+    const renderBlockImage = cm.state.enhancement ? cm.state.enhancement.settings.blockImageFolder : false;
     const renderBlockImageCaption = cm.state.enhancement ? cm.state.enhancement.settings.blockImageCaption : false;
     const inlineLinkMarker = createInlineLinkMarker(_context, cm, renderBlockLink);
     const blockLinkMarker = createBlockLinkMarker(_context, cm);
 
-    const inlineImageMarker = createInlineImageMarker(_context, cm);
+    const inlineImageMarker = createInlineImageMarker(_context, cm, renderBlockImage);
     const blockImageMarker = createBlockImageMarker(_context, cm, renderBlockImageCaption);
 
     const codeBlockMarker = createCodeBlockMarker(_context, cm)

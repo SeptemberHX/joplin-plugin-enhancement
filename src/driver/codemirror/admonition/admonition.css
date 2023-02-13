@@ -182,7 +182,7 @@ span.cm-overlay.cm-enhancement-image-size {
     color: gray !important;
 }
 
-pre.footnote.CodeMirror-line {
+.CodeMirror-lines pre.footnote.CodeMirror-line {
     font-size: smaller;
     opacity: 0.75 !important;
     padding-left: 2em !important;

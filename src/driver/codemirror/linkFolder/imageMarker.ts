@@ -13,7 +13,7 @@ const ENHANCED_IMAGE_MARKER_ICON = 'enhancement-image-marker-icon';
 const ENHANCED_IMAGE_MARKER_TEXT = 'enhancement-image-marker-text';
 const ENHANCED_IMAGE_SIZE_TEXT = 'enhancement-image-size-text';
 
-export function createInlineImageMarker(context, cm) {
+export function createInlineImageMarker(context, cm, enableBlockImageRendering: boolean) {
     return new CMInlineMarkerHelperV2(cm, INLINE_IMAGE_REG, function (match, from, to) {
         const markEl = document.createElement('span');
 
@@ -42,7 +42,11 @@ export function createInlineImageMarker(context, cm) {
         }
         return markEl;
     }, ENHANCED_IMAGE_MARKER, function (line) {
-        return !BLOCK_IMAGE_REG.test(line);
+        if (enableBlockImageRendering) {
+            return !BLOCK_IMAGE_REG.test(line);
+        } else {
+            return true;
+        }
     });
 }
 
