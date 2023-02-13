@@ -5,7 +5,7 @@ export const INLINE_FOOTNOTE_REG = /(?<!(^\s*))\[\^(.*?)\]/g;
 export const BLOCK_IMAGE_REG = /^\s*!\[(.*?)\]\((.+?)\)(\{.*?\})?$/;
 
 // from https://regexr.com/3ciio
-export const BLOCK_LINK_REG = /^\s*(\[((?:\[[^\]]*\]|[^\[\]])*)\]\([ \t]*()<?((?:\([^)]*\)|[^()\s])*?)>?[ \t]*((['"])(.*?)\6[ \t]*)?\))\s*$/;
+export const BLOCK_LINK_REG = /^\s*(\[((?:\[[^\]]*\]|[^\[\]])*)\]\([ \t]*()<?((?:\([^)]*\)|[^()\s])*?)>?[ \t]*((['"])(.*?)\6[ \t]*)?\))$/;
 
 export const CODE_BLOCK_START = /^\s*```\s*(\S+)\s*$/;
 export const CODE_BLOCK_END = /^\s*```\s*$/;
