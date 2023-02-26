@@ -1,6 +1,7 @@
 import {markdownRenderTasks} from "./taskRender";
 import {markdownRenderHTags} from "./render-h-tags";
 import {markdownRenderTables} from "./render-tables";
+import {debounce} from "ts-debounce";
 
 
 export function taskAndHeaderRender(cm) {
@@ -12,10 +13,9 @@ export function taskAndHeaderRender(cm) {
             return // Already a task registered
         }
 
-        taskHandle = requestIdleCallback(function () {
-            renderElements(cm, true)
-            taskHandle = undefined // Next task can be scheduled now
-        }, { timeout: 1000 }) // Don't wait more than 1 sec before executing this
+        debounce(() => {
+            renderElements(cm, true);
+        }, 500)();
     }
 
     cm.on('change', async function (cm, changeObjs) {

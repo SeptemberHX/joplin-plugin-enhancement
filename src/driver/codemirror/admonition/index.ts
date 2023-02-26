@@ -85,7 +85,9 @@ module.exports = {
                 });
 
                 CodeMirror.defineOption("gfm-joplin-markdown", [], async function(cm, val, old) {
-                    cm.setOption('mode', 'gfm-joplin-markdown');
+                    if (val) {
+                        cm.setOption('mode', 'gfm-joplin-markdown');
+                    }
                 });
             },
             codeMirrorResources: ['addon/mode/overlay'],

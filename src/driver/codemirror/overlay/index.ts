@@ -39,7 +39,8 @@ const WRAP_CLASS = "CodeMirror-activeline";
 
 
 export function initOverlayOption(_context, CodeMirror) {
-    CodeMirror.defineOption(enhancement_overlay_option, [], async function(cm, val, old) {
+
+    CodeMirror.defineExtension('initializeEnhancementOverlay', function() {
         function regexOverlay(cm, className, reg) {
             cm.addOverlay({
                 requiredSettings: ['extraCSS'],
@@ -96,6 +97,8 @@ export function initOverlayOption(_context, CodeMirror) {
             });
         }
 
+        let cm = this;
+
         regexOverlay(cm, 'enhancement-image-size', /(?<=(!\[.*]\(.*\)))(\{.*\})/g);
         regexOverlay(cm, 'enhancement-katex-inline-math', /(?<!\$)\$(.+?)\$(?!\$)/g);
         regexOverlay(cm, 'enhancement-finished-task', /- \[[x|X]\]\s+.*/g);
@@ -129,6 +132,10 @@ export function initOverlayOption(_context, CodeMirror) {
 
         cm.on('renderLine', on_renderLine);
         IndentHandlers.calculateSpaceWidth(cm);
+    });
+
+    CodeMirror.defineOption(enhancement_overlay_option, [], async function(cm, val, old) {
+        cm.initializeEnhancementOverlay();
     });
 
     CodeMirror.defineOption("styleActiveLine", false, function(cm, val, old) {

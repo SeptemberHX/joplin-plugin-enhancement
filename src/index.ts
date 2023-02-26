@@ -40,6 +40,14 @@ joplin.plugins.register({
 			'./driver/codemirror/index.js'
 		);
 
+		if (enhancementConfig.admonitionCmRender) {
+			await joplin.contentScripts.register(
+				ContentScriptType.CodeMirrorPlugin,
+				'cm_admonition_renderer',
+				'./driver/codemirror/admonition/index.js'
+			);
+		}
+
 		await joplin.contentScripts.onMessage(
 			'enhancement_codemirror_items',
 			async (msg: ContextMsg) => {
@@ -120,14 +128,6 @@ joplin.plugins.register({
 			await initTableFormatter();
 		}
 
-		if (enhancementConfig.admonitionCmRender) {
-			await joplin.contentScripts.register(
-				ContentScriptType.CodeMirrorPlugin,
-				'cm_admonition_renderer',
-				'./driver/codemirror/admonition/index.js'
-			);
-		}
-
 		if (enhancementConfig.frontMatterRender) {
 			await joplin.contentScripts.register(
 				ContentScriptType.MarkdownItPlugin,
@@ -162,14 +162,6 @@ joplin.plugins.register({
 				ContentScriptType.CodeMirrorPlugin,
 				'enhancement_indent_broder',
 				'./driver/codemirror/indentBorder/index.js'
-			);
-		}
-
-		if (enhancementConfig.bulletListCmRender) {
-			await joplin.contentScripts.register(
-				ContentScriptType.CodeMirrorPlugin,
-				'enhancement_bullet_list',
-				'./driver/codemirror/overlay/bulletList.js'
 			);
 		}
 

@@ -284,7 +284,7 @@ export function markdownRenderTables(cm: CodeMirror.Editor) {
             )
 
             tableList.push({ table, marker: textMarker })
-        } catch (err: any) {
+        } catch (err) {
             console.error(`Could not instantiate table between ${firstLine} and ${lastLine}: ${err.message as string}`)
             // Error, so abort rendering.
             continue

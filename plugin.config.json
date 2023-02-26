@@ -15,7 +15,6 @@
 		"driver/codemirror/searchReplace/index.ts",
 		"driver/codemirror/focusMode/index.ts",
 		"driver/codemirror/indentBorder/index.ts",
-		"driver/codemirror/overlay/bulletList.ts",
 
 		"driver/codemirror/index.ts"
 	]

@@ -17,7 +17,7 @@ export default function mermaidRender(cm) {
         svg.classList.add('mermaid-chart')
         try {
             svg.innerHTML = mermaid.render(`graphDivL${fromLine}-L${toLine}${Date.now()}`, content)
-        } catch (err: any) {
+        } catch (err) {
             svg.classList.add('error')
             // TODO: Localise!
             svg.innerText = `Could not render Graph:\n\n${err.message as string}`

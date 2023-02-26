@@ -33,49 +33,51 @@ module.exports = {
                 initOverlayOption(context, CodeMirror);
 
                 CodeMirror.defineOption('enable-enhancement-codemirror', false, async function(cm, val, old) {
-                    // Get plugin settings. From joplin-rich-markdown
-                    // There is a race condition in the Joplin initialization code
-                    // Sometimes the settings aren't ready yet and will return `undefined`
-                    // This code will perform an exponential backoff and poll settings
-                    // until something is returned
-                    async function backoff(timeout: number) {
-                        const settings = await get_settings();
+                    if (val) {
+                        // Get plugin settings. From joplin-rich-markdown
+                        // There is a race condition in the Joplin initialization code
+                        // Sometimes the settings aren't ready yet and will return `undefined`
+                        // This code will perform an exponential backoff and poll settings
+                        // until something is returned
+                        async function backoff(timeout: number) {
+                            const settings = await get_settings();
 
-                        if (!settings) {
-                            setTimeout(backoff, timeout * 2, timeout * 2);
+                            if (!settings) {
+                                setTimeout(backoff, timeout * 2, timeout * 2);
+                            } else {
+                                initCommands(cm, CodeMirror);
+
+                                cm.state.enhancement = {
+                                    settings
+                                };
+                                await linkFolderOptionFunc(context, cm, val, old);
+
+                                if (settings.quickCommands) {
+                                    new QuickCommands(context, cm as ExtendedEditor & Editor, CodeMirror);
+                                }
+
+                                if (settings.taskCmRender || settings.headerHashRender) {
+                                    taskAndHeaderRender(cm);
+                                }
+
+                                if (settings.mermaidCmRender) {
+                                    mermaidRender(cm);
+                                }
+
+                                if (settings.inlineMarker) {
+                                    inlineMarkerRender(cm);
+                                }
+
+                                if (settings.formattingBar) {
+                                    formattingBarHook(context, cm);
+                                }
+                            }
                         }
-                        else {
-                            initCommands(cm, CodeMirror);
 
-                            cm.state.enhancement = {
-                                settings
-                            };
-                            await linkFolderOptionFunc(context, cm, val, old);
-
-                            if (settings.quickCommands) {
-                                new QuickCommands(context, cm as ExtendedEditor & Editor, CodeMirror);
-                            }
-
-                            if (settings.taskCmRender || settings.headerHashRender) {
-                                taskAndHeaderRender(cm);
-                            }
-
-                            if (settings.mermaidCmRender) {
-                                mermaidRender(cm);
-                            }
-
-                            if (settings.inlineMarker) {
-                                inlineMarkerRender(cm);
-                            }
-
-                            if (settings.formattingBar) {
-                                formattingBarHook(context, cm);
-                            }
-                        }
+                        // Set the first timeout to 50 because settings are usually ready immediately
+                        // Set the first backoff to (100*2) to give a little extra time
+                        setTimeout(backoff, 50, 100);
                     }
-                    // Set the first timeout to 50 because settings are usually ready immediately
-                    // Set the first backoff to (100*2) to give a little extra time
-                    setTimeout(backoff, 50, 100);
                 });
             },
             codeMirrorResources: [
@@ -91,6 +93,9 @@ module.exports = {
                 return [
                     {
                         name: './overlay/overlay.css'
+                    },
+                    {
+                        name: './overlay/bullet-list.css'
                     },
                     {
                         name: './linkFolder/linkFolder.css'
