@@ -10,6 +10,7 @@ import mermaidRender from "./mermaidRender";
 import inlineMarkerRender from "./inlineMarker";
 import formattingBarHook from "./formattingBar/formattingBart";
 import {initCommands} from "./commands";
+import {fixListNumber, listNumberCorrector} from "./listNumber";
 
 
 module.exports = {
@@ -71,6 +72,8 @@ module.exports = {
                                 if (settings.formattingBar) {
                                     formattingBarHook(context, cm);
                                 }
+
+                                listNumberCorrector(context, cm);
                             }
                         }
 
