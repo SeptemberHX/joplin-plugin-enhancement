@@ -15,7 +15,7 @@ import {
 	ENABLE_IMAGE_ENHANCEMENT,
 	ENABLE_INDENT_BORDER,
 	ENABLE_INLINE_MARKER,
-	ENABLE_LINK_FOLDER,
+	ENABLE_LINK_FOLDER, ENABLE_LIST_NUMBER_AUTO_CORRECT,
 	ENABLE_LOCAL_PDF_PREVIEW,
 	ENABLE_MATH_RENDER,
 	ENABLE_MERMAID_RENDER, ENABLE_PLANTUML_RENDER,
@@ -299,5 +299,6 @@ async function getConfig(): Promise<EnhancementConfig> {
 	config.dateFormat = await joplin.settings.globalValue('dateFormat');
 	config.plantumlCmRender = await joplin.settings.value(ENABLE_PLANTUML_RENDER);
 	config.bulletListCmRender = await joplin.settings.value(ENABLE_BULLET_LIST_RENDER);
+	config.listNumberAutoCorrect = await joplin.settings.value(ENABLE_LIST_NUMBER_AUTO_CORRECT);
 	return config;
 }

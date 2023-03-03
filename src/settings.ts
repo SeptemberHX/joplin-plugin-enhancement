@@ -23,7 +23,7 @@ import {
     ENABLE_HEADER_HASH_RENDER,
     ENABLE_TABLE_RENDER,
     ENABLE_FORMATTING_BAR,
-    ENABLE_PLANTUML_RENDER, ENABLE_BULLET_LIST_RENDER, ENABLE_BLOCK_IMAGE_CAPTION,
+    ENABLE_PLANTUML_RENDER, ENABLE_BULLET_LIST_RENDER, ENABLE_BLOCK_IMAGE_CAPTION, ENABLE_LIST_NUMBER_AUTO_CORRECT,
 } from "./common";
 
 export namespace settings {
@@ -257,6 +257,14 @@ export namespace settings {
             section: SECTION,
             type: SettingItemType.Bool,
             label: 'Enable bullet list rendering in markdown editor (Restart required)'
+        }
+
+        PLUGIN_SETTINGS[ENABLE_LIST_NUMBER_AUTO_CORRECT] = {
+            value: true,
+            public: true,
+            section: SECTION,
+            type: SettingItemType.Bool,
+            label: 'Automatically correct list numbering when editing lists'
         }
 
         await joplin.settings.registerSettings(PLUGIN_SETTINGS);

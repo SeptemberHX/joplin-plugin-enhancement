@@ -23,6 +23,7 @@ export const ENABLE_PLANTUML_RENDER = 'enhancementEnablePlantUmlRenderer';
 export const ENABLE_CODEBLOCK_HL = 'enhancementEnableCodeBlockHighlight';
 export const ENABLE_FORMATTING_BAR = 'enhancementEnableFormattingBar';
 export const ENABLE_BULLET_LIST_RENDER = 'enhancementEnableBulletListRender';
+export const ENABLE_LIST_NUMBER_AUTO_CORRECT = 'enhancementEnableListNumberAutoCorrect';
 
 
 export class EnhancementConfig {
@@ -52,6 +53,7 @@ export class EnhancementConfig {
     public dateFormat: string;
     public plantumlCmRender: boolean;
     public bulletListCmRender: boolean;
+    public listNumberAutoCorrect: boolean;
 }
 
 

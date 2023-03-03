@@ -1,8 +1,13 @@
-const listLineReg = /^\s*[\d|a-z]\./;
+import {debounce} from "ts-debounce";
+
+const listLineReg = /^\s*[\d|a-z]+\./;
 
 
 export function listNumberCorrector(context, cm: CodeMirror.Editor) {
-    cm.on('cursorActivity', fixListNumber);
+    const fixListNumberDebounce = debounce((cm) => {
+        fixListNumber(cm);
+    }, 50);
+    cm.on('cursorActivity', fixListNumberDebounce);
 }
 
 export function fixListNumber(cm: CodeMirror.Editor) {
@@ -43,10 +48,9 @@ export function fixListNumber(cm: CodeMirror.Editor) {
         listToLineN = lineN;
     }
 
-    console.log('Current list lines ' + listFromLineN + '-' + listToLineN);
-
     let lastIndexMap = {0: 0};
     let listIndexType = 1;  // 1: number; 2: a b c
+    let listIndexTypeMap = {};
     let currIndent = 0;
     let currIndexN = 0;
     for (let lineN = listFromLineN; lineN <= listToLineN; ++lineN) {
@@ -69,67 +73,64 @@ export function fixListNumber(cm: CodeMirror.Editor) {
                     delete lastIndexMap[child];
                 }
             }
+
+            for (let child of Object.keys(listIndexTypeMap)) {
+                if (Number(child) > indent) {
+                    delete listIndexTypeMap[child];
+                }
+            }
         }
 
         currIndent = indent;
         lastIndexMap[indent] = currIndexN;
-        console.log('Correct line ' + lineN + ' with list number ' + currIndexN);
+
+        const regResult = listLineReg.exec(lineStr);
+
+        if (!regResult) {
+            continue;
+        }
+
+        const numberStr = regResult[0].substr(indent, regResult[0].length - indent);
+        if (!(indent in listIndexTypeMap)) {
+            if (/\d+\./.test(numberStr)) {
+                listIndexTypeMap[indent] = 1;
+            } else if (/[a-z]+\./.test(numberStr)) {
+                listIndexTypeMap[indent] = 2;
+            } else {
+                listIndexTypeMap[indent] = 1;
+            }
+        }
+
+        listIndexType = listIndexTypeMap[indent];
+        let replacement = '';
+        switch (listIndexType) {
+            case 1:
+                replacement = `${currIndexN}.`;
+                break;
+            case 2:
+                replacement = `${convertToNumberingScheme(currIndexN)}.`;
+                break;
+            default:
+                break;
+        }
+
+        if (numberStr == replacement) {
+            continue;
+        }
+
+        cm.replaceRange(replacement, {'line': lineN, 'ch': indent}, {'line': lineN, 'ch': regResult[0].length});
     }
 }
 
-function listNumberCorrect (cm: CodeMirror.Editor, pre: string, post: string, tokentype?: string): void {
-    // Is something selected?
-    if (!cm.somethingSelected()) {
-        // TODO: Check token type state at the cursor position to leave the
-        // mode if already in the mode.
-        let currentToken = cm.getTokenAt(cm.getCursor()).type
-        if (tokentype !== undefined && currentToken !== null && currentToken?.includes(tokentype)) { // -- the tokentypes can be multiple (spell-error, e.g.)
-            // We are, indeed, currently in this token. So let's check *how*
-            // we are going to leave the state.
-            let to = { 'line': cm.getCursor().line, 'ch': cm.getCursor().ch + post.length }
-            if (cm.getRange(cm.getCursor(), to) === post) {
-                cm.setCursor(to)
-            } else {
-                // No sign in sight -> insert it. Cursor will automatically move forward
-                cm.replaceSelection(post)
-            }
-        } else {
-            // Not in the mode -> simply do the standard.
-            cm.replaceSelection(pre + '' + post, 'start')
-            // Move cursor forward (to the middle of the insertion)
-            const cur = cm.getCursor()
-            cur.ch = cur.ch + pre.length
-            cm.setCursor(cur)
-        }
-        return
-    }
+function convertToNumberingScheme(number) {
+    var baseChar = ("a").charCodeAt(0),
+        letters  = "";
 
-    // Build the regular expression by first escaping problematic characters
-    let preregex = pre.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-    let postregex = post.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    do {
+        number -= 1;
+        letters = String.fromCharCode(baseChar + (number % 26)) + letters;
+        number = (number / 26) >> 0; // quick `floor`
+    } while(number > 0);
 
-    let re = new RegExp('^' + preregex + '.+?' + postregex + '$', 'g')
-
-    const replacements = []
-    for (const selection of cm.getSelections()) {
-        if (re.test(selection)) {
-            // We got something so unformat.
-            replacements.push(selection.substr(pre.length, selection.length - pre.length - post.length))
-        } else {
-            // TODO: Check whether the user just selected the text itself and
-            // not the formatting marks!
-
-            // NOTE: Since the user can triple-click a line, that selection will
-            // extend beyond the line. So check if the last char of selection is
-            // a newline, and, if so, pluck that and push it after post.
-            if (selection[selection.length - 1] === '\n') {
-                replacements.push(pre + String(selection).substr(0, selection.length - 1) + post + '\n')
-            } else {
-                replacements.push(pre + selection + post)
-            }
-        }
-    }
-
-    // Replace with changes selections
-    cm.replaceSelections(replacements, 'around')
+    return letters;
 }

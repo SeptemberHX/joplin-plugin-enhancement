@@ -73,7 +73,9 @@ module.exports = {
                                     formattingBarHook(context, cm);
                                 }
 
-                                listNumberCorrector(context, cm);
+                                if (settings.listNumberAutoCorrect) {
+                                    listNumberCorrector(context, cm);
+                                }
                             }
                         }
 
