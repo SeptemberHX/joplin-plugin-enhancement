@@ -188,6 +188,14 @@ joplin.plugins.register({
 				ToolbarButtonLocation.NoteToolbar
 			)
 		}
+
+		if (enhancementConfig.bulletListCmRender) {
+			await joplin.contentScripts.register(
+				ContentScriptType.CodeMirrorPlugin,
+				'enhancement_bullet_cm_render',
+				'./driver/codemirror/overlay/bulletList.js'
+			);
+		}
 	},
 });
 

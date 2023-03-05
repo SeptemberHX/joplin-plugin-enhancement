@@ -99,9 +99,9 @@ module.exports = {
                     {
                         name: './overlay/overlay.css'
                     },
-                    {
-                        name: './overlay/bullet-list.css'
-                    },
+                    // {
+                    //     name: './overlay/bullet-list.css'
+                    // },
                     {
                         name: './linkFolder/linkFolder.css'
                     },
