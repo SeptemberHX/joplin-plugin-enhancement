@@ -1,6 +1,7 @@
 import {debounce} from "ts-debounce";
 
 const listLineReg = /^\s*[\d|a-z]+\./;
+const dotListLineReg = /^\s+[\*-\+]\s/;
 
 
 export function listNumberCorrector(context, cm: CodeMirror.Editor) {
@@ -16,10 +17,12 @@ export function fixListNumber(cm: CodeMirror.Editor) {
         return;
     }
 
-    if (!listLineReg.test(cm.getLine(currLineNumber))) {
+    const currLine = cm.getLine(currLineNumber);
+    if (!listLineReg.test(currLine) && !dotListLineReg.test(currLine)) {
         return;
     }
 
+    // check list range starts
     let listFromLineN = currLineNumber;
     for (let lineN = currLineNumber - 1; lineN >= 0; --lineN) {
         const lineStr = cm.getLine(lineN);
@@ -27,7 +30,7 @@ export function fixListNumber(cm: CodeMirror.Editor) {
             break;
         }
 
-        if (!listLineReg.test(lineStr)) {
+        if (!listLineReg.test(lineStr) && !dotListLineReg.test(lineStr)) {
             break;
         }
 
@@ -41,12 +44,13 @@ export function fixListNumber(cm: CodeMirror.Editor) {
             break;
         }
 
-        if (!listLineReg.test(lineStr)) {
+        if (!listLineReg.test(lineStr) && !dotListLineReg.test(lineStr)) {
             break;
         }
 
         listToLineN = lineN;
     }
+    // check list range ends
 
     let lastIndexMap = {0: 0};
     let listIndexType = 1;  // 1: number; 2: a b c
