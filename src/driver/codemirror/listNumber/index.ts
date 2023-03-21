@@ -1,7 +1,7 @@
 import {debounce} from "ts-debounce";
 
 const listLineReg = /^\s*[\d|a-z]+\./;
-const dotListLineReg = /^\s+[\*-\+]\s/;
+const dotListLineReg = /^\s+[\*\-\+]\s/;
 
 
 export function listNumberCorrector(context, cm: CodeMirror.Editor) {
