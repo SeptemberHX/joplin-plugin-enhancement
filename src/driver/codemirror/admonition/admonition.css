@@ -76,6 +76,7 @@
 
 .admonition.note {
     border-color: #448aff;
+    box-shadow: 2px 0px 1px #eee;
 }
 
 .cm-admonition-type.cm-note, .cm-admonition-end.cm-note {
@@ -84,6 +85,7 @@
 
 .admonition.abstract {
     border-color: #00b0ff;
+    box-shadow: 2px 0px 1px #eee;
 }
 
 .cm-admonition-type.cm-abstract, .cm-admonition-end.cm-abstract {
@@ -92,6 +94,7 @@
 
 .admonition.info {
     border-color: #00b8d4;
+    box-shadow: 2px 0px 1px #eee;
 }
 
 .cm-admonition-type.cm-info, .cm-admonition-end.cm-info {
@@ -100,6 +103,7 @@
 
 .admonition.tip {
     border-color: #00bfa5;
+    box-shadow: 2px 0px 1px #eee;
 }
 
 .cm-admonition-type.cm-tip, .cm-admonition-end.cm-tip {
@@ -108,6 +112,7 @@
 
 .admonition.success {
     border-color: #00c853;
+    box-shadow: 2px 0px 1px #eee;
 }
 
 .cm-admonition-type.cm-success, .cm-admonition-end.cm-success {
@@ -116,6 +121,7 @@
 
 .admonition.question {
     border-color: #64dd17;
+    box-shadow: 2px 0px 1px #eee;
 }
 
 .cm-admonition-type.cm-question, .cm-admonition-end.cm-question {
@@ -124,6 +130,7 @@
 
 .admonition.warning {
     border-color: #ff9100;
+    box-shadow: 2px 0px 1px #eee;
 }
 
 .cm-admonition-type.cm-warning, .cm-admonition-end.cm-warning {
@@ -132,6 +139,7 @@
 
 .admonition.failure {
     border-color: #ff5252;
+    box-shadow: 2px 0px 1px #eee;
 }
 
 .cm-admonition-type.cm-failure, .cm-admonition-end.cm-failure {
@@ -140,6 +148,7 @@
 
 .admonition.danger {
     border-color: #ff1744;
+    box-shadow: 2px 0px 1px #eee;
 }
 
 .cm-admonition-type.cm-danger, .cm-admonition-end.cm-danger {
@@ -148,6 +157,7 @@
 
 .admonition.bug {
     border-color: #f50057;
+    box-shadow: 2px 0px 1px #eee;
 }
 
 .cm-admonition-type.cm-bug, .cm-admonition-end.cm-bug {
@@ -156,6 +166,7 @@
 
 .admonition.example {
     border-color: #7c4dff;
+    box-shadow: 2px 0px 1px #eee;
 }
 
 .cm-admonition-type.cm-example, .cm-admonition-end.cm-example {
@@ -164,6 +175,7 @@
 
 .admonition.quote {
     border-color: #9e9e9e;
+    box-shadow: 2px 0px 1px #eee;
 }
 
 .cm-admonition-type.cm-quote, .cm-admonition-end.cm-quote {
