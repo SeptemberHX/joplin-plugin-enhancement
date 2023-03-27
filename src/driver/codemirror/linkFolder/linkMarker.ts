@@ -19,7 +19,8 @@ const PDF_PAGE_REG = /#(\d+)$/;
 
 enum LinkType {
     NOTE,
-    OTHER
+    OTHER,
+    ZOTERO,
 }
 
 export function createInlineLinkMarker(context, cm, renderBlock: boolean = false) {
@@ -153,7 +154,10 @@ export function createBlockLinkMarker(context, cm) {
                     setTimeout(() => {lineWidget.changed()}, 50);
                 }
             })
-        } else {
+        } else if (beginMatch[4].startsWith('zotero')) {
+            markEl.appendChild(renderBlockZoteroLink(beginMatch[2], beginMatch[4]))
+        }
+        else {
             markEl.appendChild(renderBlockNormalLink(beginMatch[2], beginMatch[4]));
         }
 
@@ -186,6 +190,10 @@ function renderBlockNormalLink(title, link) {
     return renderBlockLink(title, link, LinkType.OTHER);
 }
 
+function renderBlockZoteroLink(title, link) {
+    return renderBlockLink(title, link, LinkType.ZOTERO);
+}
+
 function renderBlockLink(title, link, type: LinkType) {
     const result = document.createElement('div');
     result.classList.add('enhancement-link-block');
@@ -193,12 +201,16 @@ function renderBlockLink(title, link, type: LinkType) {
     iconDiv.classList.add('enhancement-link-block-icon');
     if (type === LinkType.NOTE) {
         const joplinIcon = document.createElement('span');
-        joplinIcon.classList.add(ENHANCED_LINK_MARKER_ICON, 'enhancement-joplin-icon');
+        joplinIcon.classList.add(ENHANCED_LINK_MARKER_ICON, 'enhancement-joplin-icon-big');
         iconDiv.appendChild(joplinIcon);
     } else if (type === LinkType.OTHER) {
         const iconEl = document.createElement('span');
         iconEl.classList.add(ENHANCED_LINK_MARKER_ICON, 'enhancement-www-icon');
         iconDiv.appendChild(iconEl);
+    } else if (type === LinkType.ZOTERO) {
+        const zoteroIcon = document.createElement('span');
+        zoteroIcon.classList.add(ENHANCED_LINK_MARKER_ICON, 'enhancement-zotero-icon-big');
+        iconDiv.appendChild(zoteroIcon);
     }
     result.appendChild(iconDiv);
 
