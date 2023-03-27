@@ -34,6 +34,10 @@ export function createInlineLinkMarker(context, cm, renderBlock: boolean = false
             markEl.appendChild(joplinIcon);
         } else if (match[2].startsWith('#')) {
             // do nothing for link to current note
+        } else if (match[2].startsWith('zotero')) {
+            const zoteroIcon = document.createElement('span');
+            zoteroIcon.classList.add(ENHANCED_LINK_MARKER_ICON, 'enhancement-zotero-icon');
+            markEl.appendChild(zoteroIcon);
         } else {
             const iconEl = document.createElement('i');
             iconEl.classList.add(ENHANCED_LINK_MARKER_ICON, 'fas', 'fa-link');
