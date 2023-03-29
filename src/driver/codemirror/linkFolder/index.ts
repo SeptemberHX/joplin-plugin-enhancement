@@ -10,6 +10,7 @@ import {createHtmlTagInsRenderMarker, createHtmlTagMarkRenderMarker} from "./htm
 import createPlantumlMarker, {
     ENHANCEMENT_PLANTUML_SPAN_MARKER_CLASS
 } from "./plantumlMarker";
+import {createHorizontalLineMarker, ENHANCED_HORIZONTAL_LINE_MARKER} from "./horizontalLineMarker";
 
 
 const ENHANCEMENT_BLOCK_IMAGE_SPAN_MARKER_LINE_CLASS = 'enhancement-block-image-marker-span-line';
@@ -17,7 +18,7 @@ const ENHANCEMENT_BLOCK_LINK_SPAN_MARKER_LINE_CLASS = 'enhancement-block-link-ma
 const ENHANCEMENT_BLOCK_CODE_SPAN_MARKER_LINE_CLASS = 'enhancement-code-block-marker-span-line';
 const ENHANCEMENT_MATH_BLOCK_SPAN_MARKER_LINE_CLASS = 'enhancement-math-block-marker-line';
 const ENHANCEMENT_PLANTUML_SPAN_MARKER_LINE_CLASS = 'enhancement-plantuml-block-marker-line';
-
+const ENHANCEMENT_HORIZONTAL_LINE_CLASS_LINE_CLASS = 'enhancement-horizontal-line-marker-line';
 
 export async function linkFolderOptionFunc(_context, cm, val, old) {
     const renderBlockLink = cm.state.enhancement ? !cm.state.enhancement.settings.blockLinkFolder : false;
@@ -38,6 +39,7 @@ export async function linkFolderOptionFunc(_context, cm, val, old) {
     const htmlInsMarker = createHtmlTagInsRenderMarker(_context, cm);
 
     const plantumlMarker = createPlantumlMarker(_context, cm);
+    const horizontalLineMarker = createHorizontalLineMarker(_context, cm);
 
     cm.on('renderLine', (editor, line: LineHandle, element: Element) => {
         if (element.getElementsByClassName(ENHANCED_BLOCK_IMAGE_MARKER).length > 0) {
@@ -50,6 +52,8 @@ export async function linkFolderOptionFunc(_context, cm, val, old) {
             element.classList.add(ENHANCEMENT_MATH_BLOCK_SPAN_MARKER_LINE_CLASS);
         } else if (element.getElementsByClassName(ENHANCEMENT_PLANTUML_SPAN_MARKER_CLASS).length > 0) {
             element.classList.add(ENHANCEMENT_PLANTUML_SPAN_MARKER_LINE_CLASS);
+        } else if (element.getElementsByClassName(ENHANCED_HORIZONTAL_LINE_MARKER).length > 0) {
+            element.classList.add(ENHANCEMENT_HORIZONTAL_LINE_CLASS_LINE_CLASS);
         }
     });
 
@@ -85,6 +89,10 @@ export async function linkFolderOptionFunc(_context, cm, val, old) {
             htmlMarkMarker.process(full);
             htmlInsMarker.process(full);
 
+            if (cm.state.enhancement.settings.horizontalLineRender) {
+                horizontalLineMarker.process(full);
+            }
+
             if (cm.state.enhancement.settings.plantumlCmRender) {
                 plantumlMarker.process(full);
             }
@@ -102,6 +110,7 @@ export async function linkFolderOptionFunc(_context, cm, val, old) {
             htmlInsMarker.process(full);
 
             plantumlMarker.process(full);
+            horizontalLineMarker.process(full);
         }
         cm.endOperation();
     }

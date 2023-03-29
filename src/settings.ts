@@ -23,7 +23,11 @@ import {
     ENABLE_HEADER_HASH_RENDER,
     ENABLE_TABLE_RENDER,
     ENABLE_FORMATTING_BAR,
-    ENABLE_PLANTUML_RENDER, ENABLE_BULLET_LIST_RENDER, ENABLE_BLOCK_IMAGE_CAPTION, ENABLE_LIST_NUMBER_AUTO_CORRECT,
+    ENABLE_PLANTUML_RENDER,
+    ENABLE_BULLET_LIST_RENDER,
+    ENABLE_BLOCK_IMAGE_CAPTION,
+    ENABLE_LIST_NUMBER_AUTO_CORRECT,
+    ENABLE_HORIZONTAL_LINE_RENDER,
 } from "./common";
 
 export namespace settings {
@@ -265,6 +269,14 @@ export namespace settings {
             section: SECTION,
             type: SettingItemType.Bool,
             label: 'Automatically correct list numbering when editing lists'
+        }
+
+        PLUGIN_SETTINGS[ENABLE_HORIZONTAL_LINE_RENDER] = {
+            value: true,
+            public: true,
+            section: SECTION,
+            type: SettingItemType.Bool,
+            label: 'Replace `---` with a horizontal line'
         }
 
         await joplin.settings.registerSettings(PLUGIN_SETTINGS);

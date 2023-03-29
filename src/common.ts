@@ -24,7 +24,7 @@ export const ENABLE_CODEBLOCK_HL = 'enhancementEnableCodeBlockHighlight';
 export const ENABLE_FORMATTING_BAR = 'enhancementEnableFormattingBar';
 export const ENABLE_BULLET_LIST_RENDER = 'enhancementEnableBulletListRender';
 export const ENABLE_LIST_NUMBER_AUTO_CORRECT = 'enhancementEnableListNumberAutoCorrect';
-
+export const ENABLE_HORIZONTAL_LINE_RENDER = 'enhancementEnableHorizontalLineRender';
 
 export class EnhancementConfig {
     public tableFormatter: boolean;
@@ -54,6 +54,7 @@ export class EnhancementConfig {
     public plantumlCmRender: boolean;
     public bulletListCmRender: boolean;
     public listNumberAutoCorrect: boolean;
+    public horizontalLineRender: boolean;
 }
 
 

@@ -11,7 +11,7 @@ import {
 	ENABLE_COLORFUL_QUOTE,
 	ENABLE_FOCUS_MODE, ENABLE_FORMATTING_BAR,
 	ENABLE_FRONT_MATTER,
-	ENABLE_HEADER_HASH_RENDER,
+	ENABLE_HEADER_HASH_RENDER, ENABLE_HORIZONTAL_LINE_RENDER,
 	ENABLE_IMAGE_ENHANCEMENT,
 	ENABLE_INDENT_BORDER,
 	ENABLE_INLINE_MARKER,
@@ -308,5 +308,6 @@ async function getConfig(): Promise<EnhancementConfig> {
 	config.plantumlCmRender = await joplin.settings.value(ENABLE_PLANTUML_RENDER);
 	config.bulletListCmRender = await joplin.settings.value(ENABLE_BULLET_LIST_RENDER);
 	config.listNumberAutoCorrect = await joplin.settings.value(ENABLE_LIST_NUMBER_AUTO_CORRECT);
+	config.horizontalLineRender = await joplin.settings.value(ENABLE_HORIZONTAL_LINE_RENDER);
 	return config;
 }

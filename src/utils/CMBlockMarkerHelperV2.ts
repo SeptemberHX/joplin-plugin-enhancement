@@ -31,7 +31,8 @@ export class CMBlockMarkerHelperV2 {
                 private readonly clearOnClick: boolean,
                 private readonly renderWhenEditing: boolean,
                 private readonly matchChecker?: (editor, line, match) => boolean,
-                private readonly metaClicked?: (content: string, e: MouseEvent) => void
+                private readonly metaClicked?: (content: string, e: MouseEvent) => void,
+                private readonly hideEditButton?: boolean
     ) {
         this.lineWidgetClassName = this.MARKER_CLASS_NAME + '-line-widget';
     }
@@ -292,9 +293,12 @@ export class CMBlockMarkerHelperV2 {
         editButton.onclick = (e) => {
             this.clearMarkerAndSelectContent(textMarker, wrapperLineWidget);
         }
+
         renderedWrapper.appendChild(editButton);
         renderedWrapper.onmouseover = (e) => {
-            editButton.style.opacity = '1';
+            if (!this.hideEditButton) {
+                editButton.style.opacity = '1';
+            }
             renderedWrapper.style.border = '2px solid #d8d8d8';
         };
         renderedWrapper.onmouseleave = (e) => {

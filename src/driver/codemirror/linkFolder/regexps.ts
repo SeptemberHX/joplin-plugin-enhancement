@@ -15,3 +15,5 @@ export const HTML_MARK_REG = /<mark[^>]*?>(.*?)<\/mark>/g;
 export const HTML_TAG_STYLE_REG = /style="(.*?)"/;
 
 export const HTML_INS_REG = /<ins[^>]*?>(.*?)<\/ins>/g;
+
+export const HORIZONTAL_LINE_REG = /^-{3,}$/g;

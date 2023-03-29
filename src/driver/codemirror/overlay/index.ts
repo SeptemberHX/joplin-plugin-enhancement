@@ -104,8 +104,8 @@ export function initOverlayOption(_context, CodeMirror) {
         regexOverlay(cm, 'enhancement-finished-task', /- \[[x|X]\]\s+.*/g);
         regexOverlay(cm, 'rm-single-list-token', single_list_token_regex);
         regexOverlay(cm, 'rm-ins', insert_regex);
-        regexOverlay(cm, 'rm-sub', sub_regex);
-        regexOverlay(cm, 'rm-sup', sup_regex);
+        // regexOverlay(cm, 'rm-sub', sub_regex);
+        // regexOverlay(cm, 'rm-sup', sup_regex);
         regexOverlay(cm, 'rm-header-token', header_regex);
         regexOverlay(cm, 'line-cm-rm-blockquote', blockquote_regex);
         regexOverlay(cm, 'rm-em-token', emph_star_regex);
