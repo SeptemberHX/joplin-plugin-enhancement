@@ -33,13 +33,13 @@ const FORMATTING_BAR_HTML = `<div class="editor-formatting-bar">
 <div class="button" data-command="markdownItalic"><i class="fas fa-italic in-button"></i></div>
 <div class="button" data-command="markdownLink"><i class="fas fa-link in-button"></i></div>
 <div class="button" data-command="markdownCode"><i class="fas fa-code in-button"></i></div>
-<div class="button" data-command="markdownHLYellow"><i class="fas fa-circle yellow in-button"></i></div>
-<div class="button" data-command="markdownHLGreen"><i class="fas fa-circle green in-button"></i></div>
-<div class="button" data-command="markdownHLPink"><i class="fas fa-circle pink in-button"></i></div>
-<div class="button" data-command="markdownHLPurple"><i class="fas fa-circle purple in-button"></i></div>
-<div class="button" data-command="markdownHLRed"><i class="fas fa-circle red in-button"></i></div>
-<div class="button" data-command="markdownHLBlue"><i class="fas fa-circle blue in-button"></i></div>
-<div class="button" data-command="markdownHLOrange"><i class="fas fa-circle orange in-button"></i></div>
+<div class="button" data-command="markdownHL1"><i class="fas fa-circle color1 in-button"></i></div>
+<div class="button" data-command="markdownHL2"><i class="fas fa-circle color2 in-button"></i></div>
+<div class="button" data-command="markdownHL3"><i class="fas fa-circle color3 in-button"></i></div>
+<div class="button" data-command="markdownHL4"><i class="fas fa-circle color4 in-button"></i></div>
+<div class="button" data-command="markdownHL5"><i class="fas fa-circle color5 in-button"></i></div>
+<div class="button" data-command="markdownHL6"><i class="fas fa-circle color6 in-button"></i></div>
+<div class="button" data-command="markdownHL7"><i class="fas fa-circle color7 in-button"></i></div>
 </div>`
 
 export default function formattingBarHook (context, cm: CodeMirror.Editor): void {

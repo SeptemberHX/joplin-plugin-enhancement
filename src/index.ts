@@ -76,13 +76,13 @@ joplin.plugins.register({
 						case 'markdownCode':
 							await joplin.commands.execute('textCode');
 							break;
-						case 'markdownHLRed':
-						case 'markdownHLGreen':
-						case 'markdownHLBlue':
-						case 'markdownHLYellow':
-						case 'markdownHLPink':
-						case 'markdownHLPurple':
-						case 'markdownHLOrange':
+						case 'markdownHL1':
+						case 'markdownHL2':
+						case 'markdownHL3':
+						case 'markdownHL4':
+						case 'markdownHL5':
+						case 'markdownHL6':
+						case 'markdownHL7':
 							await joplin.commands.execute('editor.execCommand', {
 								name: msg.content
 							});

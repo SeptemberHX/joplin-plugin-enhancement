@@ -1,44 +1,44 @@
 export function initCommands(cm, CodeMirror) {
     const commandBridge = new CommandsBridge(cm);
-    CodeMirror.defineExtension('markdownHLRed', commandBridge.hLRed.bind(commandBridge));
-    CodeMirror.defineExtension('markdownHLGreen', commandBridge.hLGreen.bind(commandBridge));
-    CodeMirror.defineExtension('markdownHLBlue', commandBridge.hLBlue.bind(commandBridge));
-    CodeMirror.defineExtension('markdownHLPink', commandBridge.hLPink.bind(commandBridge));
-    CodeMirror.defineExtension('markdownHLPurple', commandBridge.hLPurple.bind(commandBridge));
-    CodeMirror.defineExtension('markdownHLYellow', commandBridge.hLYellow.bind(commandBridge));
-    CodeMirror.defineExtension('markdownHLOrange', commandBridge.hLOrange.bind(commandBridge));
+    CodeMirror.defineExtension('markdownHL1', commandBridge.hL1.bind(commandBridge));
+    CodeMirror.defineExtension('markdownHL2', commandBridge.hL2.bind(commandBridge));
+    CodeMirror.defineExtension('markdownHL3', commandBridge.hL3.bind(commandBridge));
+    CodeMirror.defineExtension('markdownHL4', commandBridge.hL4.bind(commandBridge));
+    CodeMirror.defineExtension('markdownHL5', commandBridge.hL5.bind(commandBridge));
+    CodeMirror.defineExtension('markdownHL6', commandBridge.hL6.bind(commandBridge));
+    CodeMirror.defineExtension('markdownHL7', commandBridge.hL7.bind(commandBridge));
 }
 
 class CommandsBridge {
     constructor(private readonly cm) {
     }
 
-    hLRed() {
-        this.hlWithColor('#ea3323');
+    hL1() {
+        this.hlWithColor('#ffd400');
     }
 
-    hLGreen() {
-        this.hlWithColor('#a5ec99');
+    hL2() {
+        this.hlWithColor('#ff6666');
     }
 
-    hLBlue() {
-        this.hlWithColor('#0000f5');
+    hL3() {
+        this.hlWithColor('#5fb236');
     }
 
-    hLPink() {
-        this.hlWithColor('#f4b9c2');
+    hL4() {
+        this.hlWithColor('#2ea8e5');
     }
 
-    hLPurple() {
-        this.hlWithColor('#d4a3d9');
+    hL5() {
+        this.hlWithColor('#a28ae5');
     }
 
-    hLYellow() {
-        this.hlWithColor('#f9d949');
+    hL6() {
+        this.hlWithColor('#e56eee');
     }
 
-    hLOrange() {
-        this.hlWithColor('#f2a93b');
+    hL7() {
+        this.hlWithColor('#f19837');
     }
 
     hlWithColor(color: string) {

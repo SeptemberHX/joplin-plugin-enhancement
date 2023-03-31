@@ -34,30 +34,30 @@
     font-family: 'Font Awesome 5 Free' !important;
 }
 
-.editor-formatting-bar i.fas.red {
-    color: #ea3323;
+.editor-formatting-bar i.fas.color1 {
+    color: #ffd400;
 }
 
-.editor-formatting-bar i.fas.green {
-    color: #a5ec99;
+.editor-formatting-bar i.fas.color2 {
+    color: #ff6666;
 }
 
-.editor-formatting-bar i.fas.blue {
-    color: #0000f5;
+.editor-formatting-bar i.fas.color3 {
+    color: #5fb236;
 }
 
-.editor-formatting-bar i.fas.pink {
-    color: #f4b9c2;
+.editor-formatting-bar i.fas.color4 {
+    color: #2ea8e5;
 }
 
-.editor-formatting-bar i.fas.purple {
-    color: #d4a3d9;
+.editor-formatting-bar i.fas.color5 {
+    color: #a28ae5;
 }
 
-.editor-formatting-bar i.fas.yellow {
-    color: #f9d949;
+.editor-formatting-bar i.fas.color6 {
+    color: #e56eee;
 }
 
-.editor-formatting-bar i.fas.orange {
-    color: #f2a93b;
+.editor-formatting-bar i.fas.color7 {
+    color: #f19837;
 }
