@@ -58,6 +58,12 @@ export function fixListNumber(cm: CodeMirror.Editor) {
     let currIndent = 0;
     let currIndexN = 0;
     for (let lineN = listFromLineN; lineN <= listToLineN; ++lineN) {
+        // ignore stuff in codeblocks
+        const token = cm.getTokenTypeAt({line: lineN, ch: 0});
+        if (token && token.includes('jn-monospace')) {
+            continue;
+        }
+
         const lineStr = cm.getLine(lineN);
         const indent = lineStr.length - lineStr.trimStart().length;
 
