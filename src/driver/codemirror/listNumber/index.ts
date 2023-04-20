@@ -2,6 +2,7 @@ import {debounce} from "ts-debounce";
 
 const listLineReg = /^\s*[\d|a-z]+\./;
 const dotListLineReg = /^\s+[\*\-\+]\s/;
+const indentLineReg = /^\s+/;
 
 
 export function listNumberCorrector(context, cm: CodeMirror.Editor) {
@@ -30,7 +31,7 @@ export function fixListNumber(cm: CodeMirror.Editor) {
             break;
         }
 
-        if (!listLineReg.test(lineStr) && !dotListLineReg.test(lineStr)) {
+        if (!listLineReg.test(lineStr) && !dotListLineReg.test(lineStr) && !indentLineReg.test(lineStr)) {
             break;
         }
 
@@ -44,7 +45,7 @@ export function fixListNumber(cm: CodeMirror.Editor) {
             break;
         }
 
-        if (!listLineReg.test(lineStr) && !dotListLineReg.test(lineStr)) {
+        if (!listLineReg.test(lineStr) && !dotListLineReg.test(lineStr) && !indentLineReg.test(lineStr)) {
             break;
         }
 
