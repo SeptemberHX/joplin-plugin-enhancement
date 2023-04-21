@@ -1,6 +1,6 @@
 import {debounce} from "ts-debounce";
 
-const listLineReg = /^\s*[\d|a-z]+\./;
+const listLineReg = /^\s*[\d|a-z]+\.\s/;
 const dotListLineReg = /^\s+[\*\-\+]\s/;
 const indentLineReg = /^\s+/;
 
@@ -103,9 +103,9 @@ export function fixListNumber(cm: CodeMirror.Editor) {
 
         const numberStr = regResult[0].substr(indent, regResult[0].length - indent);
         if (!(indent in listIndexTypeMap)) {
-            if (/\d+\./.test(numberStr)) {
+            if (/\d+\.\s/.test(numberStr)) {
                 listIndexTypeMap[indent] = 1;
-            } else if (/[a-z]+\./.test(numberStr)) {
+            } else if (/[a-z]+\.\s/.test(numberStr)) {
                 listIndexTypeMap[indent] = 2;
             } else {
                 listIndexTypeMap[indent] = 1;
@@ -116,10 +116,10 @@ export function fixListNumber(cm: CodeMirror.Editor) {
         let replacement = '';
         switch (listIndexType) {
             case 1:
-                replacement = `${currIndexN}.`;
+                replacement = `${currIndexN}. `;
                 break;
             case 2:
-                replacement = `${convertToNumberingScheme(currIndexN)}.`;
+                replacement = `${convertToNumberingScheme(currIndexN)}. `;
                 break;
             default:
                 break;
