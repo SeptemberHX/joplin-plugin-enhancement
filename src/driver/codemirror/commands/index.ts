@@ -64,7 +64,9 @@ function markdownInline (cm: CodeMirror.Editor, pre: string, post: string, token
     if (!cm.somethingSelected()) {
         // TODO: Check token type state at the cursor position to leave the
         // mode if already in the mode.
-        let currentToken = cm.getTokenAt(cm.getCursor()).type
+        //
+        // FIXME(cm6): cm.getTokenAt is unsupported in CodeMirror 6.
+        let currentToken = cm.getTokenAt?.(cm.getCursor())?.type
         if (tokentype !== undefined && currentToken !== null && currentToken?.includes(tokentype)) { // -- the tokentypes can be multiple (spell-error, e.g.)
             // We are, indeed, currently in this token. So let's check *how*
             // we are going to leave the state.
