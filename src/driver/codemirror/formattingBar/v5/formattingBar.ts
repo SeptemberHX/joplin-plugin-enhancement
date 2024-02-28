@@ -16,7 +16,7 @@
 
 import CodeMirror from 'codemirror'
 import tippy, { Instance } from 'tippy.js'
-import {ContextMsgType} from "../../../common";
+import {ContextMsgType} from "../../../../common";
 
 /**
  * The formatting bar is shown while there is a selection

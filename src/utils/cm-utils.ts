@@ -1,3 +1,4 @@
+import { EditorView } from "@codemirror/view";
 import {Editor, Position} from "codemirror";
 
 export function isRangeSelected(from: Position, to: Position, cm: Editor): boolean {
@@ -31,4 +32,12 @@ export function findLineWidgetAtLine(editor: Editor, lineNumber: number, classNa
         }
     }
     return null;
+}
+
+export function isReadOnly(editor: any) {
+    if (editor.cm6) {
+        return (editor.editor as EditorView).state.readOnly;
+    } else {
+        return (editor as Editor).isReadOnly();
+    }
 }

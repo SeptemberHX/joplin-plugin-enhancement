@@ -8,9 +8,9 @@ import {taskAndHeaderRender} from "./taskRender";
 import {enhancement_mermaid_render} from "./common";
 import mermaidRender from "./mermaidRender";
 import inlineMarkerRender from "./inlineMarker";
-import formattingBarHook from "./formattingBar/formattingBart";
 import {initCommands} from "./commands";
 import {fixListNumber, listNumberCorrector} from "./listNumber";
+import initFormattingBar from "./formattingBar/initFormattingBar";
 
 
 module.exports = {
@@ -53,6 +53,10 @@ module.exports = {
                                 };
                                 await linkFolderOptionFunc(context, cm, val, old);
 
+                                if (settings.formattingBar) {
+                                    initFormattingBar(context, cm);
+                                }
+
                                 if (settings.quickCommands) {
                                     new QuickCommands(context, cm as ExtendedEditor & Editor, CodeMirror);
                                 }
@@ -67,10 +71,6 @@ module.exports = {
 
                                 if (settings.inlineMarker) {
                                     inlineMarkerRender(cm);
-                                }
-
-                                if (settings.formattingBar) {
-                                    formattingBarHook(context, cm);
                                 }
 
                                 if (settings.listNumberAutoCorrect) {

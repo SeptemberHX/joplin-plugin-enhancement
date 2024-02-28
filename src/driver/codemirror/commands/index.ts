@@ -1,3 +1,5 @@
+import { isReadOnly } from "../../../utils/cm-utils";
+
 export function initCommands(cm, CodeMirror) {
     const commandBridge = new CommandsBridge(cm);
     CodeMirror.defineExtension('markdownHL1', commandBridge.hL1.bind(commandBridge));
@@ -42,7 +44,7 @@ class CommandsBridge {
     }
 
     hlWithColor(color: string) {
-        if (this.cm.isReadOnly()) {
+        if (isReadOnly(this.cm)) {
             return;
         }
         markdownInline(this.cm, `<mark style="background: ${color}">`, '</mark>', 'mark')
