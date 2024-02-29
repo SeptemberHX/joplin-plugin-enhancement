@@ -2,13 +2,25 @@ import { isReadOnly } from "../../../utils/cm-utils";
 
 export function initCommands(cm, CodeMirror) {
     const commandBridge = new CommandsBridge(cm);
-    CodeMirror.defineExtension('markdownHL1', commandBridge.hL1.bind(commandBridge));
-    CodeMirror.defineExtension('markdownHL2', commandBridge.hL2.bind(commandBridge));
-    CodeMirror.defineExtension('markdownHL3', commandBridge.hL3.bind(commandBridge));
-    CodeMirror.defineExtension('markdownHL4', commandBridge.hL4.bind(commandBridge));
-    CodeMirror.defineExtension('markdownHL5', commandBridge.hL5.bind(commandBridge));
-    CodeMirror.defineExtension('markdownHL6', commandBridge.hL6.bind(commandBridge));
-    CodeMirror.defineExtension('markdownHL7', commandBridge.hL7.bind(commandBridge));
+
+    const addCommand = (name: string, command: ()=>void) => {
+        // Work around a bug in CodeMirror.defineExtension on CodeMirror 6 --
+        // closing and opening settings can leave such extensions only registered once.
+        // See https://github.com/laurent22/joplin/issues/10023
+        if (cm.cm6) {
+            CodeMirror.registerCommand(name, command);
+        } else {
+            CodeMirror.defineExtension(name, command);
+        }
+    };
+
+    addCommand('markdownHL1', commandBridge.hL1.bind(commandBridge));
+    addCommand('markdownHL2', commandBridge.hL2.bind(commandBridge));
+    addCommand('markdownHL3', commandBridge.hL3.bind(commandBridge));
+    addCommand('markdownHL4', commandBridge.hL4.bind(commandBridge));
+    addCommand('markdownHL5', commandBridge.hL5.bind(commandBridge));
+    addCommand('markdownHL6', commandBridge.hL6.bind(commandBridge));
+    addCommand('markdownHL7', commandBridge.hL7.bind(commandBridge));
 }
 
 class CommandsBridge {
