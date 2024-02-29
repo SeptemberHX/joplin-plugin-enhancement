@@ -53,12 +53,8 @@ module.exports = {
                                 };
                                 await linkFolderOptionFunc(context, cm, val, old);
 
-                                if (settings.formattingBar) {
-                                    initFormattingBar(context, cm);
-                                }
-
                                 if (settings.quickCommands) {
-                                    new QuickCommands(context, cm as ExtendedEditor & Editor, CodeMirror);
+                                    QuickCommands.from(context, cm as ExtendedEditor & Editor, CodeMirror);
                                 }
 
                                 if (settings.taskCmRender || settings.headerHashRender) {
@@ -71,6 +67,10 @@ module.exports = {
 
                                 if (settings.inlineMarker) {
                                     inlineMarkerRender(cm);
+                                }
+
+                                if (settings.formattingBar) {
+                                    initFormattingBar(context, cm);
                                 }
 
                                 if (settings.listNumberAutoCorrect) {

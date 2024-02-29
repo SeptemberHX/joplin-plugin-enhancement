@@ -6,6 +6,7 @@ import PlantumlHints from './PlantumlHints'
 import {getDateHints} from "./DateHints";
 import MermaidHints from "./MermaidHints";
 import ShortTypeHints from "./ShortTypeHints";
+import { ContentScriptContext } from "api/types";
 
 const TRIGGER_SYMBOL = '/';
 const HINT_ITEM_CLASS = 'quick-commands-hint';
@@ -52,9 +53,18 @@ export type ExtendedEditor = {
 };
 
 export default class QuickCommands {
-    constructor(private readonly context, private readonly editor: ExtendedEditor & Editor, private readonly cm: typeof CodeMirror) {
+    private constructor(private readonly context, private readonly editor: ExtendedEditor & Editor, private readonly cm: typeof CodeMirror) {
         this.editor.on('cursorActivity', this.triggerHints.bind(this));
         setTimeout(this.init.bind(this), 100);
+    }
+
+    public static from(context: ContentScriptContext, editor: ExtendedEditor & Editor, cm: typeof CodeMirror) {
+        // FIXME(cm6): QuickCommands uses CodeMirror 5 functionality that isn't supported by Joplin's compatibility layer.
+        if ((cm as any).cm6) {
+            console.warn('QuickCommands is not supported for CodeMirror 6');
+        } else {
+            return new QuickCommands(context, editor, cm);
+        }
     }
 
     private async init() {
