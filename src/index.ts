@@ -32,6 +32,21 @@ joplin.plugins.register({
 	onStart: async function() {
 
 		await settings.register();
+		const enhancementConfig = await getConfig();
+
+		await joplin.contentScripts.register(
+			ContentScriptType.CodeMirrorPlugin,
+			'enhancement_codemirror_items',
+			'./driver/codemirror/index.js'
+		);
+
+		if (enhancementConfig.admonitionCmRender) {
+			await joplin.contentScripts.register(
+				ContentScriptType.CodeMirrorPlugin,
+				'cm_admonition_renderer',
+				'./driver/codemirror/admonition/index.js'
+			);
+		}
 
 		await joplin.contentScripts.onMessage(
 			'enhancement_codemirror_items',
@@ -78,22 +93,6 @@ joplin.plugins.register({
 				}
 			}
 		);
-
-		const enhancementConfig = await getConfig();
-
-		await joplin.contentScripts.register(
-			ContentScriptType.CodeMirrorPlugin,
-			'enhancement_codemirror_items',
-			'./driver/codemirror/index.js'
-		);
-
-		if (enhancementConfig.admonitionCmRender) {
-			await joplin.contentScripts.register(
-				ContentScriptType.CodeMirrorPlugin,
-				'cm_admonition_renderer',
-				'./driver/codemirror/admonition/index.js'
-			);
-		}
 
 		if (enhancementConfig.imageEnhancement) {
 			await joplin.contentScripts.register(
