@@ -15,8 +15,9 @@
 // Helpful documentation:
 // - https://codemirror.net/examples/tooltip/
 
-import { StateField, EditorState } from '@codemirror/state';
-import { EditorView, Tooltip, showTooltip } from '@codemirror/view';
+import { requireCodeMirrorState, requireCodeMirrorView } from '../../../../utils/cm-dynamic-require';
+import type { EditorState } from '@codemirror/state';
+import type { Tooltip } from '@codemirror/view';
 import { ContentScriptContext } from 'api/types';
 import { ContextMsgType } from '../../../../common';
 
@@ -94,6 +95,9 @@ const buildTooltips = (state: EditorState, context: ContentScriptContext): Toolt
 };
 
 const formattingBarStateField = (context: ContentScriptContext) => {
+    const { StateField } = requireCodeMirrorState();
+    const { showTooltip } = requireCodeMirrorView();
+
     return StateField.define<readonly Tooltip[]>({
         // Initial state
         create: state => buildTooltips(state, context),
@@ -116,65 +120,69 @@ const formattingBarStateField = (context: ContentScriptContext) => {
     });
 };
 
-const formattingBar = (context: ContentScriptContext) => [
-    formattingBarStateField(context),
-    EditorView.baseTheme({
-        '& .cm-tooltip.cm-editor-formatting-bar': {
-            display: 'flex',
-            'flex-direction': 'row',
-            'border-radius': '5px',
+const formattingBar = (context: ContentScriptContext) => {
+    const { EditorView } = requireCodeMirrorView();
 
-            border: 'none',
-            'background-color': 'rgba(51, 51,51, 0.85)',
+    return [
+        formattingBarStateField(context),
+        EditorView.baseTheme({
+            '& .cm-tooltip.cm-editor-formatting-bar': {
+                display: 'flex',
+                'flex-direction': 'row',
+                'border-radius': '5px',
 
-            '& > button': {
-                'background-color': 'transparent',
                 border: 'none',
-                'flex-grow': 1,
-                padding: '4px 8px',
-                width: '35px',
-                height: '35px',
-                color: 'white',
-                transition: '0.3s all ease',
+                'background-color': 'rgba(51, 51,51, 0.85)',
 
-                '&:hover, &:focus-visible': {
-                    'background-color': 'rgb(120, 120, 120)',
+                '& > button': {
+                    'background-color': 'transparent',
+                    border: 'none',
+                    'flex-grow': 1,
+                    padding: '4px 8px',
+                    width: '35px',
+                    height: '35px',
+                    color: 'white',
+                    transition: '0.3s all ease',
+
+                    '&:hover, &:focus-visible': {
+                        'background-color': 'rgb(120, 120, 120)',
+                    },
+                    '&:first-child': {
+                        'border-top-left-radius': '4px',
+                        'border-bottom-left-radius': '4px',
+                    },
+                    '&:last-child': {
+                        'border-top-right-radius': '4px',
+                        'border-bottom-right-radius': '4px',
+                    },
                 },
-                '&:first-child': {
-                    'border-top-left-radius': '4px',
-                    'border-bottom-left-radius': '4px',
-                },
-                '&:last-child': {
-                    'border-top-right-radius': '4px',
-                    'border-bottom-right-radius': '4px',
+                '& i.fas': {
+                    'font-family': "'Font Awesome 5 Free' !important",
+                    '&.color1': {
+                        color: '#ffd400',
+                    },
+                    '&.color2': {
+                        color: '#ff6666',
+                    },
+                    '&.color3': {
+                        color: '#5fb236',
+                    },
+                    '&.color4': {
+                        color: '#2ea8e5',
+                    },
+                    '&.color5': {
+                        color: '#a28ae5',
+                    },
+                    '&.color6': {
+                        color: '#e56eee',
+                    },
+                    '&.color7': {
+                        color: '#f19837',
+                    },
                 },
             },
-            '& i.fas': {
-                'font-family': "'Font Awesome 5 Free' !important",
-                '&.color1': {
-                    color: '#ffd400',
-                },
-                '&.color2': {
-                    color: '#ff6666',
-                },
-                '&.color3': {
-                    color: '#5fb236',
-                },
-                '&.color4': {
-                    color: '#2ea8e5',
-                },
-                '&.color5': {
-                    color: '#a28ae5',
-                },
-                '&.color6': {
-                    color: '#e56eee',
-                },
-                '&.color7': {
-                    color: '#f19837',
-                },
-            },
-        },
-    }),
-];
+        }),
+    ];
+};
 
 export default formattingBar;

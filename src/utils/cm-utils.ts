@@ -1,4 +1,4 @@
-import { EditorView } from "@codemirror/view";
+import type { EditorView } from "@codemirror/view";
 import {Editor, Position} from "codemirror";
 
 export function isRangeSelected(from: Position, to: Position, cm: Editor): boolean {
