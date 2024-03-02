@@ -139,6 +139,9 @@ export function initOverlayOption(_context, CodeMirror) {
     });
 
     CodeMirror.defineOption("styleActiveLine", false, function(cm, val, old) {
+        // FIXME(cm6): Unsupported in CodeMirror 6.
+        if (CodeMirror.cm6) return;
+
         var prev = old && old != CodeMirror.Init;
         if (!prev) {
             updateActiveLine(cm);

@@ -21,6 +21,12 @@ const ENHANCEMENT_PLANTUML_SPAN_MARKER_LINE_CLASS = 'enhancement-plantuml-block-
 const ENHANCEMENT_HORIZONTAL_LINE_CLASS_LINE_CLASS = 'enhancement-horizontal-line-marker-line';
 
 export async function linkFolderOptionFunc(_context, cm, val, old) {
+    // FIXME(for:cm6): Disabled because the following logic is broken in
+    // the CM6 editor.
+    if (cm.cm6) {
+        return;
+    }
+
     const renderBlockLink = cm.state.enhancement ? !cm.state.enhancement.settings.blockLinkFolder : false;
     const renderBlockImage = cm.state.enhancement ? cm.state.enhancement.settings.blockImageFolder : false;
     const renderBlockImageCaption = cm.state.enhancement ? cm.state.enhancement.settings.blockImageCaption : false;
