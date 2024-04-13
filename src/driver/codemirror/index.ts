@@ -4,7 +4,7 @@ import {initOverlayOption} from "./overlay";
 import {linkFolderOptionFunc} from "./linkFolder";
 import QuickCommands, {ExtendedEditor} from "./quickCommands/quickCommands";
 import {Editor} from "codemirror";
-import {taskAndHeaderRender} from "./taskRender";
+import taskAndHeaderRenderer from "./taskAndHeaderRenderer";
 import {enhancement_mermaid_render} from "./common";
 import mermaidRender from "./mermaidRender";
 import inlineMarkerRender from "./inlineMarker";
@@ -58,7 +58,7 @@ module.exports = {
                                 }
 
                                 if (settings.taskCmRender || settings.headerHashRender) {
-                                    taskAndHeaderRender(cm);
+                                    taskAndHeaderRenderer(cm);
                                 }
 
                                 if (settings.mermaidCmRender) {
@@ -115,7 +115,7 @@ module.exports = {
                         name: './quickCommands/quickCommands.css'
                     },
                     {
-                        name: './taskRender/taskRender.css'
+                        name: './taskAndHeaderRenderer/taskRender.css'
                     },
                     {
                         name: './mermaidRender/mermaid.css'

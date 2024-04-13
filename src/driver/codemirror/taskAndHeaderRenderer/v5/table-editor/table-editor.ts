@@ -19,7 +19,7 @@ import buildPipeTable from './build-pipe'
 import buildSimpleTable from './build-simple'
 import buildGridTable from './build-grid'
 
-import { getConverter } from '../../../../utils/md-to-html'
+import { getConverter } from '../../../../../utils/md-to-html'
 
 import computeCSS from './compute-css'
 import { ColAlignment, TableEditorOptions } from './types'

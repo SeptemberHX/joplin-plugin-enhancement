@@ -10,6 +10,7 @@
 
 import type * as CodeMirrorView from '@codemirror/view';
 import type * as CodeMirrorState from '@codemirror/state';
+import type * as CodeMirrorLanguage from '@codemirror/language';
 
 export function requireCodeMirrorView() {
     return require('@codemirror/view') as typeof CodeMirrorView;
@@ -17,4 +18,8 @@ export function requireCodeMirrorView() {
 
 export function requireCodeMirrorState() {
     return require('@codemirror/state') as typeof CodeMirrorState;
+}
+
+export function requireCodeMirrorLanguage() {
+    return require('@codemirror/language') as typeof CodeMirrorLanguage;
 }

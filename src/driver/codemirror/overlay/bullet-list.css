@@ -1,13 +1,21 @@
+
+/* CodeMirror 5 */
 .cm-variable-2.cm-rm-single-list-token,
 .cm-variable-3.cm-rm-single-list-token,
-.cm-keyword.cm-rm-single-list-token {
+.cm-keyword.cm-rm-single-list-token,
+/* CodeMirror 6 */
+.cm-rm-single-list-token > .tok-meta {
     visibility: hidden;
     position: relative;
 }
 
+
+/* CodeMirror 5 */
 .cm-variable-2.cm-rm-single-list-token:after,
 .cm-variable-3.cm-rm-single-list-token:after,
-.cm-keyword.cm-rm-single-list-token:after {
+.cm-keyword.cm-rm-single-list-token:after,
+/* CodeMirror 6 */
+.cm-rm-single-list-token > .tok-meta:after {
     visibility: visible;
     content: '\2022';
     position: absolute;

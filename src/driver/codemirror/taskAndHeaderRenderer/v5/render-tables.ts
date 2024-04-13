@@ -14,7 +14,7 @@
 
 import CodeMirror, { commands, TextMarker } from 'codemirror'
 import fromMarkdown from './table-editor'
-import { getTableHeadingRE } from '../../../utils/regular-expressions'
+import { getTableHeadingRE } from '../../../../utils/regular-expressions'
 import TableEditor from './table-editor/table-editor'
 
 const tableMarkerName = 'zettlr-table-marker';

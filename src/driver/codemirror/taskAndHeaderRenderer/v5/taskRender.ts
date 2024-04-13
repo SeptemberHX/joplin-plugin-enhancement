@@ -13,8 +13,8 @@
  */
 
 import CodeMirror from 'codemirror'
-import { getTaskRE } from '../../../utils/regular-expressions'
-import canRenderElement from "../../../utils/can-render-element";
+import { getTaskRE } from '../../../../utils/regular-expressions'
+import canRenderElement from "../../../../utils/can-render-element";
 
 const taskRE = getTaskRE() // Matches `- [ ]` and `- [x]`
 
