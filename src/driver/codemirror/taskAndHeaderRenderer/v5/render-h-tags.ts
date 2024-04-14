@@ -13,9 +13,9 @@
  */
 
 import CodeMirror, { commands } from 'codemirror'
-import { getHeadRE } from '../../../utils/regular-expressions'
+import { getHeadRE } from '../../../../utils/regular-expressions'
 import showPopupMenu from './window-register/application-menu-helper'
-import canRenderElement from '../../../utils/can-render-element'
+import canRenderElement from '../../../../utils/can-render-element'
 
 const headRE = getHeadRE()
 

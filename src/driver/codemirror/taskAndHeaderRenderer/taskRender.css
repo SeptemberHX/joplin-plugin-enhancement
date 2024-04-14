@@ -1,5 +1,11 @@
+/* For CodeMirror 6 */
+input.cm-enhancement-checkbox {
+    cursor: pointer;
+}
+
 /* from zettlr */
-.CodeMirror-sizer input[type="checkbox"] {
+.CodeMirror-sizer input[type="checkbox"],
+input.cm-enhancement-checkbox {
     vertical-align: middle;
     margin: 4px 0.6em 4px 0px;
     width: 1.4em;
@@ -10,7 +16,8 @@
 }
 
 /* from obsidian */
-.CodeMirror-sizer input[type="checkbox"]:checked {
+.CodeMirror-sizer input[type="checkbox"]:checked,
+input.cm-enhancement-checkbox:checked {
     background-color: dodgerblue;
     border: 1px solid transparent;
     background-position: 44% 55%;
